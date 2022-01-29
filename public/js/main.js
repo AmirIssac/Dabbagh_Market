@@ -211,14 +211,32 @@
         if ($button.hasClass('inc')) {
             var newVal = parseFloat(oldValue) + 1;
         } else {
-            // Don't allow decrementing below zero
-            if (oldValue > 0) {
+            // Don't allow decrementing below one
+            if (oldValue > 1) {
                 var newVal = parseFloat(oldValue) - 1;
             } else {
-                newVal = 0;
+                newVal = 1;
             }
         }
         $button.parent().find('input').val(newVal);
+
+        // change weight output
+        if($('#unit').val() == "gram"){  // gram
+            var newWeight = newVal * 500 ;
+            if(newWeight > 500)  // change to KG
+                newWeight = newWeight / 1000 + "KG";
+            else
+                 newWeight = newWeight + "g";
+            $('#weight-input').val(newWeight);
+        }
+        else{  // piece
+            var newWeight = newVal * 1 ;
+            $('#weight-input').val(newWeight+' piece');
+        }
+
+        // change price
+        var new_price = $('#initial-price').val() * newVal;
+        $('#price-input').val(new_price);
     });
 
 })(jQuery);

@@ -52,7 +52,7 @@
                     {{$product->price}}
                   </td>
                   <td class="text-right">
-                    <a class="btn btn-info">Edit</a>
+                    <a href="{{route('edit.product.form',$product->id)}}" class="btn btn-info">Edit</a>
                     <a class="btn btn-danger">Delete</a>
                   </td>
                 </tr>
@@ -201,6 +201,7 @@
         </div>
       </div>
       </form>
+
 
         <div class="col-md-12">
       <div class="card card-plain">
