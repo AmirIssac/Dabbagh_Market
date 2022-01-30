@@ -22,4 +22,8 @@ class Controller extends BaseController
     public function adminDashboard(){
         return view('Admin.dashboard');
     }
+
+    public function signUpForm(){
+        return view('auth.signUp');
+    }
 }

@@ -57,7 +57,7 @@
                 </ul>
             </div>
             <div class="header__top__right__auth">
-                <a href="#"><i class="fa fa-user"></i> Login</a>
+                <button data-toggle="modal" data-target="#loginModal"><i class="fa fa-user"></i> Login</button>
             </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
@@ -124,7 +124,52 @@
                                 </ul>
                             </div>
                             <div class="header__top__right__auth">
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                                @if(!Auth::user())
+                                <button style="background-color: #7fad39; color:white; border:0px solid white" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-user"></i> Login</button>
+                                     {{-- login modal --}}
+                                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div style="display: flex; flex-direction:column; justify-content: center; align-items: center" class="modal-body">
+                                                <img src="{{asset('img/logo.png')}}" alt="logo">
+                                                <form action="{{ route('login') }}" method="POST">
+                                                    @csrf
+                                                    <div style="display: flex; flex-direction:column; justify-content: center; align-items: center">
+                                                        <label>E-mail</label>
+                                                        <input style="width: 350px" type="email" name="email" class="form-control">
+                                                        <label>Password</label>
+                                                        <input type="password" name="password" class="form-control">
+                                                        <div style="display: flex; flex-direction:column">
+                                                        <button style="margin: 10px;" class="btn btn-primary">login</button>
+                                                        <div>
+                                                        <h6>You don't have account ? </h6>
+                                                        <a href="{{route('sign.up')}}" type="button" class="btn btn-success">sign up</a>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                              {{--
+                                              <button type="button" class="btn btn-primary">Save changes</button>
+                                              --}}
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      @else
+                                      <form action="{{route('logout')}}" method="POST">
+                                          @csrf
+                                          <button class="btn btn-danger">logout</button>
+                                      </form>
+                                      @endif        
                             </div>
                         </div>
                     </div>
@@ -322,9 +367,10 @@
     <script src="{{asset('js/mixitup.min.js')}}"></script>
     <script src="{{asset('js/owl.carousel.min.js')}}"></script>
     <script src="{{asset('js/main.js')}}"></script>
-
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-modal/2.2.6/js/bootstrap-modalmanager.min.js"></script>
+<script>
+  
+</script>
 </body>
 
 </html>

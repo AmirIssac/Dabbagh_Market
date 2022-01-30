@@ -13,11 +13,11 @@
                             <li data-filter=".oranges">type 1</li>
                             <li data-filter=".fresh-meat">type 2</li>
                             <li data-filter=".vegetables">type 3</li>
-                            <li data-filter=".fastfood">type 4</li>
+                            <li data-filter=".{{$category->name_en}}">type 4</li>
                             --}}
-                            <li class="active" data-filter="*">All</li>
+                            <li class="active">All</li>
                             @foreach($categories as $category)
-                                <li data-filter=".{{$category->name_en}}">{{$category->name_en}}</li>
+                                <li>{{$category->name_en}}</li>
                             @endforeach
                         </ul>
                     </div>

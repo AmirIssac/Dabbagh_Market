@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', [Controller::class, 'index']);
+Route::get('/', [Controller::class, 'index'])->name('index');
 
 // Admin
 Route::get('/dashboard',[Controller::class, 'adminDashboard'])->name('dashboard')->middleware('auth');
@@ -39,4 +39,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // customer
 Route::get('/product/{product_id}', [ProductController::class, 'viewProduct'])->name('view.product');
+
+
+// guest
+Route::get('/sign-up', [Controller::class, 'signUpForm'])->name('sign.up');
 
