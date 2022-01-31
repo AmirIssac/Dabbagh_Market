@@ -119,7 +119,6 @@
                                 <div>English</div>
                                 <span class="arrow_carrot-down"></span>
                                 <ul>
-                                    <li><a href="#">Spanis</a></li>
                                     <li><a href="#">English</a></li>
                                 </ul>
                             </div>
@@ -149,14 +148,13 @@
                                                         <button style="margin: 10px;" class="btn btn-primary">login</button>
                                                         <div>
                                                         <h6>You don't have account ? </h6>
-                                                        <a href="{{route('sign.up')}}" type="button" class="btn btn-success">sign up</a>
+                                                        <a style="margin: 5px" href="{{route('sign.up')}}" type="button" class="btn btn-success">sign up</a>
                                                         </div>
                                                         </div>
                                                     </div>
                                                 </form>
                                             </div>
                                             <div class="modal-footer">
-                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                               {{--
                                               <button type="button" class="btn btn-primary">Save changes</button>
                                               --}}
@@ -165,10 +163,27 @@
                                         </div>
                                       </div>
                                       @else
+                                      {{--
                                       <form action="{{route('logout')}}" method="POST">
                                           @csrf
                                           <button class="btn btn-danger">logout</button>
                                       </form>
+                                      --}}
+                                      <div class="header__top__right__language">
+                                        <i style="color:#7fad39" class="fa fa-user"></i>
+                                        {{--<div>English</div>--}}
+                                        {{--<span class="arrow_carrot-down"></span>--}}
+                                        <ul>
+                                            <li><a href="#">My profile</a></li>
+                                            <li><a href="#">My cart</a></li>
+                                            <li>
+                                                <form id="logout-form" action="{{route('logout')}}" method="POST">
+                                                    @csrf
+                                                    <a style="color: rgb(255, 34, 34)" href="javascript:$('#logout-form').submit();">logout</a>
+                                                </form> 
+                                            </li>
+                                        </ul>
+                                    </div>
                                       @endif        
                             </div>
                         </div>
