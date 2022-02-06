@@ -26,6 +26,10 @@ class InventoryController extends Controller
         );
         */
         $imagePath = $request->file('primary_image')->store('Products/'.$request->code, 'public');
+        if($request->availability == 'yes')
+            $availability = true;
+        else
+            $availability = false;
         $product = Product::create([
             'category_id' => $request->category_id,
             'code' => $request->code,
@@ -34,6 +38,7 @@ class InventoryController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'unit' => $request->unit,
+            'availability' => $availability,
             'image' => $imagePath,
         ]);
         // add additional images
@@ -69,6 +74,10 @@ class InventoryController extends Controller
         else{   // no update on image
             $imagePath = $product->image;
         }
+        if($request->availability == 'yes')
+            $availability = true;
+        else
+            $availability = false;
         $product->update([
             'category_id' => $request->category_id,
             'code' => $request->code,
@@ -77,6 +86,7 @@ class InventoryController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'unit' => $request->unit,
+            'availability' => $availability,
             'image' => $imagePath,
         ]);
         // update additional images

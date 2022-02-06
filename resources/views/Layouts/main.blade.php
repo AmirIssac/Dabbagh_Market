@@ -24,7 +24,7 @@
     {{--
     <link rel="stylesheet" href="css/bootstrap-rtl.css" type="text/css">
     --}}
-
+    @yield('links')
 </head>
 
 <body>
@@ -42,7 +42,7 @@
         <div class="humberger__menu__cart">
             <ul>
                 <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                <li><a href="#"><i class="fa fa-cart"></i> <span>3</span></a></li>
+                <li><a href="#"><i class="fa fa-cart"></i> <span>0</span></a></li>
             </ul>
             <div class="header__cart__price">item: <span>$150.00</span></div>
         </div>
@@ -170,12 +170,19 @@
                                       </form>
                                       --}}
                                       <div class="header__top__right__language">
-                                        <i style="color:#7fad39" class="fa fa-user"></i>
+                                          @if(Auth::user()->hasRole('super_admin'))
+                                                <i style="color:#ffa909" class="fa fa-user"></i>
+                                          @else
+                                                <i style="color:#7fad39" class="fa fa-user"></i>
+                                          @endif
                                         {{--<div>English</div>--}}
                                         {{--<span class="arrow_carrot-down"></span>--}}
                                         <ul>
+                                            @if(Auth::user()->adminstrative())
+                                            <li><a href="{{route('dashboard')}}">Dashboard</a></li>
+                                            @endif
                                             <li><a href="#">My profile</a></li>
-                                            <li><a href="#">My cart</a></li>
+                                            <li><a href="{{route('view.cart')}}">My cart</a></li>
                                             <li>
                                                 <form id="logout-form" action="{{route('logout')}}" method="POST">
                                                     @csrf
@@ -221,7 +228,7 @@
                     <div class="header__cart">
                         <ul>
                             <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li>
+                            <li><a href="{{route('view.cart')}}"><i class="fa fa-shopping-cart"></i> <span>0</span></a></li>
                         </ul>
                         <div class="header__cart__price">item: <span>$150.00</span></div>
                     </div>
@@ -384,8 +391,8 @@
     <script src="{{asset('js/main.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-modal/2.2.6/js/bootstrap-modalmanager.min.js"></script>
 <script>
-  
 </script>
+@yield('scripts')
 </body>
 
 </html>

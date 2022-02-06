@@ -107,6 +107,9 @@
                   Category
                 </th>
                 <th>
+                  Availability
+                </th>
+                <th>
                   Price
                 </th>
               </thead>
@@ -129,6 +132,12 @@
                             @endforeach
                         </select>
                     </td>
+                    <td>
+                      <select name="availability" class="form-control">
+                          <option value="yes">available in stock</option>
+                          <option value="no">not available</option>
+                      </select>
+                  </td>
                     <td> <input type="number" step="0.1" name="price" class="form-control"> </td>
                 </tr>
                 <tr>
@@ -201,7 +210,7 @@
         </div>
       </div>
       </form>
-
+    </div>
 
         <div class="col-md-12">
       <div class="card card-plain">
@@ -248,6 +257,128 @@
         </div>
       </div>
     </div>
+
+
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <h4 class="card-title">Discounts</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  ID
+                </th>
+                <th>
+                  Type
+                </th>
+                <th>
+                  Value
+                </th>
+              </thead>
+              <tbody>
+               <tr>
+                 <td>
+                    <select name="discount_type" class="form-control">
+                        <option value="percent">percent</option>
+                        <option value="percent">value</option>
+                    </select>
+                 </td>
+                 <td>
+                    <input type="number" step="0.01" class="form-control">
+                </td>
+               </tr>
+                <tr>
+                    <td>
+                        <button id="new-discount-btn" class="btn btn-success">New</button>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td class="text-right">
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+            {{ $products->links() }}
+          </div>
+        </div>
+      </div>
+
+      {{-- new discount Form --}}
+      <form action="{{route('store.product')}}" method="POST">
+          @csrf
+      <div id="new-discount-form" class="card displaynone">
+        <div class="card-header">
+          <h4 class="card-title">New Discount</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead class=" text-primary">
+                <th>
+                  Type
+                </th>
+                <th>
+                  Value
+                </th>
+                <th>
+                  Apply on
+                </th>
+                <th>
+                  Expired at
+                </th>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <select name="discount_type" class="form-control">
+                        <option value="percent">percent</option>
+                        <option value="percent">value</option>
+                    </select>
+                 </td>
+                 <td>
+                    <input type="number" step="0.01" class="form-control">
+                </td>
+                <td>
+                    <select name="apply_discount_on_products" class="form-control" multiple>
+                        @foreach($products as $product)
+                          <option value="{{$product->id}}">#{{$product->code}} / {{$product->name_en}}</option>
+                        @endforeach
+                    </select>
+                </td>
+                <td>
+                    <input type="date" class="form-control">
+                </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button class="btn btn-primary">create</button>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      </form>
+    </div>
+
+
+
   </div>
 </div>
 @endsection
@@ -255,6 +386,11 @@
 <script>
     $('#new-product-btn').on('click',function(){
         $('#new-product-form').removeClass('displaynone');
+        $(this).addClass('displaynone');
+    })
+
+    $('#new-discount-btn').on('click',function(){
+        $('#new-discount-form').removeClass('displaynone');
         $(this).addClass('displaynone');
     })
 </script>

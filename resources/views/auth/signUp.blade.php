@@ -30,26 +30,26 @@
 					<img src="img/logo.png" alt="IMG">
 				</div>
 
-                <form method="POST" action="{{ route('login') }}" class="login100-form validate-form">
+                <form method="POST" action="{{ route('register') }}" class="login100-form">
                     @csrf
 					<span class="login100-form-title">
 						 Sign up
 					</span>
-                    <div class="wrap-input100 validate-input">
+                    <div class="wrap-input100">
 						<input class="input100" type="text" name="first_name" placeholder="First Name">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-user" aria-hidden="true"></i>
 						</span>
 					</div>
-                    <div class="wrap-input100 validate-input">
+                    <div class="wrap-input100">
 						<input class="input100" type="text" name="last_name" placeholder="Last Name">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-user" aria-hidden="true"></i>
 						</span>
 					</div>
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+					<div class="wrap-input100">
 						<input class="input100" type="email" name="email" placeholder="Email">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
@@ -57,14 +57,14 @@
 						</span>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate = "Password is required">
+					<div class="wrap-input100">
 						<input class="input100" type="password" name="password" placeholder="Password">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-lock" aria-hidden="true"></i>
 						</span>
 					</div>
-                    <div class="wrap-input100 validate-input">
+                    <div class="wrap-input100">
 						<input class="input100" type="text" name="phone" placeholder="Phone">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">

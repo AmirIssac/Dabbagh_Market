@@ -42,6 +42,9 @@
                   Category
                 </th>
                 <th>
+                  Availability
+                </th>
+                <th>
                   Price
                 </th>
               </thead>
@@ -68,6 +71,17 @@
                             @endforeach
                         </select>
                     </td>
+                    <td>
+                      <select name="availability" class="form-control">
+                          @if($product->availability)
+                          <option value="yes" selected>available in stock</option>
+                          <option value="no">not available</option>
+                          @else
+                          <option value="yes">available in stock</option>
+                          <option value="no" selected>not available</option>
+                          @endif
+                      </select>
+                  </td>
                     <td> <input type="number" step="0.1" name="price" value="{{$product->price}}" class="form-control"> </td>
                 </tr>
                 <tr>

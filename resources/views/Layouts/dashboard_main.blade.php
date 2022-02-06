@@ -44,7 +44,7 @@
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
       <div class="logo">
-        <a class="simple-text logo-mini">
+        <a href="/" class="simple-text logo-mini">
           MD
         </a>
         <a class="simple-text logo-normal">
@@ -73,12 +73,12 @@
           </li>
           <li>
             <a href="./notifications.html">
-              <i class="now-ui-icons ui-1_bell-53"></i>
-              <p>Notifications</p>
+              <i class="now-ui-icons objects_key-25"></i>
+              <p>Permissions</p>
             </a>
           </li>
-          <li>
-            <a href="./user.html">
+          <li class="{{Route::is('show.users') ? 'active' : ''}}">
+            <a href="{{route('show.users')}}">
               <i class="now-ui-icons users_single-02"></i>
               <p>Users</p>
             </a>

@@ -1,4 +1,7 @@
 @extends('Layouts.main')
+@section('links')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
 @section('content')
     <!-- Product Details Section Begin -->
     <section class="product-details spad">
@@ -40,13 +43,15 @@
                         <div class="product__details__quantity">
                             <div class="quantity">
                                 <div class="pro-qty">
-                                    <input type="text" value="1">
+                                    <input id="quantity-input" type="text" value="1">
                                 </div>
                             </div>
                         </div>
                         <input style="height:40px; width:100px; font-size:30px; border:0px solid white" id="weight-input" type='text' name='name' value="{{$product->unit == 'gram' ? '500g' : '1 piece'}}" readonly/>
                         <input type="hidden" id="unit" value="{{$product->unit}}">
-                        <a href="#" class="primary-btn">ADD TO CART</a>
+                        <input type="hidden" id="product-id" value="{{$product->id}}">
+                        <button id="add-to-cart" class="primary-btn"> ADD TO CART </button>
+                        {{--<a href="#" class="primary-btn">ADD TO CART</a>--}}
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b> <span>In Stock</span></li>
@@ -151,4 +156,28 @@
         </div>
     </section>
     <!-- Product Details Section End -->
+@section('scripts')
+<script>
+        /*function addToCart(){*/
+    $('document').ready(function(){
+        $('#add-to-cart').on('click',function(){
+            var product_id = $('#product-id').val();
+            var qty = parseInt($('#quantity-input').val());
+            $.ajax({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "post",
+                url: '/add/product/toCart/'+product_id,
+                data : { quantity : qty },
+                //dataType: 'json',
+                success: function(data){    // data is the response come from controller
+                    if(data == 'success')
+                        alert('added to cart !!');
+                }
+            }); // ajax close
+        });
+    });
+</script>
+@endsection
 @endsection

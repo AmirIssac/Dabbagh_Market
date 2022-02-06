@@ -18,16 +18,19 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id')->unsigned();
             $table->foreign('category_id')->references('id')->on('categories');//onDelete('set null');
+            $table->unsignedBigInteger('discount_id')->unsigned()->nullable();
+            $table->foreign('discount_id')->references('id')->on('discounts');//onDelete('set null');
             $table->string('code');
             $table->string('name_en');
             $table->string('name_ar');
             $table->string('description');
-            $table->float('price');
+            $table->decimal('price',10,2);
             $table->enum('unit',['gram','piece']);
+            $table->boolean('availability')->default(1);
             $table->string('image'); // primary image
+            //$table->float('discount')->default(0);
             $table->timestamps(); 
         });
-        
     }
 
     /**
