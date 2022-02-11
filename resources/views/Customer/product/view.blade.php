@@ -1,6 +1,11 @@
 @extends('Layouts.main')
 @section('links')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+    #add-to-cart{
+        border: 1px solid #ffffff;
+    }
+</style>
 @endsection
 @section('content')
     <!-- Product Details Section Begin -->
@@ -37,8 +42,25 @@
                             <i class="fa fa-star-half-o"></i>
                             <span>(18 reviews)</span>
                         </div>
-                        <input style="display: none;" type="number" id="initial-price" value="{{$product->price}}">
-                        <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$product->price}}" readonly/>AED</div>
+                        
+                        @if($product->discount)  {{-- product has discount --}}
+                                    <h6 style="text-decoration: line-through; color: #f44336">    {{$product->price}}  </h6>
+                                    <?php
+                                        $discount_type = $product->discount->type;
+                                        if($discount_type == 'percent'){
+                                            $discount = $product->price * $product->discount->value / 100;
+                                            $new_price = $product->price - $discount;
+                                        }
+                                        else
+                                            $new_price = $product->price - $product->discount->value;
+                                    ?>
+                                    <input style="display: none;" type="number" id="initial-price" value="{{$new_price}}">
+                                    <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$new_price}}" readonly/>AED</div>
+                        @else
+                                    <input style="display: none;" type="number" id="initial-price" value="{{$product->price}}">
+                                    <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$product->price}}" readonly/>AED</div>
+                        @endif
+
                         <p>{{$product->description}}</p>
                         <div class="product__details__quantity">
                             <div class="quantity">
@@ -50,11 +72,21 @@
                         <input style="height:40px; width:100px; font-size:30px; border:0px solid white" id="weight-input" type='text' name='name' value="{{$product->unit == 'gram' ? '500g' : '1 piece'}}" readonly/>
                         <input type="hidden" id="unit" value="{{$product->unit}}">
                         <input type="hidden" id="product-id" value="{{$product->id}}">
-                        <button id="add-to-cart" class="primary-btn"> ADD TO CART </button>
+                        @if($product->availability)
+                        <button id="add-to-cart" class="primary-btn"> ADD TO CART <i class="fa fa-cart-plus"></i> </button>
+                        @else
+                        <button id="add-to-cart" class="disabled-btn" disabled> ADD TO CART <i class="fa fa-exclamation-circle"></i> </button>
+                        @endif
                         {{--<a href="#" class="primary-btn">ADD TO CART</a>--}}
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
-                            <li><b>Availability</b> <span>In Stock</span></li>
+                            <li><b>Availability</b>
+                                 @if($product->availability)
+                                 <span style="color: #7fad39; font-weight: bold;">available</span>
+                                 @else
+                                 <span style="color: #f44336; font-weight: bold;">sorry , not available now</span>
+                                 @endif
+                            </li>
                             <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
                             @if($product->unit == 'gram')
                             <li><b>Min weight</b> <span>500 g</span></li>

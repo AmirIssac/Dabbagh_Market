@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Shop\Category;
+use App\Models\Shop\Discount;
 use App\Models\Shop\Product;
 use App\Models\Shop\ProductImage;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class InventoryController extends Controller
     public function index(){
         $products = Product::orderBy('updated_at','DESC')->simplePaginate(10);
         $categories = Category::all();
-        return view('Admin.Inventory.index',['products'=>$products,'categories'=>$categories]);
+        $discounts = Discount::all();
+        return view('Admin.Inventory.index',['products'=>$products,'categories'=>$categories,'discounts'=>$discounts]);
     }
 
     public function storeProduct(Request $request){
@@ -106,5 +108,27 @@ class InventoryController extends Controller
             }
         }
         return back();
+    }
+
+    public function storeNewDiscount(Request $request){       
+        $active = true;
+        if(now() > $request->expired_at)
+            $active = false;
+        $discount = Discount::create([
+            'type' => $request->discount_type,
+            'value' => $request->discount_value,
+            'active' => $active,
+            'expired_at' => $request->expired_at,
+        ]);
+        
+        foreach($request->apply_discount_on_products as $product_id){
+                $product = Product::find($product_id);
+                $product->update([
+                    'discount_id' => $discount->id,
+                ]);
+        }
+        
+        return back();
+
     }
 }

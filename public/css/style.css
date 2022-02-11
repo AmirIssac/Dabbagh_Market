@@ -171,6 +171,17 @@ ol {
 	letter-spacing: 2px;
 }
 
+.disabled-btn {
+	display: inline-block;
+	font-size: 14px;
+	padding: 10px 28px 10px;
+	color: #ffffff;
+	text-transform: uppercase;
+	font-weight: 700;
+	background: #44493b;
+	letter-spacing: 2px;
+}
+
 .site-btn {
 	font-size: 14px;
 	color: #ffffff;
@@ -1702,7 +1713,7 @@ ol {
 
 .product__details__text .product__details__price {
 	font-size: 30px;
-	color: #dd2222;
+	color: #7fad39;
 	font-weight: 600;
 	margin-bottom: 15px;
 }
@@ -1712,6 +1723,12 @@ ol {
 }
 
 .product__details__text .primary-btn {
+	padding: 16px 28px 14px;
+	margin-right: 6px;
+	margin-bottom: 5px;
+}
+
+.product__details__text .disabled-btn {
 	padding: 16px 28px 14px;
 	margin-right: 6px;
 	margin-bottom: 5px;
@@ -1768,7 +1785,7 @@ ol {
 	margin-right: 6px;
 }
 
-.pro-qty {
+.pro-qty , .cart-qty {
 	width: 140px;
 	height: 50px;
 	display: inline-block;
@@ -1778,7 +1795,7 @@ ol {
 	margin-bottom: 5px;
 }
 
-.pro-qty input {
+.pro-qty input , .cart-qty input{
 	height: 100%;
 	width: 100%;
 	font-size: 16px;
@@ -1789,7 +1806,7 @@ ol {
 	text-align: center;
 }
 
-.pro-qty .qtybtn {
+.pro-qty .qtybtn , .cart-qty .cartqtybtn{
 	width: 35px;
 	font-size: 16px;
 	color: #6f6f6f;
@@ -1959,7 +1976,16 @@ ol {
 	height: 40px;
 }
 
+.shoping__cart__table table tbody tr td.shoping__cart__quantity .cart-qty {
+	width: 120px;
+	height: 40px;
+}
+
 .shoping__cart__table table tbody tr td.shoping__cart__quantity .pro-qty input {
+	color: #1c1c1c;
+}
+
+.shoping__cart__table table tbody tr td.shoping__cart__quantity .cart-qty input {
 	color: #1c1c1c;
 }
 
@@ -1967,7 +1993,15 @@ ol {
 	color: #1c1c1c;
 }
 
-.shoping__cart__table table tbody tr td.shoping__cart__quantity .pro-qty .qtybtn {
+.shoping__cart__table table tbody tr td.shoping__cart__quantity .cart-qty input::placeholder {
+	color: #1c1c1c;
+}
+
+.shoping__cart__table table tbody tr td.shoping__cart__quantity .pro-qty .cartqtybtn {
+	width: 15px;
+}
+
+.shoping__cart__table table tbody tr td.shoping__cart__quantity .cart-qty .cartqtybtn {
 	width: 15px;
 }
 
@@ -1977,11 +2011,24 @@ ol {
 	background: #f5f5f5;
 }
 
+.disabled-btn.cart-btn {
+	color: #6f6f6f;
+	padding: 14px 30px 12px;
+	background: #f5f5f5;
+}
+
 .primary-btn.cart-btn span {
+	font-size: 14px;
+}
+.disabled-btn.cart-btn span {
 	font-size: 14px;
 }
 
 .primary-btn.cart-btn.cart-btn-right {
+	float: right;
+}
+
+.disabled-btn.cart-btn.cart-btn-right {
 	float: right;
 }
 

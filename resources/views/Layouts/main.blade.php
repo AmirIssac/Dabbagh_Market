@@ -41,10 +41,10 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
+                <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
                 <li><a href="#"><i class="fa fa-cart"></i> <span>0</span></a></li>
             </ul>
-            <div class="header__cart__price">item: <span>$150.00</span></div>
+            <div class="header__cart__price">item: <span>00.00 AED</span></div>
         </div>
         <div class="humberger__menu__widget">
             <div class="header__top__right__language">
@@ -227,10 +227,24 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
-                            <li><a href="{{route('view.cart')}}"><i class="fa fa-shopping-cart"></i> <span>0</span></a></li>
+                            @if(Auth::user())
+                            <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
+                            <li><a href="{{route('view.cart')}}"><i class="fa fa-shopping-cart"></i>
+                                 <span>
+                                     @if($cart_items->count() > 0)
+                                     {{$cart_items->count()}}
+                                     @else
+                                     0
+                                     @endif
+                                </span>
+                                </a>
+                            </li>
+                            @else
+                            <li><a data-toggle="modal" data-target="#exampleModal"><i style="cursor: pointer" class="fa fa-heart"></i></a> </li>
+                            <li><a data-toggle="modal" data-target="#exampleModal"><i style="cursor: pointer" class="fa fa-shopping-cart"></i></a></li>
+                            @endif
                         </ul>
-                        <div class="header__cart__price">item: <span>$150.00</span></div>
+                        <div class="header__cart__price">item: <span>00.00 AED</span></div>
                     </div>
                 </div>
             </div>

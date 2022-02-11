@@ -52,8 +52,15 @@
                     {{$product->price}}
                   </td>
                   <td class="text-right">
+                    {{--
                     <a href="{{route('edit.product.form',$product->id)}}" class="btn btn-info">Edit</a>
                     <a class="btn btn-danger">Delete</a>
+                    --}}
+                  
+                      <a href="{{route('edit.product.form',$product->id)}}"><i class="fas fa-tools"></i></a>
+                      .
+                      <a><i class="fas fa-trash-alt"></i></a>
+                    
                   </td>
                 </tr>
                 @endforeach
@@ -213,7 +220,7 @@
     </div>
 
         <div class="col-md-12">
-      <div class="card card-plain">
+      <div class="card">
         <div class="card-header">
           <h4 class="card-title">   Categories </h4>
           <p class="category"></p>
@@ -242,7 +249,7 @@
                     {{$category->name_ar}}
                   </td>
                   <td class="text-right">
-                    <a class="btn btn-info">Edit</a>
+                    <a><i class="fas fa-tools"></i></a>
                   </td>
                 </tr>
                 @endforeach
@@ -277,22 +284,64 @@
                 <th>
                   Value
                 </th>
+                <th>
+                  Products
+                </th>
+                <th>
+                  Expired at
+                </th>
+                <th>
+                  Status
+                </th>
+                <th>
+                  Actions
+                </th>
               </thead>
               <tbody>
+              @foreach($discounts as $discount)
                <tr>
                  <td>
-                    <select name="discount_type" class="form-control">
-                        <option value="percent">percent</option>
-                        <option value="percent">value</option>
-                    </select>
+                   {{$discount->id}}
                  </td>
                  <td>
-                    <input type="number" step="0.01" class="form-control">
+                    {{$discount->type}}
+                 </td>
+                 <td>
+                    {{$discount->value}}
+                </td>
+                <td>
+                    @if($discount->products()->count() > 0)
+                    <select class="form-control">
+                        @foreach($discount->products as $product)
+                          <option>#{{$product->code}} / {{$product->name_en}}</option>
+                        @endforeach
+                    </select>
+                    @else
+                    <span class="badge badge-danger">none</span>
+                    @endif
+                </td>
+                <td>
+                  {{$discount->expired_at}}
+                </td>
+                <td>
+                  @if($discount->active)
+                  <span class="badge badge-success">active</span>
+                  @else
+                  <span class="badge badge-danger">disabled</span>
+                  @endif
+                </td>
+                <td>
+                  <a><i class="fas fa-tools"></i></a>
+                  .
+                  <a><i class="fas fa-trash-alt"></i></a>
                 </td>
                </tr>
+               @endforeach
                 <tr>
                     <td>
                         <button id="new-discount-btn" class="btn btn-success">New</button>
+                    </td>
+                    <td>
                     </td>
                     <td>
                     </td>
@@ -305,13 +354,13 @@
                 </tr>
               </tbody>
             </table>
-            {{ $products->links() }}
+            
           </div>
         </div>
       </div>
 
       {{-- new discount Form --}}
-      <form action="{{route('store.product')}}" method="POST">
+      <form action="{{route('store.discount')}}" method="POST">
           @csrf
       <div id="new-discount-form" class="card displaynone">
         <div class="card-header">
@@ -328,7 +377,7 @@
                   Value
                 </th>
                 <th>
-                  Apply on
+                  Products
                 </th>
                 <th>
                   Expired at
@@ -339,21 +388,21 @@
                   <td>
                     <select name="discount_type" class="form-control">
                         <option value="percent">percent</option>
-                        <option value="percent">value</option>
+                        <option value="value">value</option>
                     </select>
                  </td>
                  <td>
-                    <input type="number" step="0.01" class="form-control">
+                    <input type="number" step="0.01" name="discount_value" class="form-control">
                 </td>
                 <td>
-                    <select name="apply_discount_on_products" class="form-control" multiple>
+                    <select name="apply_discount_on_products[]" class="form-control" multiple>
                         @foreach($products as $product)
                           <option value="{{$product->id}}">#{{$product->code}} / {{$product->name_en}}</option>
                         @endforeach
                     </select>
                 </td>
                 <td>
-                    <input type="date" class="form-control">
+                    <input type="date" name="expired_at" class="form-control">
                 </td>
                 </tr>
                 <tr>
@@ -366,8 +415,7 @@
                     </td>
                     <td>
                     </td>
-                    <td>
-                    </td>
+                   
                 </tr>
               </tbody>
             </table>

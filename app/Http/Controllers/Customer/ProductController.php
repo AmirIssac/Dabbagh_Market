@@ -39,4 +39,19 @@ class ProductController extends Controller
         }
         return response('success');
     }
+
+    public function updateProductCart(Request $request , $id){
+            $product = Product::findOrFail($id);
+            $user = User::findOrFail(Auth::user()->id);
+            $cart = $user->cart;
+            //$cart->products()->attach([$product->id]);
+            // check if product repeated in cart so we increase quantity
+            $check_product = CartItem::where('cart_id',$cart->id)->where('product_id',$product->id)->first();
+            if($check_product){
+                $check_product->update([
+                    'quantity' => (int) $request->quantity,
+                ]);
+            }
+            return response('success');
+    }
 }

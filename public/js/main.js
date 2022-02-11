@@ -241,4 +241,29 @@
         $('#price-input').val(new_price);
     });
 
+
+
+    /*-------------------
+		Cart Live Quantity change
+	--------------------- */
+    var cartQty = $('.cart-qty');
+    //cartQty.prepend('<span class="dec cartqtybtn">-</span>');
+    //cartQty.append('<span class="inc cartqtybtn">+</span>');
+    cartQty.on('click', '.cartqtybtn', function () {
+        var $button = $(this);
+        var oldValue = $button.parent().find('input').val();
+        if ($button.hasClass('inc')) {
+            var newVal = parseFloat(oldValue) + 1;
+        } else {
+            // Don't allow decrementing below one
+            if (oldValue > 1) {
+                var newVal = parseFloat(oldValue) - 1;
+            } else {
+                newVal = 1;
+            }
+        }
+        $button.parent().find('input').val(newVal);
+
+    });
+
 })(jQuery);

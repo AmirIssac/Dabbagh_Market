@@ -19,6 +19,10 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+
+Route::group(['middleware'=>['global_data_share']] , function(){
+
+
 Route::get('/', [Controller::class, 'index'])->name('index');
 
 // Admin
@@ -29,6 +33,7 @@ Route::group(['middleware'=>['is_admin']] , function(){
         Route::get('/edit/product/form/{product_id}',[AdminInventoryController::class, 'editProductForm'])->name('edit.product.form');
         Route::post('/update/product/{product_id}',[AdminInventoryController::class, 'updateProduct'])->name('update.product');
         Route::get('/users',[UserDashboardContoller::class, 'show'])->name('show.users');
+        Route::post('/store/discount',[AdminInventoryController::class, 'storeNewDiscount'])->name('store.discount');
 });
 
 /*
@@ -44,7 +49,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // customer
 Route::get('/product/{product_id}', [ProductController::class, 'viewProduct'])->name('view.product');
 Route::post('/add/product/toCart/{product_id}', [ProductController::class, 'addProductToCart'])->name('add.product.to.cart');
+Route::post('/update/product/inCart/{product_id}', [ProductController::class, 'updateProductCart'])->name('update.product.in.cart');
 Route::get('/view/my-cart', [CartController::class, 'viewCart'])->name('view.cart');
+Route::post('/delete/cart/item/{cart_item}', [CartController::class, 'deleteCartItem'])->name('delete.cart.item');
+
 
 
 
@@ -52,3 +60,5 @@ Route::get('/view/my-cart', [CartController::class, 'viewCart'])->name('view.car
 // guest
 Route::get('/sign-up', [Controller::class, 'signUpForm'])->name('sign.up');
 
+
+});

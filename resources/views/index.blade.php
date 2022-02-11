@@ -53,7 +53,27 @@
                         </div>
                         <div class="featured__item__text">
                             <h6><a href="#">{{$product->name_en}}</a></h6>
-                            <h5>{{$product->price}} AED</h5>
+                            <h5>
+                                @if(!$product->availability)
+                                <span class="badge badge-danger">not available now</span>
+                                @endif
+                              {{--  {{$product->price}} AED  --}}
+                            </h5>
+                            @if($product->discount)  {{-- product has discount --}}
+                                    <h6 style="text-decoration: line-through; color: #f44336">    {{$product->price}}  </h6>
+                                    <?php
+                                        $discount_type = $product->discount->type;
+                                        if($discount_type == 'percent'){
+                                            $discount = $product->price * $product->discount->value / 100;
+                                            $new_price = $product->price - $discount;
+                                        }
+                                        else
+                                            $new_price = $product->price - $product->discount->value;
+                                    ?>
+                                    <h5 style="color: #7fad39">{{$new_price}} AED</h5>
+                            @else
+                                    <h5 style="color: #7fad39">{{$product->price}} AED</h5>
+                            @endif
                         </div>
                     </div>
                 </div>
