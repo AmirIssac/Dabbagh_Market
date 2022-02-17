@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\InventoryController as AdminInventoryController;
 use App\Http\Controllers\Customer\ProductController as ProductController;
 use App\Http\Controllers\Customer\CartController as CartController;
 use App\Http\Controllers\Admin\UserContoller as UserDashboardContoller;
+use App\Http\Controllers\Customer\OrderController;
+use App\Http\Controllers\Customer\ProfileController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -52,6 +54,14 @@ Route::post('/add/product/toCart/{product_id}', [ProductController::class, 'addP
 Route::post('/update/product/inCart/{product_id}', [ProductController::class, 'updateProductCart'])->name('update.product.in.cart');
 Route::get('/view/my-cart', [CartController::class, 'viewCart'])->name('view.cart');
 Route::post('/delete/cart/item/{cart_item}', [CartController::class, 'deleteCartItem'])->name('delete.cart.item');
+
+Route::get('/checkout',[OrderController::class, 'checkout'])->name('checkout');
+
+
+Route::get('/my-profile',[ProfileController::class, 'myProfile'])->name('my.profile');
+Route::post('/submit/profile',[ProfileController::class, 'submitProfile'])->name('submit.profile');
+
+
 
 
 

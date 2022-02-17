@@ -54,24 +54,41 @@
                                         else
                                             $new_price = $product->price - $product->discount->value;
                                     ?>
+                                    {{-- FOR 1 KG --}}
                                     <input style="display: none;" type="number" id="initial-price" value="{{$new_price}}">
-                                    <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$new_price}}" readonly/>AED</div>
+                                    <div><input style="height:40px; font-size:18px; color:#7fad39; border:0px solid white" type='text' name='name' value="{{$new_price.' for 1 K.G'}}" readonly/></div>
+                                    {{-- final price --}}
+                                    <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$new_price * $product->min_weight / 1000}}" readonly/>AED</div>
                         @else
+                                    {{-- FOR 1 KG --}}
                                     <input style="display: none;" type="number" id="initial-price" value="{{$product->price}}">
-                                    <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$product->price}}" readonly/>AED</div>
+                                    <div><input style="height:40px; font-size:18px; color:#7fad39; border:0px solid white" type='text' name='name' value="{{$product->price.' for 1 K.G'}}" readonly/></div>
+                                    {{-- final price --}}
+                                    <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$product->price * $product->min_weight / 1000}}" readonly/>AED</div>
                         @endif
-
+                                    
                         <p>{{$product->description}}</p>
                         <div class="product__details__quantity">
+                            <input type="hidden" id="increase-by" value="{{$product->increase_by}}">
                             <div class="quantity">
                                 <div class="pro-qty">
                                     <input id="quantity-input" type="text" value="1">
                                 </div>
                             </div>
                         </div>
-                        <input style="height:40px; width:100px; font-size:30px; border:0px solid white" id="weight-input" type='text' name='name' value="{{$product->unit == 'gram' ? '500g' : '1 piece'}}" readonly/>
+                        @if($product->unit == 'gram')
+                        <input style="height:40px; width:100px; font-size:30px; border:0px solid white" id="weight-input" type='text' name='name' value="{{($product->min_weight / 1000).' K.G'}}" readonly/>
+                        {{--
+                        @elseif($product->unit == 'gram' && $product->min_weight < 1000)
+                        <input style="height:40px; width:100px; font-size:30px; border:0px solid white" id="weight-input" type='text' name='name' value="{{$product->min_weight.' g'}}" readonly/>
+                        --}}
+                        @elseif($product->unit == 'piece')
+                        <input style="height:40px; width:100px; font-size:30px; border:0px solid white" id="weight-input" type='text' name='name' value="{{$product->min_weight.' piece'}}" readonly/>
+                        @endif
                         <input type="hidden" id="unit" value="{{$product->unit}}">
+                        <input type="hidden" id="min_weight" value="{{$product->min_weight}}">
                         <input type="hidden" id="product-id" value="{{$product->id}}">
+                        <input style="display: none"  id="weight-in-gram" type='number' name='weight' value="{{$product->unit == 'gram' ? $product->min_weight : $product->min_weight}}" readonly/>
                         @if($product->availability)
                         <button id="add-to-cart" class="primary-btn"> ADD TO CART <i class="fa fa-cart-plus"></i> </button>
                         @else
@@ -89,9 +106,9 @@
                             </li>
                             <li><b>Shipping</b> <span>01 day shipping. <samp>Free pickup today</samp></span></li>
                             @if($product->unit == 'gram')
-                            <li><b>Min weight</b> <span>500 g</span></li>
+                            <li><b>Min weight</b> <span>{{$product->min_weight}} gram</span></li>
                             @else
-                            <li><b>Min quantity</b> <span>1 piece</span></li>
+                            <li><b>Min quantity</b> <span>{{$product->min_weight}} piece</span></li>
                             @endif
                             <li><b>Share on</b>
                                 <div class="share">
@@ -194,7 +211,8 @@
     $('document').ready(function(){
         $('#add-to-cart').on('click',function(){
             var product_id = $('#product-id').val();
-            var qty = parseInt($('#quantity-input').val());
+            //var qty = parseInt($('#quantity-input').val());
+            var qty = parseInt($('#weight-in-gram').val());
             $.ajax({
                 headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

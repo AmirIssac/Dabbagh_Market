@@ -32,6 +32,12 @@
                 <th>
                   Price
                 </th>
+                <th>
+                  Min weight
+                </th>
+                <th>
+                  Increase by
+                </th>
                 <th class="text-right">
                   Action
                 </th>
@@ -51,6 +57,12 @@
                   <td>
                     {{$product->price}}
                   </td>
+                  <td>
+                    {{$product->min_weight}} {{$product->unit}}
+                  </td>
+                  <td>
+                    {{$product->increase_by}}
+                  </td>
                   <td class="text-right">
                     {{--
                     <a href="{{route('edit.product.form',$product->id)}}" class="btn btn-info">Edit</a>
@@ -67,6 +79,10 @@
                 <tr>
                     <td>
                         <button id="new-product-btn" class="btn btn-success">New</button>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
                     </td>
                     <td>
                     </td>
@@ -113,12 +129,6 @@
                 <th>
                   Category
                 </th>
-                <th>
-                  Availability
-                </th>
-                <th>
-                  Price
-                </th>
               </thead>
               <tbody>
                 <tr>
@@ -139,13 +149,31 @@
                             @endforeach
                         </select>
                     </td>
-                    <td>
-                      <select name="availability" class="form-control">
-                          <option value="yes">available in stock</option>
-                          <option value="no">not available</option>
-                      </select>
-                  </td>
-                    <td> <input type="number" step="0.1" name="price" class="form-control"> </td>
+                </tr>
+                <tr>
+                  <th>
+                    Availability
+                  </th>
+                  <th>
+                    Price
+                  </th>
+                  <th>
+                    Min weight
+                  </th>
+                  <th>
+                    Increase by
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    <select name="availability" class="form-control">
+                        <option value="yes">available in stock</option>
+                        <option value="no">not available</option>
+                    </select>
+                </td>
+                  <td> <input type="number" step="0.1" name="price" class="form-control"> </td>
+                  <td> <input type="number" step="100" name="min_weight" class="form-control"> </td>
+                  <td> <input type="number" step="100" name="increase_by" class="form-control"> </td>
                 </tr>
                 <tr>
                     <th>

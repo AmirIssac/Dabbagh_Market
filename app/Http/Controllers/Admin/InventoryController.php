@@ -40,6 +40,8 @@ class InventoryController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'unit' => $request->unit,
+            'min_weight' => $request->min_weight,
+            'increase_by' => $request->increase_by,
             'availability' => $availability,
             'image' => $imagePath,
         ]);
@@ -88,6 +90,8 @@ class InventoryController extends Controller
             'description' => $request->description,
             'price' => $request->price,
             'unit' => $request->unit,
+            'min_weight' => $request->min_weight,
+            'increase_by' => $request->increase_by,
             'availability' => $availability,
             'image' => $imagePath,
         ]);

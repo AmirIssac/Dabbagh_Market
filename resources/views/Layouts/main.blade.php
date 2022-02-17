@@ -181,7 +181,7 @@
                                             @if(Auth::user()->adminstrative())
                                             <li><a href="{{route('dashboard')}}">Dashboard</a></li>
                                             @endif
-                                            <li><a href="#">My profile</a></li>
+                                            <li><a href="{{route('my.profile')}}">My profile</a></li>
                                             <li><a href="{{route('view.cart')}}">My cart</a></li>
                                             <li>
                                                 <form id="logout-form" action="{{route('logout')}}" method="POST">

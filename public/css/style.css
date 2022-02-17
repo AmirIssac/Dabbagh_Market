@@ -903,7 +903,24 @@ ol {
 	border-color: #7fad39;
 }
 
+.featured__item__pic__hover li:hover button {
+	background: #7fad39;
+	border-color: #7fad39;
+}
+
+
+
+.featured__item__pic__hover li:hover #disabled-cart {
+	background: #ad3939;
+	border-color: #ad3939;
+}
+
 .featured__item__pic__hover li:hover a i {
+	color: #ffffff;
+	transform: rotate(360deg);
+}
+
+.featured__item__pic__hover li:hover button i {
 	color: #ffffff;
 	transform: rotate(360deg);
 }
@@ -926,7 +943,53 @@ ol {
 	transition: all, 0.5s;
 }
 
+.featured__item__pic__hover li button {
+	font-size: 16px;
+	color: #1c1c1c;
+	height: 40px;
+	width: 40px;
+	line-height: 40px;
+	text-align: center;
+	border: 1px solid #ebebeb;
+	background: #ffffff;
+	display: block;
+	border-radius: 50%;
+	-webkit-transition: all, 0.5s;
+	-moz-transition: all, 0.5s;
+	-ms-transition: all, 0.5s;
+	-o-transition: all, 0.5s;
+	transition: all, 0.5s;
+}
+
+.featured__item__pic__hover li #disabled-cart {
+	font-size: 16px;
+	color: #1c1c1c;
+	height: 40px;
+	width: 40px;
+	line-height: 40px;
+	text-align: center;
+	border: 1px solid #ebebeb;
+	background: #ffffff;
+	display: block;
+	border-radius: 50%;
+	-webkit-transition: all, 0.5s;
+	-moz-transition: all, 0.5s;
+	-ms-transition: all, 0.5s;
+	-o-transition: all, 0.5s;
+	transition: all, 0.5s;
+}
+
 .featured__item__pic__hover li a i {
+	position: relative;
+	transform: rotate(0);
+	-webkit-transition: all, 0.3s;
+	-moz-transition: all, 0.3s;
+	-ms-transition: all, 0.3s;
+	-o-transition: all, 0.3s;
+	transition: all, 0.3s;
+}
+
+.featured__item__pic__hover li button i {
 	position: relative;
 	transform: rotate(0);
 	-webkit-transition: all, 0.3s;
@@ -1258,6 +1321,10 @@ ol {
 .sidebar__item__size label input {
 	position: absolute;
 	visibility: hidden;
+}
+
+.displaynone{
+	display: none;
 }
 
 /*---------------------

@@ -224,12 +224,24 @@
 
         // change weight output
         if($('#unit').val() == "gram"){  // gram
-            var newWeight = newVal * 500 ;
+            var min_weight = parseInt($('#min_weight').val());
+            var increase_by = parseInt($('#increase-by').val());
+            var weight_in_gram = 0;   // to calculate the price
+            if(newVal == 1){
+                var newWeight = min_weight ;
+                    weight_in_gram = min_weight ;
+            }
+            else{
+                var newWeight = min_weight + ((newVal-1) * increase_by) ;   // increasing 500 by 500 every step
+                weight_in_gram = newWeight;
+            }
             if(newWeight > 500)  // change to KG
                 newWeight = newWeight / 1000 + "KG";
             else
                  newWeight = newWeight + "g";
             $('#weight-input').val(newWeight);
+            $('#weight-in-gram').val(weight_in_gram);
+
         }
         else{  // piece
             var newWeight = newVal * 1 ;
@@ -237,7 +249,8 @@
         }
 
         // change price
-        var new_price = $('#initial-price').val() * newVal;
+        // initial price is the price of 1 k.g
+        var new_price = ($('#initial-price').val() * weight_in_gram ) / 1000;
         $('#price-input').val(new_price);
     });
 
@@ -251,15 +264,19 @@
     //cartQty.append('<span class="inc cartqtybtn">+</span>');
     cartQty.on('click', '.cartqtybtn', function () {
         var $button = $(this);
-        var oldValue = $button.parent().find('input').val();
+        var oldValue = $button.parent().find('input[type="text"]').val();
+        var determine_product_id = $button.parent().find('input[type="hidden"]').attr('id');
+        var gold = determine_product_id.slice(3);
+        var min_weight = parseInt($('#min'+gold).val());
+        var increase_by = parseInt($('#increase'+gold).val());
         if ($button.hasClass('inc')) {
-            var newVal = parseFloat(oldValue) + 1;
+            var newVal = parseFloat(oldValue) + increase_by;
         } else {
             // Don't allow decrementing below one
-            if (oldValue > 1) {
-                var newVal = parseFloat(oldValue) - 1;
+            if (oldValue > min_weight) {
+                var newVal = parseFloat(oldValue) - increase_by;
             } else {
-                newVal = 1;
+                newVal = min_weight;
             }
         }
         $button.parent().find('input').val(newVal);

@@ -27,7 +27,7 @@ class ProductController extends Controller
         $check_product = CartItem::where('cart_id',$cart->id)->where('product_id',$product->id)->first();
         if($check_product){
             $check_product->update([
-                'quantity' => $check_product->quantity + $request->quantity,
+                'quantity' => $check_product->quantity + $request->quantity,   // quantity is the weight in gram
             ]);
         }
         else{

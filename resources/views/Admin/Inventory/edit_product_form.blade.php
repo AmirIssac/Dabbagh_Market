@@ -41,12 +41,6 @@
                 <th>
                   Category
                 </th>
-                <th>
-                  Availability
-                </th>
-                <th>
-                  Price
-                </th>
               </thead>
               <tbody>
                 <tr>
@@ -71,18 +65,36 @@
                             @endforeach
                         </select>
                     </td>
-                    <td>
-                      <select name="availability" class="form-control">
-                          @if($product->availability)
-                          <option value="yes" selected>available in stock</option>
-                          <option value="no">not available</option>
-                          @else
-                          <option value="yes">available in stock</option>
-                          <option value="no" selected>not available</option>
-                          @endif
-                      </select>
-                  </td>
-                    <td> <input type="number" step="0.1" name="price" value="{{$product->price}}" class="form-control"> </td>
+                </tr>
+                <tr>
+                  <th>
+                    Availability
+                  </th>
+                  <th>
+                    Price
+                  </th>
+                  <th>
+                    Min weight
+                  </th>
+                  <th>
+                    Increase by
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    <select name="availability" class="form-control">
+                        @if($product->availability)
+                        <option value="yes" selected>available in stock</option>
+                        <option value="no">not available</option>
+                        @else
+                        <option value="yes">available in stock</option>
+                        <option value="no" selected>not available</option>
+                        @endif
+                    </select>
+                </td>
+                  <td> <input type="number" step="0.1" name="price" value="{{$product->price}}" class="form-control"> </td>
+                    <td> <input type="number" step="100" name="min_weight" value="{{$product->min_weight}}" class="form-control"> </td>
+                    <td> <input type="number" step="100" name="increase_by" value="{{$product->increase_by}}" class="form-control"> </td>
                 </tr>
                 <tr>
                     <th>

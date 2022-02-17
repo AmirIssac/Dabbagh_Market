@@ -1,4 +1,7 @@
     @extends('Layouts.main')
+    @section('links')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @endsection
     @section('content')
    
 
@@ -48,7 +51,13 @@
                             <ul class="featured__item__pic__hover">
                                 <li><a href="#"><i class="fa fa-heart"></i></a></li>
                                 <li><a href="{{route('view.product',$product->id)}}"><i class="fa fa-eye"></i></a></li>
-                                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                <li>
+                                    @if($product->availability)
+                                    <button id="add-to-cart-{{$product->id}}"><i class="fa fa-shopping-cart"></i></button>
+                                    @else
+                                    <button id="disabled-cart"><i class="fa fa-shopping-cart"></i></button>
+                                    @endif
+                                </li>
                             </ul>
                         </div>
                         <div class="featured__item__text">
@@ -404,5 +413,26 @@
     </section>
     <!-- Blog Section End -->
 
+    @section('scripts')
+    <script>
+    $('[id^=add-to-cart-]').on('click',function(){
+        var product_id = parseInt($(this).attr('id').slice(12));
+        var qty = 1 ;
+        $.ajax({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "post",
+            url: '/add/product/toCart/'+product_id,
+            data : { quantity : qty },
+            //dataType: 'json',
+            success: function(data){    // data is the response come from controller
+                if(data == 'success')
+                    alert('added to cart !!');
+            }
+        }); // ajax close
 
+    });
+    </script>
+    @endsection
     @endsection

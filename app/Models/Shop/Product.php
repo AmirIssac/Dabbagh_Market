@@ -17,6 +17,8 @@ class Product extends Model
         'name_ar',
         'description',
         'price',
+        'min_weight',
+        'increase_by',
         'unit',
         'availability',
         'image',

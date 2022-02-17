@@ -24,11 +24,12 @@ class CreateProductsTable extends Migration
             $table->string('name_en');
             $table->string('name_ar');
             $table->string('description');
-            $table->decimal('price',10,2);
+            $table->decimal('price',10,2);   // for 1 kg || 1 piece
             $table->enum('unit',['gram','piece']);
+            $table->integer('min_weight');
+            $table->smallInteger('increase_by');
             $table->boolean('availability')->default(1);
             $table->string('image'); // primary image
-            //$table->float('discount')->default(0);
             $table->timestamps(); 
         });
     }

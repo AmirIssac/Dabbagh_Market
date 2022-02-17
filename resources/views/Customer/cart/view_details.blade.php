@@ -13,7 +13,7 @@
                             <thead>
                                 <tr>
                                     <th class="shoping__product">Products</th>
-                                    <th>Price</th>
+                                    <th>1 K.G Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
                                     <th></th>
@@ -48,9 +48,12 @@
                                     </td>
                                     <td class="shoping__cart__quantity">
                                         <div class="quantity">
+                                            <input type="number" class="displaynone" id="min{{$item->product->id}}" value="{{$item->product->min_weight}}">
+                                            <input type="number" class="displaynone" id="increase{{$item->product->id}}" value="{{$item->product->increase_by}}">
                                             <div class="cart-qty">
                                                 <span class="{{$counter}}qty dec cartqtybtn">-</span>
                                                 <input type="text" value="{{$item->quantity}}" id="quantity-input{{$counter}}">
+                                                <input type="hidden" id="pro{{$item->product->id}}">
                                                 <span class="{{$counter}}qty inc cartqtybtn" id="qty{{$counter}}">+</span>
                                             </div>
                                         </div>
@@ -66,10 +69,12 @@
                                             {{$item->product->price * $item->quantity}}
                                         @endif
                                         --}}
-                                        <input type="text" id="single-item-total{{$counter}}" value="{{$item->product->discount ? $new_price * $item->quantity : $item->product->price * $item->quantity}}">
                                         {{--
-                                        <h6 id="h-item-total{{$counter}}"></h6>
-                                        --}}
+                                        <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->product->discount ? $new_price * $item->quantity : $item->product->price * $item->quantity}}">
+                                        <h3 id="h-item-total{{$counter}}">{{$item->product->discount ? $new_price * $item->quantity : $item->product->price * $item->quantity}}</h6>
+                                        --}}    
+                                        <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->product->discount ? ($new_price * $item->quantity) / 1000 : ($item->product->price * $item->quantity) / 1000}}">
+                                        <h3 id="h-item-total{{$counter}}">{{$item->product->discount ? ($new_price * $item->quantity) / 1000 : ($item->product->price * $item->quantity) / 1000}}</h6>
                                     </td>
                                     <td class="shoping__cart__item__close">
                                         <form action="{{route('delete.cart.item',$item->id)}}" method="POST">
@@ -83,12 +88,14 @@
                                 </tr>
                                 <?php $counter++; ?>
                                 @endforeach
+                                <input type="hidden" value="{{$counter}}" id="cart-rows"> {{-- number of rows in cart --}}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             <div class="row">
+                {{--
                 <div class="col-lg-12">
                     <div class="shoping__cart__btns">
                         <a href="#" class="primary-btn cart-btn">CONTINUE SHOPPING</a>
@@ -96,6 +103,7 @@
                             Upadate Cart</a>
                     </div>
                 </div>
+                --}}
                 <div class="col-lg-6">
                     <div class="shoping__continue">
                         <div class="shoping__discount">
@@ -111,10 +119,10 @@
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span>$454.98</span></li>
-                            <li>Total <span>$454.98</span></li>
+                            <li>Subtotal <span id="cart-subtotal">{{$cart_total}} AED</span></li>
+                            <li>Total <span id="cart-total">{{$cart_total}} AED</span></li>
                         </ul>
-                        <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a>
+                        <a href="{{route('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
                     </div>
                 </div>
             </div>
@@ -152,13 +160,20 @@
                         "_token": token,
                     },
                     success: function (){
-                        $('#single-item-total'+gold).val(parseFloat($('#final-item-price'+gold).val()) * quantity);
+                        $('#single-item-total'+gold).val((parseFloat($('#final-item-price'+gold).val()) * quantity) / 1000);
+                        $('#h-item-total'+gold).text($('#single-item-total'+gold).val());
+                        var cart_total = 0 ;
+                        var cart_rows = $('#cart-rows').val();
+                        //alert(cart_rows);
+                        for(var i=0 ; i < cart_rows ; i++){
+                            cart_total = cart_total + parseFloat($('#single-item-total'+i).val());
+                        }
+                        $('#cart-subtotal').text(cart_total + ' AED');
+                        $('#cart-total').text(cart_total + ' AED');
                         //alert('success !');
                     }
                 });
                 
-        
-       
     });
 </script>
 @endsection

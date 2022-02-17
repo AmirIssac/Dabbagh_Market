@@ -19,7 +19,7 @@ class CreateCartItemsTable extends Migration
             $table->foreign('cart_id')->references('id')->on('carts');//onDelete('set null');
             $table->unsignedBigInteger('product_id')->unsigned();
             $table->foreign('product_id')->references('id')->on('products');//onDelete('set null');
-            $table->integer('quantity');
+            $table->integer('quantity');  // weight
             $table->timestamps();
         });
     }
