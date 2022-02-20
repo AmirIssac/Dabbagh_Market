@@ -66,7 +66,7 @@
             </a>
           </li>
           <li>
-            <a href="./map.html">
+            <a href="{{route('orders')}}">
               <i class="now-ui-icons shopping_box"></i>
               <p>Orders</p>
             </a>

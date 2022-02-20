@@ -2044,7 +2044,7 @@ ol {
 }
 
 .shoping__cart__table table tbody tr td.shoping__cart__quantity .cart-qty {
-	width: 120px;
+	width: 200px;
 	height: 40px;
 }
 
@@ -2069,7 +2069,7 @@ ol {
 }
 
 .shoping__cart__table table tbody tr td.shoping__cart__quantity .cart-qty .cartqtybtn {
-	width: 15px;
+	width: 60px;
 }
 
 .primary-btn.cart-btn {
@@ -2231,7 +2231,7 @@ ol {
 .checkout__input p span {
 	color: #dd2222;
 }
-
+/*
 .checkout__input input {
 	width: 100%;
 	height: 46px;
@@ -2239,6 +2239,16 @@ ol {
 	padding-left: 20px;
 	font-size: 16px;
 	color: #b2b2b2;
+	border-radius: 4px;
+}
+*/
+
+.checkout__input input[type="text"] {
+	width: 100%;
+	height: 46px;
+	border: 1px solid #ebebeb;
+	padding-left: 20px;
+	font-size: 16px;
 	border-radius: 4px;
 }
 

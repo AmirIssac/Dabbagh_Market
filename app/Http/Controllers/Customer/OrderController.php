@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Shop\Profile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,7 @@ class OrderController extends Controller
 {
     public function checkout(){
         $user = User::findOrFail(Auth::user()->id);
+        $profile = $user->profile;
         $cart = $user->cart;
         $cart_items = $cart->cartItems;
         $date = now()->toDateString();
@@ -32,6 +34,6 @@ class OrderController extends Controller
                      $total_order_price += $item->product->price * $item->quantity / 1000  ;
             } 
         } 
-        return view('Customer.order.checkout',['cart'=>$cart , 'cart_items' => $cart_items,'date' => $date, 'total_order_price' => $total_order_price]);
+        return view('Customer.order.checkout',['cart'=>$cart , 'cart_items' => $cart_items,'date' => $date, 'total_order_price' => $total_order_price,'profile'=>$profile]);
     }
 }

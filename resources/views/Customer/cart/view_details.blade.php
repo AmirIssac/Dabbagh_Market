@@ -21,6 +21,7 @@
                             </thead>
                             <tbody>
                                 <?php $counter = 0 ?>
+                                @if($cart_items->count() > 0)
                                 @foreach($cart_items as $item)
                                 <input type="hidden" value="{{$item->product->id}}" id="product{{$counter}}">
                                 <tr>
@@ -52,7 +53,7 @@
                                             <input type="number" class="displaynone" id="increase{{$item->product->id}}" value="{{$item->product->increase_by}}">
                                             <div class="cart-qty">
                                                 <span class="{{$counter}}qty dec cartqtybtn">-</span>
-                                                <input type="text" value="{{$item->quantity}}" id="quantity-input{{$counter}}">
+                                                <input type="text" value="{{$item->quantity}}" id="quantity-input{{$counter}}">g
                                                 <input type="hidden" id="pro{{$item->product->id}}">
                                                 <span class="{{$counter}}qty inc cartqtybtn" id="qty{{$counter}}">+</span>
                                             </div>
@@ -88,6 +89,22 @@
                                 </tr>
                                 <?php $counter++; ?>
                                 @endforeach
+                                @else {{-- Empty cart --}}
+                                <tr>
+                                    <td>
+                                        <span class="badge badge-danger">empty</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-danger">none</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-danger">none</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-danger">none</span>
+                                    </td>
+                                </tr>
+                                @endif
                                 <input type="hidden" value="{{$counter}}" id="cart-rows"> {{-- number of rows in cart --}}
                             </tbody>
                         </table>
