@@ -12,7 +12,8 @@ class ProfileController extends Controller
     public function myProfile(){
         $user = User::findOrFail(Auth::user()->id);
         $profile = $user->profile;
-        return view('Customer.profile.view')->with(['user'=>$user,'profile'=>$profile]);
+        $orders_count = $user->orders()->count();
+        return view('Customer.profile.view')->with(['user'=>$user,'profile'=>$profile,'orders_count'=>$orders_count]);
     }
 
     public function submitProfile(Request $request){

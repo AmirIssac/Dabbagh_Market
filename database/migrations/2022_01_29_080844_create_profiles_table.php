@@ -20,6 +20,7 @@ class CreateProfilesTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('phone');
+            $table->mediumInteger('points')->default(0);
             $table->string('address_address')->nullable();
             $table->double('address_latitude')->nullable();
             $table->double('address_longitude')->nullable();

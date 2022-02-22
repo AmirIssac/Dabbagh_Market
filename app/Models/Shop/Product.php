@@ -44,6 +44,11 @@ class Product extends Model
         return $this->belongsTo(Discount::class);
     }
 
+    public function orderItem()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
+
     /*
     public function carts()
     {

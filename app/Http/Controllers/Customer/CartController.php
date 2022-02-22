@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Setting;
 use App\Models\Shop\CartItem;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,6 +16,7 @@ class CartController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $cart = $user->cart;
         $cart_items = $cart->cartItems;
+        $tax = Setting::first()->tax;
         $cart_total = 0 ;
         foreach($cart_items as $item){
             if($item->product->discount){
@@ -30,7 +32,7 @@ class CartController extends Controller
                 $cart_total = $cart_total + ($item->product->price * $item->quantity / 1000);
 
         }
-        return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total]);
+        return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax]);
     }
 
     public function deleteCartItem($id){

@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');//onDelete('set null');
             $table->string('number');   // order number
-            $table->enum('status',['pending','preparing','shipping','delivered','failed']);
+            $table->enum('status',['pending','preparing','shipping','delivered','failed','cancelled','rejected']);
             $table->decimal('sub_total',10,2);   // the total price of the order items
             $table->decimal('tax_ratio',3,2);   // the tax ratio
             $table->decimal('tax_value',10,2);   // the total tax value of the order

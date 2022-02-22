@@ -18,14 +18,14 @@
                 <div class="contact__widget">
                     <i class="fa fa-shopping-cart order-icon"></i>
                     <h4>Orders</h4>
-                    <p>0</p>
+                    <p>{{$orders_count}}</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 text-center">
                 <div class="contact__widget">
                     <span class="icon_box-checked"></span>
                     <h4>Points</h4>
-                    <p>0</p>
+                    <p>{{$profile->points}}</p>
                 </div>
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6 text-center">

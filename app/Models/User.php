@@ -3,7 +3,10 @@
 namespace App\Models;
 
 use App\Models\Shop\Cart;
+use App\Models\Shop\Order;
+use App\Models\Shop\PaymentDetail;
 use App\Models\Shop\Profile;
+use App\Models\Shop\Transaction;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -55,6 +58,21 @@ class User extends Authenticatable
     public function cart()
     {
         return $this->hasOne(Cart::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function paymentsDetails()
+    {
+        return $this->hasMany(PaymentDetail::class);
     }
 
 

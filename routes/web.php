@@ -57,6 +57,9 @@ Route::get('/view/my-cart', [CartController::class, 'viewCart'])->name('view.car
 Route::post('/delete/cart/item/{cart_item}', [CartController::class, 'deleteCartItem'])->name('delete.cart.item');
 
 Route::get('/checkout',[OrderController::class, 'checkout'])->name('checkout');
+Route::post('/submit/order',[App\Http\Controllers\Customer\OrderController::class, 'submit'])->name('submit.order');
+Route::get('/order/details/{order_id}',[App\Http\Controllers\Customer\OrderController::class, 'details'])->name('order.details');
+
 
 
 Route::get('/my-profile',[ProfileController::class, 'myProfile'])->name('my.profile');

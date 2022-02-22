@@ -135,9 +135,14 @@
                 <div class="col-lg-6">
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
+                        <input type="hidden" value="{{$tax}}" id="tax">
                         <ul>
                             <li>Subtotal <span id="cart-subtotal">{{$cart_total}} AED</span></li>
-                            <li>Total <span id="cart-total">{{$cart_total}} AED</span></li>
+                            <li>Tax <span id="cart-subtotal">{{$tax}}%</span></li>
+                            <?php $tax_value = $tax * $cart_total / 100 ;
+                                  $cart_grand_total = $cart_total + $tax_value ;
+                            ?>
+                            <li>Total <span id="cart-total">{{$cart_grand_total}} AED</span></li>
                         </ul>
                         <a href="{{route('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
                     </div>
@@ -180,13 +185,17 @@
                         $('#single-item-total'+gold).val((parseFloat($('#final-item-price'+gold).val()) * quantity) / 1000);
                         $('#h-item-total'+gold).text($('#single-item-total'+gold).val());
                         var cart_total = 0 ;
+                        var cart_grand_total = 0 ;
+                        var tax = $('#tax').val();
                         var cart_rows = $('#cart-rows').val();
                         //alert(cart_rows);
                         for(var i=0 ; i < cart_rows ; i++){
                             cart_total = cart_total + parseFloat($('#single-item-total'+i).val());
                         }
+                        var tax_value = tax * cart_total / 100 ;
+                        cart_grand_total = cart_total + tax_value ;
                         $('#cart-subtotal').text(cart_total + ' AED');
-                        $('#cart-total').text(cart_total + ' AED');
+                        $('#cart-total').text(cart_grand_total + ' AED');
                         //alert('success !');
                     }
                 });
