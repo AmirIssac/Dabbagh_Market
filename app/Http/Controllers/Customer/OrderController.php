@@ -127,4 +127,10 @@ class OrderController extends Controller
         $order_items = $order->orderItems;
         return view('Customer.order.order_details',['order' => $order , 'order_items' => $order_items]);
     }
+
+    public function showMyOrders(){
+        $user = User::findOrFail(Auth::user()->id);
+        $orders = $user->orders()->orderBy('updated_at','DESC')->get();
+        return view('Customer.order.my_orders',['orders'=>$orders]);
+    }
 }

@@ -7,37 +7,41 @@
     <div class="col-md-8 ml-auto mr-auto">
       <div class="card card-upgrade">
         <div class="card-header text-center">
-          <h4 class="card-title">All orders <span class="badge badge-success">{{$orders->count()}}</span></h3>
+          <h4 class="card-title">Orders <span class="badge badge-primary"> {{$orders->count()}} </span> </h3>
             <p class="card-category"></p>
         </div>
         <div class="card-body">
           <div class="table-responsive table-upgrade">
             <table class="table">
               <thead>
-                <th>Order number</th>
-                <th class="text-center">Price</th>
-                <th class="text-center">Status</th>
-                <th class="text-center">Details</th>
+                <th style="font-weight: bold">Number</th>
+                <th style="font-weight: bold" class="text-center">Total</th>
+                <th style="font-weight: bold" class="text-center">Status</th>
+                <th style="font-weight: bold" class="text-center">Customer</th>
+                <th style="font-weight: bold" class="text-center">Action</th>
               </thead>
               <tbody>
-                <tr>
-                @if( $orders->count() > 0 )
                 @foreach($orders as $order)
+                <tr style="font-weight: bold">
                   <td>{{$order->number}}</td>
-                  <td class="text-center">{{$order->total}}</td>
-                  <td class="text-center">{{$order->status}}</td>
-                  <td class="text-center"></td>
-                @endforeach
-                @else
-                <td><span class="badge badge-danger">no orders</span></td>
-                <td class="text-center"><span class="badge badge-danger">none</span></td>
-                <td class="text-center"><span class="badge badge-danger">none</span></td>
-                <td class="text-center"><span class="badge badge-danger">none</span></td>
-                @endif
+                  <td class="text-center"><span class="badge badge-success">{{$order->total}}</span></td>
+                  <td class="text-center">
+                      @if($order->status == 'pending')
+                      <span class="badge badge-warning"> {{$order->status}} </span>
+                      @elseif($order->status == 'preparing' || $order->status == 'shipping')
+                      <span class="badge badge-info"> {{$order->status}} </span>
+                      @elseif($order->status == 'delivered')
+                      <span class="badge badge-success"> {{$order->status}} </span>
+                      @elseif($order->status == 'failed' || $order->status == 'cancelled' || $order->status == 'rejected')
+                      <span class="badge badge-danger"> {{$order->status}} </span>
+                      @endif
+                  </td>
+                  <td class="text-center">{{$order->user->profile->first_name}}</td>
+                  <td class="text-center"><i class="fas fa-tools"></i></td>
                 </tr>
+                @endforeach
               </tbody>
             </table>
-            {{ $orders->links() }}
           </div>
         </div>
       </div>

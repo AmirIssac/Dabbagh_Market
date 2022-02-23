@@ -183,6 +183,7 @@
                                             @endif
                                             <li><a href="{{route('my.profile')}}">My profile</a></li>
                                             <li><a href="{{route('view.cart')}}">My cart</a></li>
+                                            <li><a href="{{route('my.orders')}}">My orders</a></li>
                                             <li>
                                                 <form id="logout-form" action="{{route('logout')}}" method="POST">
                                                     @csrf
