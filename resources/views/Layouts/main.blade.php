@@ -171,9 +171,9 @@
                                       --}}
                                       <div class="header__top__right__language">
                                           @if(Auth::user()->hasRole('super_admin'))
-                                                <i style="color:#ffa909" class="fa fa-user"></i>
+                                                <i style="color:#ffa909" class="fa fa-user">&nbsp;<b>{{$user->name}}</b></i>
                                           @else
-                                                <i style="color:#7fad39" class="fa fa-user"></i>
+                                                <i style="color:#7fad39" class="fa fa-user">&nbsp;<b>{{$user->name}}</b></i>
                                           @endif
                                         {{--<div>English</div>--}}
                                         {{--<span class="arrow_carrot-down"></span>--}}

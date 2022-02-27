@@ -34,7 +34,8 @@ Route::group(['middleware'=>['is_admin']] , function(){
         Route::post('/store/product',[AdminInventoryController::class, 'storeProduct'])->name('store.product');
         Route::get('/edit/product/form/{product_id}',[AdminInventoryController::class, 'editProductForm'])->name('edit.product.form');
         Route::post('/update/product/{product_id}',[AdminInventoryController::class, 'updateProduct'])->name('update.product');
-        Route::get('/users',[UserDashboardContoller::class, 'show'])->name('show.users');
+        Route::get('/users',[UserDashboardContoller::class, 'index'])->name('show.users');
+        Route::get('/view/user/{user_id}',[UserDashboardContoller::class, 'viewUser'])->name('view.user');
         Route::post('/store/discount',[AdminInventoryController::class, 'storeNewDiscount'])->name('store.discount');
         Route::get('/orders',[App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders');
 });

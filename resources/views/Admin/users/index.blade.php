@@ -16,19 +16,19 @@
             @foreach($super_admins as $super_admin)
             <div class="alert alert-primary">
                 <span><b> {{$super_admin->name}} - </b> {{$super_admin->email}} </span>
-                <a href=""><i style="color:white; float: right" class="fa fa-eye"></i></a>
+                <a href="{{route('view.user',$super_admin->id)}}"><i style="color:white; float: right" class="fa fa-eye"></i></a>
             </div>
             @endforeach
             @foreach($admins as $admin)
             <div class="alert alert-info">
                 <span><b> {{$admin->name}} - </b> {{$admin->email}} </span>
-                <a href=""><i style="color: white; float: right" class="fa fa-eye"></i></a>
+                <a href="{{route('view.user',$admin->id)}}"><i style="color: white; float: right" class="fa fa-eye"></i></a>
             </div>
             @endforeach
             @foreach($employees as $employee)
             <div class="alert alert-info">
                 <span><b> {{$employee->name}} - </b> {{$employee->email}} </span>
-                <a href=""><i style="color: white; float: right" class="fa fa-eye"></i></a>
+                <a href="{{route('view.user',$employee->id)}}"><i style="color: white; float: right" class="fa fa-eye"></i></a>
             </div>
             @endforeach
           </div>
@@ -43,7 +43,7 @@
             @foreach($customers as $customer)
                 <div class="alert alert-success">
                 <span><b> {{$customer->name}} - </b> {{$customer->email}} </span>
-                <a href=""><i style="color: white; float: right" class="fa fa-eye"></i></a>
+                <a href="{{route('view.user',$customer->id)}}"><i style="color: white; float: right" class="fa fa-eye"></i></a>
                 </div>
             @endforeach
             {{$customers->links()}}

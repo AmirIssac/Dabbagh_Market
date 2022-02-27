@@ -11,7 +11,7 @@ class UserContoller extends Controller
 {
     //
 
-    public function show(){
+    public function index(){
         $customers = User::whereHas('roles', function (Builder $query) {
             $query->where('name','customer');
         })->orderBy('created_at','DESC')->simplePaginate(6);
@@ -24,7 +24,12 @@ class UserContoller extends Controller
         $employees = User::whereHas('roles', function (Builder $query) {
             $query->where('name','employee');
         })->get();
-        return view('Admin.users.show',['customers' => $customers , 'super_admins' => $super_admins ,
+        return view('Admin.users.index',['customers' => $customers , 'super_admins' => $super_admins ,
                                         'admins' => $admins , 'employees' => $employees]);
+    }
+
+    public function viewUser($id){
+        $person = User::findOrFail($id);
+        return view('Admin.users.view_user',['person' => $person]);
     }
 }
