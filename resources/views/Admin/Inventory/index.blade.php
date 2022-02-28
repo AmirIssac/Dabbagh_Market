@@ -68,11 +68,9 @@
                     <a href="{{route('edit.product.form',$product->id)}}" class="btn btn-info">Edit</a>
                     <a class="btn btn-danger">Delete</a>
                     --}}
-                  
                       <a href="{{route('edit.product.form',$product->id)}}"><i class="fas fa-tools"></i></a>
                       .
                       <a><i class="fas fa-trash-alt"></i></a>
-                    
                   </td>
                 </tr>
                 @endforeach
@@ -443,7 +441,6 @@
                     </td>
                     <td>
                     </td>
-                   
                 </tr>
               </tbody>
             </table>
@@ -453,8 +450,6 @@
       </form>
     </div>
 
-
-
   </div>
 </div>
 @endsection
@@ -463,11 +458,17 @@
     $('#new-product-btn').on('click',function(){
         $('#new-product-form').removeClass('displaynone');
         $(this).addClass('displaynone');
+        $('html, body').animate({
+          scrollTop: $("#new-product-form").offset().top
+        }, 1000);
     })
 
     $('#new-discount-btn').on('click',function(){
         $('#new-discount-form').removeClass('displaynone');
         $(this).addClass('displaynone');
+        $('html, body').animate({
+          scrollTop: $("#new-discount-form").offset().top
+        }, 1000);
     })
 </script>
 @endsection

@@ -18,4 +18,9 @@ class Store extends Model
         'address_longitude',
     ];
 
+    public function users(){
+        return $this->belongsToMany(User::class, 'store_user');
+    }
+
+
 }

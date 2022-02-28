@@ -75,12 +75,42 @@ class User extends Authenticatable
         return $this->hasMany(PaymentDetail::class);
     }
 
+    public function stores(){
+        return $this->belongsToMany(Store::class, 'store_user');
+    }
+
 
     // custom functions
 
     public function adminstrative(){    //  موظف او ادمن
         $user = User::find(Auth::user()->id);
         if($user->hasRole('super_admin') || $user->hasRole('admin') || $user->hasRole('employee'))
+            return true;
+        else
+            return false;
+    }
+
+    public function isSuperAdmin($user){
+        if($user->hasRole('super_admin'))
+            return true;
+        else
+            return false;
+    }
+
+    public function isAdmin($user){
+        if($user->hasRole('admin'))
+            return true;
+        else
+            return false;
+    }
+    public function isEmployee($user){
+        if($user->hasRole('employee'))
+            return true;
+        else
+            return false;
+    }
+    public function isCustomer($user){
+        if($user->hasRole('customer'))
             return true;
         else
             return false;

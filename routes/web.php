@@ -36,6 +36,7 @@ Route::group(['middleware'=>['is_admin']] , function(){
         Route::post('/update/product/{product_id}',[AdminInventoryController::class, 'updateProduct'])->name('update.product');
         Route::get('/users',[UserDashboardContoller::class, 'index'])->name('show.users');
         Route::get('/view/user/{user_id}',[UserDashboardContoller::class, 'viewUser'])->name('view.user');
+        Route::post('/update/user/{user_id}',[UserDashboardContoller::class, 'update'])->name('update.user');
         Route::post('/store/discount',[AdminInventoryController::class, 'storeNewDiscount'])->name('store.discount');
         Route::get('/orders',[App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders');
 });
