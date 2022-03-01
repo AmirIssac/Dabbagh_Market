@@ -170,8 +170,8 @@
                     </select>
                 </td>
                   <td> <input type="number" step="0.1" name="price" class="form-control"> </td>
-                  <td> <input type="number" step="100" name="min_weight" class="form-control"> </td>
-                  <td> <input type="number" step="100" name="increase_by" class="form-control"> </td>
+                  <td> <input type="number" name="min_weight" class="form-control"> </td>
+                  <td> <input type="number" name="increase_by" class="form-control"> </td>
                 </tr>
                 <tr>
                     <th>

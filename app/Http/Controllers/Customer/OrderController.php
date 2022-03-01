@@ -28,15 +28,24 @@ class OrderController extends Controller
                 if($discount_type == 'percent'){
                      $discount = $item->product->price * $item->product->discount->value / 100;
                      $new_price = $item->product->price - $discount;
-                     $total_order_price += $new_price * $item->quantity / 1000 ;
+                     if($item->product->unit == 'gram')
+                        $total_order_price += $new_price * $item->quantity / 1000 ;
+                     else
+                        $total_order_price += $new_price * $item->quantity;
                      }
                 else {
                      $new_price = $item->product->price - $item->product->discount->value;   
-                     $total_order_price += $new_price * $item->quantity / 1000 ;
+                     if($item->product->unit == 'gram')
+                        $total_order_price += $new_price * $item->quantity / 1000 ;
+                     else
+                        $total_order_price += $new_price * $item->quantity;
                 }   
             }
             else{   // no discount
+                if($item->product->unit == 'gram')
                      $total_order_price += $item->product->price * $item->quantity / 1000  ;
+                else
+                     $total_order_price += $item->product->price * $item->quantity;
             } 
         } 
         return view('Customer.order.checkout',['cart'=>$cart , 'cart_items' => $cart_items,'date' => $date, 'total_order_price' => $total_order_price,'profile'=>$profile,'tax'=>$tax]);
@@ -61,19 +70,27 @@ class OrderController extends Controller
                 if($discount_type == 'percent'){
                      $discount = $item->product->price * $item->product->discount->value / 100;
                      $new_price = $item->product->price - $discount;
-                     $total_order_price += $new_price * $item->quantity / 1000 ;
+                     if($item->product->unit == 'gram')
+                            $total_order_price += $new_price * $item->quantity / 1000 ;
+                     else
+                            $total_order_price += $new_price * $item->quantity;
                      // order item
                      $order_items_arr[] = ['product_id' => $item->product->id , 'price' => $new_price , 'discount' => $discount , 'quantity' => $item->quantity];
                      }
                 else {
                      $new_price = $item->product->price - $item->product->discount->value;   
-                     $total_order_price += $new_price * $item->quantity / 1000 ;
-                     // order item
+                     if($item->product->unit == 'gram')
+                            $total_order_price += $new_price * $item->quantity / 1000 ;
+                     else
+                            $total_order_price += $new_price * $item->quantity;                     // order item
                      $order_items_arr[] = ['product_id' => $item->product->id , 'price' => $new_price , 'discount' => $item->product->discount->value  , 'quantity' => $item->quantity];
                 }   
             }
             else{   // no discount
-                     $total_order_price += $item->product->price * $item->quantity / 1000  ;
+                     if($item->product->unit == 'gram')
+                        $total_order_price += $item->product->price * $item->quantity / 1000  ;
+                     else
+                        $total_order_price += $item->product->price * $item->quantity;
                       // order item
                       $order_items_arr[] = ['product_id' => $item->product->id , 'price' => $item->product->price , 'discount' => 0  , 'quantity' => $item->quantity];
             } 

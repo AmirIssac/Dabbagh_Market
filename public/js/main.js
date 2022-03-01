@@ -242,16 +242,33 @@
             $('#weight-input').val(newWeight);
             $('#weight-in-gram').val(weight_in_gram);
 
+             // change price
+            // initial price is the price of 1 k.g
+            var new_price = ($('#initial-price').val() * weight_in_gram ) / 1000;
+            $('#price-input').val(new_price);
+
         }
         else{  // piece
-            var newWeight = newVal * 1 ;
-            $('#weight-input').val(newWeight+' piece');
+            var min_weight = parseInt($('#min_weight').val());
+            var increase_by = parseInt($('#increase-by').val());
+            var pieces = 0;   // to calculate the price
+            if(newVal == 1){
+                var newWeight = min_weight ;
+                    pieces = min_weight ;
+            }
+            else{
+                var newWeight = min_weight + ((newVal-1) * increase_by) ;
+                pieces = newWeight;
+            }
+            newWeight = newWeight + "piece";
+            $('#weight-input').val(newWeight);
+            $('#weight-in-gram').val(pieces);
+
+             // change price
+            var new_price = $('#initial-price').val() * pieces;
+            $('#price-input').val(new_price);
         }
 
-        // change price
-        // initial price is the price of 1 k.g
-        var new_price = ($('#initial-price').val() * weight_in_gram ) / 1000;
-        $('#price-input').val(new_price);
     });
 
 

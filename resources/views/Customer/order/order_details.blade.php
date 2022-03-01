@@ -13,7 +13,10 @@
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
                         <div class="checkout__order">
+                            <div style="display: flex; justify-content: space-between;">
                             <h4>#{{$order->number}}</h4>
+                            <img src="{{asset('img/pngs/success-icon.png')}}" height="35px">
+                            </div>
                             <div class="checkout__order__products">Products <span>Total</span></div>
                             <ul>
                                 @foreach($order_items as $item)

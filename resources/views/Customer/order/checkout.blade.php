@@ -85,9 +85,21 @@
                                             else
                                                 $new_price = $item->product->price - $item->product->discount->value;
                                         ?>
-                                    <li> {{$item->product->name_en}} <b style="color: #7fad39">{{$item->quantity/1000}} K.G </b> <span>{{$new_price * $item->quantity / 1000}} AED</span></li>
+                                    <li> {{$item->product->name_en}}
+                                         @if($item->product->unit == 'gram')
+                                         <b style="color: #7fad39">{{$item->quantity/1000}} K.G </b> <span>{{$new_price * $item->quantity / 1000}} AED</span>
+                                         @else
+                                         <b style="color: #7fad39">{{$item->quantity}}  </b> <span>{{$new_price * $item->quantity}} AED</span>
+                                         @endif
+                                        </li>
                                     @else
-                                    <li> {{$item->product->name_en}} <b style="color: #7fad39">{{$item->quantity/1000}} K.G </b> <span>{{$item->product->price * $item->quantity / 1000}} AED</span></li>
+                                    <li> {{$item->product->name_en}}
+                                        @if($item->product->unit == 'gram')
+                                         <b style="color: #7fad39">{{$item->quantity/1000}} K.G </b> <span>{{$item->product->price * $item->quantity / 1000}} AED</span>
+                                        @else
+                                        <b style="color: #7fad39">{{$item->quantity}} </b> <span>{{$item->product->price * $item->quantity}} AED</span>
+                                        @endif
+                                    </li>
                                     @endif
                                 @endforeach
                             </ul>

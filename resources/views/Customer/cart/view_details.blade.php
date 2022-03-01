@@ -1,6 +1,23 @@
 @extends('Layouts.main')
 @section('links')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<style>
+    #clear-cart-btn{
+        background-color: white;
+        border: 1px solid #2b201e;
+        border-radius: 5px;
+        font-size: 13px;
+        font-weight: bold;
+        color: black;
+    }
+    #clear-cart-btn:hover{
+        background-color: #2b201e;
+        border: 1px solid #2b201e;
+        border-radius: 5px;
+        font-size: 13px;
+        color: white;
+    }
+</style>
 @endsection
 @section('content')
     <!-- Shoping Cart Section Begin -->
@@ -13,10 +30,10 @@
                             <thead>
                                 <tr>
                                     <th class="shoping__product">Products</th>
-                                    <th>1 K.G Price</th>
+                                    <th>1 K.G Price Piece Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
-                                    <th></th>
+                                    <th><button id="clear-cart-btn">Clear Cart</button></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -26,7 +43,7 @@
                                 <input type="hidden" value="{{$item->product->id}}" id="product{{$counter}}">
                                 <tr>
                                     <td class="shoping__cart__item">
-                                        <img src="{{asset('storage/'.$item->product->image)}}" alt="" width="50px" height="50px">
+                                        <img src="{{asset('storage/'.$item->product->image)}}" alt="" height="75px">
                                         <h5>{{$item->product->name_en}}</h5>
                                     </td>
                                     <td class="shoping__cart__price">
@@ -43,6 +60,7 @@
                                     <input type="hidden" id="final-item-price{{$counter}}" value="{{$new_price}}">
                                     {{$new_price}}
                                     @else
+                                        
                                         <input type="hidden" id="final-item-price{{$counter}}" value="{{$item->product->price}}">
                                         {{$item->product->price}}
                                     @endif
@@ -73,9 +91,14 @@
                                         {{--
                                         <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->product->discount ? $new_price * $item->quantity : $item->product->price * $item->quantity}}">
                                         <h3 id="h-item-total{{$counter}}">{{$item->product->discount ? $new_price * $item->quantity : $item->product->price * $item->quantity}}</h6>
-                                        --}}    
+                                        --}}
+                                        @if($item->product->unit == 'gram')    
                                         <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->product->discount ? ($new_price * $item->quantity) / 1000 : ($item->product->price * $item->quantity) / 1000}}">
                                         <h3 id="h-item-total{{$counter}}">{{$item->product->discount ? ($new_price * $item->quantity) / 1000 : ($item->product->price * $item->quantity) / 1000}}</h6>
+                                        @else
+                                        <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->product->discount ? $new_price * $item->quantity : $item->product->price * $item->quantity}}">
+                                        <h3 id="h-item-total{{$counter}}">{{$item->product->discount ? $new_price * $item->quantity : $item->product->price * $item->quantity}}</h6>
+                                        @endif
                                     </td>
                                     <td class="shoping__cart__item__close">
                                         <form action="{{route('delete.cart.item',$item->id)}}" method="POST">

@@ -54,17 +54,27 @@
                                         else
                                             $new_price = $product->price - $product->discount->value;
                                     ?>
+                                    @if($product->unit == 'gram')
                                     {{-- FOR 1 KG --}}
                                     <input style="display: none;" type="number" id="initial-price" value="{{$new_price}}">
                                     <div><input style="height:40px; font-size:18px; color:#7fad39; border:0px solid white" type='text' name='name' value="{{$new_price.' for 1 K.G'}}" readonly/></div>
                                     {{-- final price --}}
                                     <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$new_price * $product->min_weight / 1000}}" readonly/>AED</div>
+                                    @else  {{-- By piece --}}
+                                    <input style="display: none;" type="number" id="initial-price" value="{{$product->price}}">
+                                    <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$product->price * $product->min_weight}}" readonly/>AED</div>
+                                    @endif
                         @else
+                                    @if($product->unit == 'gram')
                                     {{-- FOR 1 KG --}}
                                     <input style="display: none;" type="number" id="initial-price" value="{{$product->price}}">
                                     <div><input style="height:40px; font-size:18px; color:#7fad39; border:0px solid white" type='text' name='name' value="{{$product->price.' for 1 K.G'}}" readonly/></div>
                                     {{-- final price --}}
                                     <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$product->price * $product->min_weight / 1000}}" readonly/>AED</div>
+                                    @else  {{-- By piece --}}
+                                    <input style="display: none;" type="number" id="initial-price" value="{{$product->price}}">
+                                    <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$product->price * $product->min_weight}}" readonly/>AED</div>
+                                    @endif
                         @endif
                                     
                         <p>{{$product->description}}</p>
@@ -83,7 +93,7 @@
                         <input style="height:40px; width:100px; font-size:30px; border:0px solid white" id="weight-input" type='text' name='name' value="{{$product->min_weight.' g'}}" readonly/>
                         --}}
                         @elseif($product->unit == 'piece')
-                        <input style="height:40px; width:100px; font-size:30px; border:0px solid white" id="weight-input" type='text' name='name' value="{{$product->min_weight.' piece'}}" readonly/>
+                        <input style="height:40px; width:100px; font-size:30px; border:0px solid white" id="weight-input" type='hidden' name='name' value="{{$product->min_weight.' piece'}}" readonly/>
                         @endif
                         <input type="hidden" id="unit" value="{{$product->unit}}">
                         <input type="hidden" id="min_weight" value="{{$product->min_weight}}">

@@ -23,13 +23,23 @@ class CartController extends Controller
                 $discount_type = $item->product->discount->type;
                 if($discount_type == 'percent'){
                             $discount = $item->product->price * $item->product->discount->value / 100;
-                            $cart_total = $cart_total +  (($item->product->price - $discount) * $item->quantity / 1000);
+                            if($item->product->unit == 'gram')
+                                $cart_total = $cart_total +  (($item->product->price - $discount) * $item->quantity / 1000);
+                            else
+                                $cart_total = $cart_total +  ($item->product->price - $discount) * $item->quantity;
                             }
-                else
-                            $cart_total = $cart_total +  (($item->product->price - $item->product->discount->value) * $item->quantity / 1000);
+                else{
+                            if($item->product->unit == 'gram')
+                                $cart_total = $cart_total +  (($item->product->price - $item->product->discount->value) * $item->quantity / 1000);
+                            else
+                                $cart_total = $cart_total +  ($item->product->price - $item->product->discount->value) * $item->quantity;
+                }
             }
             else  // no discount for this item
-                $cart_total = $cart_total + ($item->product->price * $item->quantity / 1000);
+                if($item->product->unit == 'gram')
+                        $cart_total = $cart_total + ($item->product->price * $item->quantity / 1000);
+                else
+                        $cart_total = $cart_total + ($item->product->price * $item->quantity);
 
         }
         return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax]);
