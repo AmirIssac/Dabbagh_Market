@@ -20,7 +20,13 @@
                             <div class="checkout__order__products">Products <span>Total</span></div>
                             <ul>
                                 @foreach($order_items as $item)
-                                <li> {{$item->product->name_en}} <b style="color: #7fad39">{{$item->quantity/1000}} K.G </b> <span>{{$item->price * $item->quantity / 1000}} AED</span></li>
+                                <li> {{$item->product->name_en}}
+                                    @if($item->product->unit == 'gram')
+                                     <b style="color: #7fad39">{{$item->quantity/1000}} K.G </b> <span>{{$item->price * $item->quantity / 1000}} AED</span>
+                                    @elseif($item->product->unit == 'piece')
+                                    <b style="color: #7fad39">{{$item->quantity}} </b> <span>{{$item->price * $item->quantity}} AED</span>
+                                    @endif
+                                </li>
                                 @endforeach
                             </ul>
                             <div class="checkout__order__subtotal">Subtotal <span> {{$order->sub_total}} AED</span></div>
@@ -29,8 +35,7 @@
                             <div class="checkout__order__total">Total <span> {{$order->total}} AED</span></div>
                             <div>
                                  <span class="badge badge-success">success</span>
-                                </div>
-
+                            </div>
                         </div>
                     </div>
                 </div>

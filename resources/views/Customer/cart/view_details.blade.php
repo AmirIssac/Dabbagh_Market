@@ -17,12 +17,22 @@
         font-size: 13px;
         color: white;
     }
+    #proceed-to-checkout{
+        border: 1px solid white;
+    }
+    #login-btn{
+        border: 1px solid white;
+    }
+    #checkout-box , #have-account-form{
+        filter: drop-shadow(3px 3px 3px #7fad39);
+    }
 </style>
 @endsection
 @section('content')
     <!-- Shoping Cart Section Begin -->
     <section style="margin-top:-100px;" class="shoping-cart spad">
         <div class="container">
+            @if(Auth::user())
             <div class="row">
                 <div class="col-lg-12">
                     <div class="shoping__cart__table">
@@ -71,7 +81,10 @@
                                             <input type="number" class="displaynone" id="increase{{$item->product->id}}" value="{{$item->product->increase_by}}">
                                             <div class="cart-qty">
                                                 <span class="{{$counter}}qty dec cartqtybtn">-</span>
-                                                <input type="text" value="{{$item->quantity}}" id="quantity-input{{$counter}}">g
+                                                <input type="text" value="{{$item->quantity}}" id="quantity-input{{$counter}}">
+                                                @if($item->product->unit == 'gram')
+                                                g
+                                                @endif
                                                 <input type="hidden" id="pro{{$item->product->id}}">
                                                 <span class="{{$counter}}qty inc cartqtybtn" id="qty{{$counter}}">+</span>
                                             </div>
@@ -93,9 +106,11 @@
                                         <h3 id="h-item-total{{$counter}}">{{$item->product->discount ? $new_price * $item->quantity : $item->product->price * $item->quantity}}</h6>
                                         --}}
                                         @if($item->product->unit == 'gram')    
+                                        <input type="hidden" id="single-item-unit{{$counter}}" value="gram">
                                         <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->product->discount ? ($new_price * $item->quantity) / 1000 : ($item->product->price * $item->quantity) / 1000}}">
                                         <h3 id="h-item-total{{$counter}}">{{$item->product->discount ? ($new_price * $item->quantity) / 1000 : ($item->product->price * $item->quantity) / 1000}}</h6>
                                         @else
+                                        <input type="hidden" id="single-item-unit{{$counter}}" value="piece">
                                         <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->product->discount ? $new_price * $item->quantity : $item->product->price * $item->quantity}}">
                                         <h3 id="h-item-total{{$counter}}">{{$item->product->discount ? $new_price * $item->quantity : $item->product->price * $item->quantity}}</h6>
                                         @endif
@@ -134,6 +149,110 @@
                     </div>
                 </div>
             </div>
+            @else  {{-- Not authentacated --}}
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="shoping__product">Products</th>
+                                    <th>1 K.G Price Piece Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th><button id="clear-cart-btn">Clear Cart</button></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php $counter = 0 ?>
+                                @if($cart_items->count() > 0)
+                                @foreach($cart_items as $item)
+                                <input type="hidden" value="{{$item->id}}" id="product{{$counter}}">
+                                <tr>
+                                    <td class="shoping__cart__item">
+                                        <img src="{{asset('storage/'.$item->image)}}" alt="" height="75px">
+                                        <h5>{{$item->name_en}}</h5>
+                                    </td>
+                                    <td class="shoping__cart__price">
+                                    @if($item->discount)  {{-- product has discount --}}
+                                        <?php
+                                            $discount_type = $item->discount->type;
+                                            if($discount_type == 'percent'){
+                                                $discount = $item->price * $item->discount->value / 100;
+                                                $new_price = $item->price - $discount;
+                                            }
+                                            else
+                                                $new_price = $item->price - $item->discount->value;
+                                        ?>
+                                    <input type="hidden" id="final-item-price{{$counter}}" value="{{$new_price}}">
+                                    {{$new_price}}
+                                    @else
+                                        
+                                        <input type="hidden" id="final-item-price{{$counter}}" value="{{$item->price}}">
+                                        {{$item->price}}
+                                    @endif
+                                    </td>
+                                    <td class="shoping__cart__quantity">
+                                        <div class="quantity">
+                                            <input type="number" class="displaynone" id="min{{$item->id}}" value="{{$item->min_weight}}">
+                                            <input type="number" class="displaynone" id="increase{{$item->id}}" value="{{$item->increase_by}}">
+                                            <div class="cart-qty">
+                                                <span class="{{$counter}}qty dec cartqtybtn">-</span>
+                                                <input type="text" value="{{$item->quantity}}" id="quantity-input{{$counter}}">
+                                                @if($item->unit == 'gram')
+                                                g
+                                                @endif
+                                                <input type="hidden" id="pro{{$item->id}}">
+                                                <span class="{{$counter}}qty inc cartqtybtn" id="qty{{$counter}}">+</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="shoping__cart__total">
+                                        @if($item->unit == 'gram')    
+                                        <input type="hidden" id="single-item-unit{{$counter}}" value="gram">
+                                        <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->discount ? ($new_price * $item->quantity) / 1000 : ($item->price * $item->quantity) / 1000}}">
+                                        <h3 id="h-item-total{{$counter}}">{{$item->discount ? ($new_price * $item->quantity) / 1000 : ($item->price * $item->quantity) / 1000}}</h6>
+                                        @else
+                                        <input type="hidden" id="single-item-unit{{$counter}}" value="piece">
+                                        <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->discount ? $new_price * $item->quantity : $item->price * $item->quantity}}">
+                                        <h3 id="h-item-total{{$counter}}">{{$item->discount ? $new_price * $item->quantity : $item->price * $item->quantity}}</h6>
+                                        @endif
+                                    </td>
+                                    <td class="shoping__cart__item__close">
+                                        <form action="{{route('delete.cart.item',$item->id)}}" method="POST">
+                                            @csrf
+                                            {{--
+                                            <span onclick="javascript:this.form.submit();" class="icon_close"></span>
+                                            --}}
+                                            <button style="border: none; background-color: transparent" onclick="javascript:this.form.submit();" class="icon_close"></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <?php $counter++; ?>
+                                @endforeach
+                                @else {{-- Empty cart --}}
+                                <tr>
+                                    <td>
+                                        <span class="badge badge-danger">empty</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-danger">none</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-danger">none</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-danger">none</span>
+                                    </td>
+                                </tr>
+                                @endif
+                                <input type="hidden" value="{{$counter}}" id="cart-rows"> {{-- number of rows in cart --}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @endif
             <div class="row">
                 {{--
                 <div class="col-lg-12">
@@ -144,19 +263,25 @@
                     </div>
                 </div>
                 --}}
-                <div class="col-lg-6">
-                    <div class="shoping__continue">
-                        <div class="shoping__discount">
-                            <h5>Discount Codes</h5>
-                            <form action="#">
-                                <input type="text" placeholder="Enter your coupon code">
-                                <button type="submit" class="site-btn">APPLY COUPON</button>
-                            </form>
-                        </div>
+                <div id="have-account-form" class="col-lg-6 displaynone">
+                    <div class="shoping__checkout">
+                      <form action="{{route('login')}}" method="POST">
+                        <h5>Already have an account ?</h5>
+                        <ul>
+                            <li>E-mail <input type="email" name="email" class="form-control"></li>
+                            <li>Password <input type="password" name="password" class="form-control"></li>
+                            <li>
+                                    @csrf
+                                <button id="login-btn" class="primary-btn">Login</button>
+                            </li>
+                        </ul>
+                        <h6>Don't have an account ?</h6>
+                        <a style="color: #7fad39; font-weight: bold;" href="{{route('sign.up')}}">sign up</a>
+                      </form>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="shoping__checkout">
+                <div id="div-checkout" class="col-lg-12">
+                    <div id="checkout-box" class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <input type="hidden" value="{{$tax}}" id="tax">
                         <ul>
@@ -167,7 +292,11 @@
                             ?>
                             <li>Total <span id="cart-total">{{$cart_grand_total}} AED</span></li>
                         </ul>
+                        @if(Auth::user())
                         <a href="{{route('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                        @else
+                        <button id="proceed-to-checkout" class="primary-btn">PROCEED TO CHECKOUT</button>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -205,7 +334,11 @@
                         "_token": token,
                     },
                     success: function (){
-                        $('#single-item-total'+gold).val((parseFloat($('#final-item-price'+gold).val()) * quantity) / 1000);
+                        var item_unit = $('#single-item-unit'+gold).val();
+                        if(item_unit == 'gram')
+                            $('#single-item-total'+gold).val((parseFloat($('#final-item-price'+gold).val()) * quantity) / 1000);
+                        else if(item_unit == 'piece')
+                            $('#single-item-total'+gold).val((parseFloat($('#final-item-price'+gold).val()) * quantity));
                         $('#h-item-total'+gold).text($('#single-item-total'+gold).val());
                         var cart_total = 0 ;
                         var cart_grand_total = 0 ;
@@ -221,8 +354,11 @@
                         $('#cart-total').text(cart_grand_total + ' AED');
                         //alert('success !');
                     }
-                });
-                
+                });     
+    });
+    $('#proceed-to-checkout').on('click',function(){
+        $('#div-checkout').removeClass('col-lg-12').addClass('col-lg-6');
+        $('#have-account-form').fadeIn('slow');
     });
 </script>
 @endsection
