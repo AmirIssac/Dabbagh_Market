@@ -21,7 +21,8 @@ class OrderController extends Controller
         $cart_items = $cart->cartItems;
         $date = now()->toDateString();
         $total_order_price = 0 ;
-        $tax = Setting::first()->tax;
+        $tax_row = Setting::where('key','tax')->first();
+        $tax = (float) $tax_row->value;
         foreach($cart_items as $item){
             if($item->product->discount){
                 $discount_type = $item->product->discount->type;
@@ -56,7 +57,8 @@ class OrderController extends Controller
         $cart = $user->cart;
         $cart_items = $cart->cartItems;
         $total_order_price = 0 ;
-        $tax = Setting::first()->tax;
+        $tax_row = Setting::where('key','tax')->first();
+        $tax = (float) $tax_row->value;
         $number_of_today_orders = Order::whereYear('created_at',now()->year)->whereMonth('created_at',now()->month)
                                     ->whereDay('created_at',now()->day)->count();
         $date = Carbon::now();

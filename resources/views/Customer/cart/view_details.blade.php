@@ -26,6 +26,13 @@
     #checkout-box , #have-account-form{
         filter: drop-shadow(3px 3px 3px #7fad39);
     }
+    #min-order-warning{
+        color: #dd2222;
+        font-weight: bold;
+    }
+    .displaynone{
+        display: none;
+    }
 </style>
 @endsection
 @section('content')
@@ -43,7 +50,16 @@
                                     <th>1 K.G Price Piece Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
-                                    <th><button id="clear-cart-btn">Clear Cart</button></th>
+                                    <th>
+                                        @if(Auth::user())
+                                            <form action="{{route('delete.cart.content',$cart->id)}}" method="POST">
+                                        @else {{-- Guest --}}
+                                            <form action="{{route('delete.cart.content')}}" method="POST">
+                                        @endif
+                                        @csrf
+                                        <button type="submit" id="clear-cart-btn">Clear Cart</button>
+                                        </form>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -160,7 +176,16 @@
                                     <th>1 K.G Price Piece Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
-                                    <th><button id="clear-cart-btn">Clear Cart</button></th>
+                                    <th>
+                                        @if(Auth::user())
+                                        <form action="{{route('delete.cart.content',$cart->id)}}" method="POST">
+                                        @else {{-- Guest --}}
+                                        <form action="{{route('delete.cart.content')}}" method="POST">
+                                        @endif
+                                        @csrf
+                                        <button type="submit" id="clear-cart-btn">Clear Cart</button>
+                                        </form>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -289,13 +314,35 @@
                             <li>Tax <span id="cart-subtotal">{{$tax}}%</span></li>
                             <?php $tax_value = $tax * $cart_total / 100 ;
                                   $cart_grand_total = $cart_total + $tax_value ;
+                                  $cart_grand_total = number_format((float)$cart_grand_total, 2, '.', '');
                             ?>
                             <li>Total <span id="cart-total">{{$cart_grand_total}} AED</span></li>
                         </ul>
+                        <input type="hidden" id="min-order-val" value="{{$min_order}}">
                         @if(Auth::user())
-                        <a href="{{route('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                            @if($min_order > $cart_grand_total)
+                            <h4 id="min-order-warning">You can't submit order by less than {{$min_order}} AED</h4>
+                            <div id="proceed-to-checkout-div" class="displaynone">
+                            <a href="{{route('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                            </div>
+                            @else
+                            <h4 id="min-order-warning" class="displaynone">You can't submit order by less than {{$min_order}} AED</h4>
+                            <div id="proceed-to-checkout-div">
+                            <a href="{{route('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                            </div>
+                            @endif
                         @else
-                        <button id="proceed-to-checkout" class="primary-btn">PROCEED TO CHECKOUT</button>
+                            @if($min_order > $cart_grand_total)
+                            <h4 id="min-order-warning">You can't submit order by less than {{$min_order}} AED</h4>
+                            <div id="proceed-to-checkout-div" class="displaynone">
+                            <button id="proceed-to-checkout" class="primary-btn">PROCEED TO CHECKOUT</button>
+                            </div>
+                            @else
+                            <h4 id="min-order-warning" class="displaynone">You can't submit order by less than {{$min_order}} AED</h4>
+                            <div id="proceed-to-checkout-div">
+                            <button id="proceed-to-checkout" class="primary-btn">PROCEED TO CHECKOUT</button>
+                            </div>
+                            @endif
                         @endif
                     </div>
                 </div>
@@ -318,6 +365,7 @@
         var product_id = $('#product'+gold).val();
         var $button = $(this);
         var oldValue = $button.parent().find('input').val();
+        var min_order = parseFloat($('#min-order-val').val());
         //alert(gold);
        // alert(product_id);
             //var newVal = parseFloat(oldValue) + 1;
@@ -350,9 +398,18 @@
                         }
                         var tax_value = tax * cart_total / 100 ;
                         cart_grand_total = cart_total + tax_value ;
+                        cart_grand_total = cart_grand_total.toFixed(2);
                         $('#cart-subtotal').text(cart_total + ' AED');
                         $('#cart-total').text(cart_grand_total + ' AED');
-                        //alert('success !');
+                        // check min_order
+                        if(min_order > cart_grand_total){    // warning
+                            $('#min-order-warning').removeClass('displaynone');
+                            $('#proceed-to-checkout-div').addClass('displaynone');
+                        }
+                        else{
+                            $('#min-order-warning').addClass('displaynone');
+                            $('#proceed-to-checkout-div').removeClass('displaynone');
+                        }
                     }
                 });     
     });

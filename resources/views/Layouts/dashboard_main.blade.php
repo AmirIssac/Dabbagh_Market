@@ -89,8 +89,8 @@
               <p>Location</p>
             </a>
           </li>
-          <li>
-            <a href="./typography.html">
+          <li class="{{Route::is('settings') ? 'active' : ''}}">
+            <a href="{{route('settings')}}">
               <i class="now-ui-icons ui-1_settings-gear-63"></i>
               <p>Settings</p>
             </a>

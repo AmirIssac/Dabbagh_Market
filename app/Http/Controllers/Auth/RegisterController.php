@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Shop\Cart;
+use App\Models\Shop\CartItem;
 use App\Models\Shop\Profile;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -94,10 +96,23 @@ class RegisterController extends Controller
             'address_latitude' => null,
             'address_longitude' => null,
         ]);
-        Cart::create([
+        $cart = Cart::create([
             'user_id' => $user->id,
         ]);
         $user->assignRole('customer');
+        // add session cart to DB
+        $session_cart = Session::get('cart');
+        if($session_cart){    // there is cart in the session
+            foreach($session_cart as $item){
+                    $cartItem = CartItem::create([
+                        'cart_id' => $cart->id,
+                        'product_id' => $item['product_id'],
+                        'quantity' => $item['quantity'],
+                    ]);
+            }
+        }
+        Session::forget('cart');
+        //$user->assignRole('customer');
         return $user;
     }
 }

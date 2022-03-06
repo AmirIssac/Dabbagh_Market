@@ -15,7 +15,12 @@ class CreateSettingsTable extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
+            /*
             $table->smallInteger('tax');  // percent
+            $table->min_order('value',10,2);
+            */
+            $table->string('key');
+            $table->string('value');
             $table->timestamps();
         });
     }

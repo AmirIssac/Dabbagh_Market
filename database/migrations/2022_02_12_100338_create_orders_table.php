@@ -13,12 +13,14 @@ class CreateOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
-            Schema::dropIfExists('orders');
-            Schema::dropIfExists('order_items');
+        Schema::create('orders', function (Blueprint $table) {    // Customer Order
+            //Schema::dropIfExists('orders');
+            //Schema::dropIfExists('order_items');
             $table->id();
-            $table->unsignedBigInteger('user_id')->unsigned();
+            $table->unsignedBigInteger('user_id')->unsigned();   // customer
             $table->foreign('user_id')->references('id')->on('users');//onDelete('set null');
+            $table->unsignedBigInteger('store_id')->unsigned()->nullable()->default(null);
+            $table->foreign('store_id')->references('id')->on('stores');//onDelete('set null');
             $table->string('number');   // order number
             $table->enum('status',['pending','preparing','shipping','delivered','failed','cancelled','rejected']);
             $table->decimal('sub_total',10,2);   // the total price of the order items
@@ -32,7 +34,7 @@ class CreateOrdersTable extends Migration
             $table->string('email',75);
             $table->string('address');
             $table->string('customer_note')->nullable();
-            $table->string('employee_note')->nullable();
+            //$table->string('employee_note')->nullable();
             $table->timestamp('estimated_time')->nullable();  // determined from the dashboard after accepting the order
             $table->timestamps();
         });

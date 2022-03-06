@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Models\Shop\Cart;
 use App\Models\Shop\CartItem;
 use App\Models\Shop\Product;
 use App\Models\User;
@@ -18,7 +19,10 @@ class CartController extends Controller
         $user = User::findOrFail(Auth::user()->id);
         $cart = $user->cart;
         $cart_items = $cart->cartItems;
-        $tax = Setting::first()->tax;
+        $tax_row = Setting::where('key','tax')->first();
+        $min_order_row = Setting::where('key','min_order_limit')->first();
+        $tax = (float) $tax_row->value;
+        $min_order = (float) $min_order_row->value;
         $cart_total = 0 ;
         foreach($cart_items as $item){
             if($item->product->discount){
@@ -44,19 +48,19 @@ class CartController extends Controller
                         $cart_total = $cart_total + ($item->product->price * $item->quantity);
 
         }
-        return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax]);
+        return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax,
+                                                  'min_order' => $min_order
+                    ]);
     }
 
-    public function deleteCartItem($id){
-        $cart_item = CartItem::findOrFail($id);
-        $cart_item->delete();
-        return back();
-    }
 
     public function viewGuestCart(){
         $cart = Session::get('cart');
         $cart_items = collect();
-        $tax = Setting::first()->tax;
+        $tax_row = Setting::where('key','tax')->first();
+        $min_order_row = Setting::where('key','min_order_limit')->first();
+        $tax = (float) $tax_row->value;
+        $min_order = (float) $min_order_row->value;
         $cart_total = 0 ;
         if($cart){
         foreach($cart as $c_item){
@@ -89,6 +93,25 @@ class CartController extends Controller
 
         }
         }
-        return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax]);
+        return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax,
+                                                    'min_order'=>$min_order]);
+    }
+
+    public function deleteCartItem($id){
+        $cart_item = CartItem::findOrFail($id);
+        $cart_item->delete();
+        return back();
+    }
+
+    public function deleteCartContent($id = 'session_cart'){   // default value because its a optional parameter
+        if($id != 'session_cart'){
+            $cart = Cart::findOrFail($id);
+            $cart->cartItems()->delete();
+            return back();
+        }
+        else{    // Cart Guest Session
+            Session::forget('cart');
+            return back();
+        }
     }
 }

@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Setting extends Model
+class OrderSystem extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'key','value',
+        'order_id',
+        'user_id',
+        'status',
+        'employee_note',
+        'estimated_time',
     ];
 }

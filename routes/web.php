@@ -40,8 +40,10 @@ Route::group(['middleware'=>['is_admin']] , function(){
         Route::post('/update/user/{user_id}',[UserDashboardContoller::class, 'update'])->name('update.user');
         Route::post('/store/discount',[AdminInventoryController::class, 'storeNewDiscount'])->name('store.discount');
         Route::get('/orders',[App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders');
+        Route::get('/edit/order',[App\Http\Controllers\Admin\OrderController::class, 'editOrder'])->name('edit.order');
+        Route::get('/settings' , [App\Http\Controllers\Admin\SettingController::class , 'index'])->name('settings');
+        Route::post('/update/settings' , [App\Http\Controllers\Admin\SettingController::class , 'update'])->name('update.settings');
 });
-
 /*
 Route::get('/login-form',function(){
     return view('auth.login_form');
@@ -59,6 +61,7 @@ Route::post('/update/product/inCart/{product_id}', [ProductController::class, 'u
 Route::get('/view/my-cart', [CartController::class, 'viewCart'])->name('view.cart');
 Route::get('/view/guest-cart', [CartController::class, 'viewGuestCart'])->name('view.guest.cart');
 Route::post('/delete/cart/item/{cart_item}', [CartController::class, 'deleteCartItem'])->name('delete.cart.item');
+Route::post('/delete/cart/content/{cart_id?}', [CartController::class, 'deleteCartContent'])->name('delete.cart.content');
 
 Route::get('/checkout',[OrderController::class, 'checkout'])->name('checkout');
 Route::post('/submit/order',[App\Http\Controllers\Customer\OrderController::class, 'submit'])->name('submit.order');
@@ -74,10 +77,6 @@ Route::post('/submit/profile',[ProfileController::class, 'submitProfile'])->name
 Route::get('/session', function(){
     return Session::get('cart');
 });
-
-
-
-
 
 
 
