@@ -12,7 +12,7 @@ class CreateOrderSystemsTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   // including transfering process from admin thats mean if order not have any order system process so the order created from customer and no body do anything to it yet
         Schema::create('order_systems', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id')->unsigned();

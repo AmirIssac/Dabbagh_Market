@@ -71,7 +71,7 @@
                 </div>
               </div>
             </div>
-            <button id="edit-user-btn" class="btn btn-primary">New</button>
+            <button id="edit-user-btn" class="btn btn-primary">Edit</button>
         </div>
       </div>
     </div>
@@ -85,7 +85,9 @@
             @elseif($person->isAdmin($person))
             <img src="{{asset('dashboard_asset/img/crown.png')}}" height="30px">
             @elseif($person->isEmployee($person))
+            {{--
             <img src="{{asset('dashboard_asset/img/crown.png')}}" height="30px">
+            --}}
             @elseif($person->isCustomer($person))
             @endif
         </div>
@@ -94,7 +96,6 @@
               <img class="avatar border-gray" src="{{asset('dashboard_asset/img/default-avatar.png')}}" alt="...">
               <h5 class="title">{{$person->name}}</h5>
           </div>
-
 
           <div style="display: flex; justify-content: space-around">
             <img src="{{asset('dashboard_asset/img/orders.png')}}" alt="..." height="50px">

@@ -29,7 +29,7 @@ Route::group(['middleware'=>['global_data_share']] , function(){
 Route::get('/', [Controller::class, 'index'])->name('index');
 
 // Admin
-Route::group(['middleware'=>['is_admin']] , function(){
+Route::group(['middleware'=>['is_employee']] , function(){
         Route::get('/dashboard',[Controller::class, 'adminDashboard'])->name('dashboard')->middleware('auth');
         Route::get('/inventory',[AdminInventoryController::class, 'index'])->name('inventory.index');
         Route::post('/store/product',[AdminInventoryController::class, 'storeProduct'])->name('store.product');
@@ -40,7 +40,8 @@ Route::group(['middleware'=>['is_admin']] , function(){
         Route::post('/update/user/{user_id}',[UserDashboardContoller::class, 'update'])->name('update.user');
         Route::post('/store/discount',[AdminInventoryController::class, 'storeNewDiscount'])->name('store.discount');
         Route::get('/orders',[App\Http\Controllers\Admin\OrderController::class, 'index'])->name('orders');
-        Route::get('/edit/order',[App\Http\Controllers\Admin\OrderController::class, 'editOrder'])->name('edit.order');
+        Route::get('/edit/order/{order_id}',[App\Http\Controllers\Admin\OrderController::class, 'editOrder'])->name('edit.order');
+        Route::post('/transfer/order/{order_id}',[App\Http\Controllers\Admin\OrderController::class, 'transferOrder'])->name('transfer.order');
         Route::get('/settings' , [App\Http\Controllers\Admin\SettingController::class , 'index'])->name('settings');
         Route::post('/update/settings' , [App\Http\Controllers\Admin\SettingController::class , 'update'])->name('update.settings');
 });
@@ -49,6 +50,13 @@ Route::get('/login-form',function(){
     return view('auth.login_form');
 });
 */
+
+// Employee
+Route::group(['middleware'=>['is_employee']] , function(){
+    Route::get('/employee/orders',[App\Http\Controllers\Employee\OrderController::class, 'index'])->name('employee.orders');
+    Route::get('/employee/edit/order/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'editOrder'])->name('employee.edit.order');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

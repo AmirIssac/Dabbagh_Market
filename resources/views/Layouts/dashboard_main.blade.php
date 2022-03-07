@@ -66,7 +66,11 @@
             </a>
           </li>
           <li>
+            @if(Auth::user()->hasRole(['super_admin']) || Auth::user()->hasRole(['admin']))
             <a href="{{route('orders')}}">
+            @elseif(Auth::user()->hasRole(['employee']))
+            <a href="{{route('employee.orders')}}">
+            @endif
               <i class="now-ui-icons shopping_box"></i>
               <p>Orders</p>
             </a>

@@ -18,7 +18,6 @@
                 <th style="font-weight: bold" class="text-center">Total</th>
                 <th style="font-weight: bold" class="text-center">Status</th>
                 <th style="font-weight: bold" class="text-center">Customer</th>
-                <th style="font-weight: bold" class="text-center">Date</th>
                 <th style="font-weight: bold" class="text-center">Action</th>
               </thead>
               <tbody>
@@ -38,8 +37,7 @@
                       @endif
                   </td>
                   <td class="text-center">{{$order->user->profile->first_name}}</td>
-                  <td class="text-center">{{$order->created_at}}</td>
-                  <td class="text-center"><a href="{{route('edit.order',$order->id)}}"><i class="fas fa-tools"></i></a></td>
+                  <td class="text-center"><a href="{{route('employee.edit.order',$order->id)}}"><i class="fas fa-tools"></i></a></td>
                 </tr>
                 @endforeach
               </tbody>
