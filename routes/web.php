@@ -55,6 +55,8 @@ Route::get('/login-form',function(){
 Route::group(['middleware'=>['is_employee']] , function(){
     Route::get('/employee/orders',[App\Http\Controllers\Employee\OrderController::class, 'index'])->name('employee.orders');
     Route::get('/employee/edit/order/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'editOrder'])->name('employee.edit.order');
+    Route::post('/employee/accept/order/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'acceptOrder'])->name('employee.accept.order');
+    Route::post('/employee/change/order/status/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'changeStatus'])->name('employee.change.order.status');
 });
 
 Auth::routes();
@@ -85,7 +87,6 @@ Route::post('/submit/profile',[ProfileController::class, 'submitProfile'])->name
 Route::get('/session', function(){
     return Session::get('cart');
 });
-
 
 
 // guest

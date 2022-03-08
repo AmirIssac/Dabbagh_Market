@@ -2,6 +2,7 @@
 
 namespace App\Models\Shop;
 
+use App\Models\OrderSystem;
 use App\Models\Store;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,6 +45,11 @@ class Order extends Model
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function orderSystems()
+    {
+        return $this->hasMany(OrderSystem::class);
     }
 
     public function transactions()

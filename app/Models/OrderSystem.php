@@ -16,4 +16,14 @@ class OrderSystem extends Model
         'employee_note',
         'estimated_time',
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(user::class);
+    }
 }

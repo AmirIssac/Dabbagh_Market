@@ -18,7 +18,8 @@
                 <th style="font-weight: bold" class="text-center">Total</th>
                 <th style="font-weight: bold" class="text-center">Status</th>
                 <th style="font-weight: bold" class="text-center">Address</th>
-                <th style="font-weight: bold" class="text-center">Note</th>
+                <th style="font-weight: bold" class="text-center">Cusomer note</th>
+                <th style="font-weight: bold" class="text-center">Center note</th>
               </thead>
               <tbody>
                 <tr style="font-weight: bold">
@@ -37,6 +38,7 @@
                   </td>
                   <td class="text-center">{{$order->address}}</td>
                   <td class="text-center">{{$order->customer_note}}</td>
+                  <td class="text-center">{{$order_center_system->employee_note}}</td>
                 </tr>
                 <tr>   {{-- order items --}}
                     <th>
@@ -47,6 +49,8 @@
                     </th>
                     <th style="font-weight: bold" class="text-center">
                         Price
+                    </th>
+                    <th>
                     </th>
                     <th>
                     </th>
@@ -76,73 +80,74 @@
                         </td>
                         <td>
                         </td>
+                        <td>
+                        </td>
                     </tr>
                 @endforeach
-                    @if(!$order->store)  {{-- الطلب غير محول بعد --}}
-                    <form action="{{route('transfer.order',$order->id)}}" method="POST">
-                      @csrf
-                        <tr>
-                            <td style="color: #dd2222; font-weight: bold;">
-                                Transfer the order to
-                            </td>
-                            <td style="font-weight: bold" class="text-center">
-                                <select name="store_id" class="form-control">
-                                    @foreach($stores as $store)
-                                        <option value="{{$store->id}}">{{$store->name_en}}</option>
-                                    @endforeach
-                                </select>
-                            </td>
-                            <td>
-                              <input type="text" name="admin_note" class="form-control" placeholder="additional note...">
-                            </td>
-                            <td style="font-weight: bold" class="text-center">
-                              <button type="submit" class="btn btn-primary">confirm transfer</button>
-                            </td>
-                        </tr>
-                    </form>
-                    @else  {{-- الطلب محول  --}}
-                      <tr>
-                        <td style="font-weight: bold;">
-                            Order in 
+                <tr>
+                    <td>
+                        <b>Transfered by</b>
+                    </td>
+                    <td style="font-weight: bold" class="text-center">
+                        <b>{{$order_center_system->user->name}}</b>
+                    </td>
+                    <td style="font-weight: bold" class="text-center">
+                        To
+                    </td>
+                    <td style="font-weight: bold" class="text-center">
+                        {{$order->store->name_en}}
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                @if($order->status == 'pending')
+                    <tr>
+                        <td>
+                            <b>Accept order ?</b>
                         </td>
-                        <td style="color: #38b818; font-weight: bold;" class="text-center">
-                            <b>{{$order_store->name_en}}</b>
-                        </td>
+                        <form action="{{route('employee.accept.order',$order->id)}}" method="POST">
+                          @csrf
+                            <td style="font-weight: bold" class="text-center">
+                            <button type="submit" class="btn btn-success">Accept</button>
+                            </td>
+                        </form>
                         <td style="font-weight: bold" class="text-center">
                         </td>
                         <td>
                         </td>
                         <td>
                         </td>
-                      </tr>
-                      <form action="{{route('transfer.order',$order->id)}}" method="POST">
-                        @csrf
-                        <tr>
-                          <td style="color: #dd2222; font-weight: bold;">
-                            Change order to
-                          </td>
-                          <td style="font-weight: bold" class="text-center">
-                              <select name="store_id" class="form-control">
-                                  @foreach($stores as $store)
-                                      @if($order->store_id == $store->id)
-                                      <option value="{{$store->id}}" selected>{{$store->name_en}}</option>
-                                      @else
-                                      <option value="{{$store->id}}">{{$store->name_en}}</option>
-                                      @endif
-                                  @endforeach
-                          </select>
-                          <input type="hidden" name="change_order_transfer" value="yes">
-                          </td>
-                          <td style="font-weight: bold" class="text-center">
-                                <button class="btn btn-primary">confirm transfer</button>
-                          </td>
-                          <td>
-                          </td>
-                          <td>
-                          </td>
-                        </tr>
-                      </form>
-                    @endif
+                        <td>
+                        </td>
+                    </tr>
+                @else
+                <form action="{{route('employee.change.order.status',$order->id)}}" method="POST">
+                    @csrf
+                    <tr>
+                        <td>
+                            <b>Change order status to</b>
+                        </td>
+                        <td style="font-weight: bold" class="text-center">
+                            <select name="order_status" class="form-control">
+                                <option value="shipping">shipping</option>
+                                <option value="delivered">delivered</option>
+                                <option value="rejected">rejected</option>
+                            </select>
+                        </td>
+                        <td style="font-weight: bold" class="text-center">
+                            <button type="submit" class="btn btn-info">Submit</button>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </form>
+                @endif
               </tbody>
             </table>
           </div>
