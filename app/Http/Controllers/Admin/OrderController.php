@@ -20,7 +20,16 @@ class OrderController extends Controller
         $stores = Store::all();   // for select input
         $order_store = $order->store;
         $order_items = $order->orderItems;
-        return view('Admin.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,'order_store'=>$order_store]);
+        $order_center_system = $order->orderSystems->first();
+        if($order_center_system){
+            $order_employee_systems = $order->orderSystems()->where('id','!=',$order_center_system->id)->get();
+            return view('Admin.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,'order_store'=>$order_store,
+                    'order_center_system'=>$order_center_system,'order_employee_systems'=>$order_employee_systems]);
+        }
+        else{   // not transfered yet
+            return view('Admin.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,'order_store'=>$order_store,
+            ]);
+        }
     }
     public function transferOrder(Request $request , $id){
         $order = Order::findOrFail($id);

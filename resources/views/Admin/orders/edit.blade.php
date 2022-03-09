@@ -1,4 +1,26 @@
 @extends('Layouts.dashboard_main')
+@section('links')
+<style>
+    .pending-row{
+        background-color: #cfccca;
+    }
+    .preparing-row{
+        background-color: #04558b;
+        color: white;
+    }
+    .shipping-row{
+        background-color: #409ad6;
+    }
+    .delivered-row{
+        background-color: #38b818;
+        color: white;
+    }
+    .rejected-row{
+        background-color: #c00202;
+        color: white;
+    }
+</style>
+@endsection
 @section('content')
 <div class="panel-header panel-header-sm">
 </div>
@@ -15,28 +37,34 @@
             <table class="table">
               <thead>
                 <th style="font-weight: bold">Customer</th>
-                <th style="font-weight: bold" class="text-center">Total</th>
                 <th style="font-weight: bold" class="text-center">Status</th>
+                <th style="font-weight: bold" class="text-center">Total</th>
                 <th style="font-weight: bold" class="text-center">Address</th>
                 <th style="font-weight: bold" class="text-center">Note</th>
               </thead>
               <tbody>
                 <tr style="font-weight: bold">
                   <td>{{$order->user->profile->first_name}}</td>
-                  <td class="text-center"><span class="badge badge-success">{{$order->total}}</span></td>
                   <td class="text-center">
-                      @if($order->status == 'pending')
-                      <span class="badge badge-warning"> {{$order->status}} </span>
-                      @elseif($order->status == 'preparing' || $order->status == 'shipping')
-                      <span class="badge badge-info"> {{$order->status}} </span>
-                      @elseif($order->status == 'delivered')
-                      <span class="badge badge-success"> {{$order->status}} </span>
-                      @elseif($order->status == 'failed' || $order->status == 'cancelled' || $order->status == 'rejected')
-                      <span class="badge badge-danger"> {{$order->status}} </span>
-                      @endif
-                  </td>
+                    @if($order->status == 'pending')
+                    <b style="color: #ff7300"> {{$order->status}} </b>
+                    @elseif($order->status == 'preparing' || $order->status == 'shipping')
+                    <b style="color: #04558b"> {{$order->status}} </b>
+                    @elseif($order->status == 'delivered')
+                    <b style="color: #069e1f"> {{$order->status}} </b>
+                    @elseif($order->status == 'failed' || $order->status == 'cancelled' || $order->status == 'rejected')
+                    <b style="color: #c00202"> {{$order->status}} </b>
+                    @endif
+                </td>
+                  <td style="font-weight: bold; color: #38b818;" class="text-center">{{$order->total}}</td>
                   <td class="text-center">{{$order->address}}</td>
-                  <td class="text-center">{{$order->customer_note}}</td>
+                  <td class="text-center">
+                    @if($order->customer_note)
+                       {{$order->customer_note}}
+                    @else
+                      <span class="badge badge-danger">NONE</span>
+                    @endif
+                  </td>
                 </tr>
                 <tr>   {{-- order items --}}
                     <th>
@@ -78,6 +106,56 @@
                         </td>
                     </tr>
                 @endforeach
+                @if(isset($order_center_system))
+                {{-- center transfer process --}}
+                <tr class="pending-row">
+                      <td>
+                          <b>1</b>
+                      </td>
+                      <td style="font-weight: bold" class="text-center">
+                          {{$order_center_system->status}}
+                      </td>
+                      <td style="font-weight: bold" class="text-center">
+                          {{$order_center_system->created_at}}
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                 </tr>
+                {{-- employee life cycle except center one --}}
+                <?php $counter = 2 ; ?>
+                @foreach($order_employee_systems as $order_employee_process)
+                  @if($order_employee_process->status == 'preparing')
+                  <tr class="preparing-row">
+                  @elseif($order_employee_process->status == 'shipping')
+                  <tr class="shipping-row">
+                  @elseif($order_employee_process->status == 'delivered')
+                  <tr class="delivered-row">
+                  @elseif($order_employee_process->status == 'rejected')
+                  <tr class="rejected-row">
+                  @endif
+                        <td>
+                            <b>{{$counter}}</b>
+                        </td>
+                        <td style="font-weight: bold" class="text-center">
+                            {{$order_employee_process->status}}
+                        </td>
+                        <td style="font-weight: bold" class="text-center">
+                            {{$order_employee_process->created_at}}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                   </tr>
+                   <?php $counter++; ?>
+                   @endforeach
+                   @endif
                     @if(!$order->store)  {{-- الطلب غير محول بعد --}}
                     <form action="{{route('transfer.order',$order->id)}}" method="POST">
                       @csrf

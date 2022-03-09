@@ -18,7 +18,7 @@ class OrderController extends Controller
         $stores = $user->stores;   // stores this employee works in
         $orders = collect();
         foreach($stores as $store){
-            $store_orders = $store->orders;
+            $store_orders = $store->orders()->orderBy('created_at','DESC')->get();
             foreach($store_orders as $store_order)
                 $orders->add($store_order);
         }
