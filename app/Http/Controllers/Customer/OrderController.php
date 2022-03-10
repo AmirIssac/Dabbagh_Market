@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Models\Shop\Order;
 use App\Models\Shop\OrderItem;
+use App\Models\Shop\PaymentDetail;
+use App\Models\Shop\Product;
 use App\Models\Shop\Profile;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class OrderController extends Controller
 {
@@ -52,7 +55,54 @@ class OrderController extends Controller
         return view('Customer.order.checkout',['cart'=>$cart , 'cart_items' => $cart_items,'date' => $date, 'total_order_price' => $total_order_price,'profile'=>$profile,'tax'=>$tax]);
     }
 
-    public function submit(Request $request){
+    public function guestCheckout(){
+        $guest = User::whereHas('roles', function($q){
+            $q->where('name', 'guest');
+        })->first();                       // guest user
+        $cart = Session::get('cart');
+        $cart_items = collect();
+        $date = now()->toDateString();
+        $total_order_price = 0 ;
+        $tax_row = Setting::where('key','tax')->first();
+        $tax = (float) $tax_row->value;
+        $cart_total = 0 ;
+        if($cart){
+            foreach($cart as $c_item){
+                $item = Product::find($c_item['product_id']);  // but we have to take quantity too (its not stored in product object its stored in cart_item table and we dont have cart_item in session process)
+                $item->quantity = $c_item['quantity'];
+                $cart_items->add($item);
+            }
+            foreach($cart_items as $item){
+                if($item->discount){
+                    $discount_type = $item->discount->type;
+                    if($discount_type == 'percent'){
+                         $discount = $item->price * $item->discount->value / 100;
+                         $new_price = $item->price - $discount;
+                         if($item->unit == 'gram')
+                            $total_order_price += $new_price * $item->quantity / 1000 ;
+                         else
+                            $total_order_price += $new_price * $item->quantity;
+                         }
+                    else {
+                         $new_price = $item->price - $item->discount->value;   
+                         if($item->unit == 'gram')
+                            $total_order_price += $new_price * $item->quantity / 1000 ;
+                         else
+                            $total_order_price += $new_price * $item->quantity;
+                    }   
+                }
+                else{   // no discount
+                    if($item->unit == 'gram')
+                         $total_order_price += $item->price * $item->quantity / 1000  ;
+                    else
+                         $total_order_price += $item->price * $item->quantity;
+                } 
+            } 
+            return view('Guest.order.checkout',['cart'=>$cart , 'cart_items' => $cart_items,'date' => $date, 'total_order_price' => $total_order_price,'tax'=>$tax,'guest'=>$guest]);
+        }
+    }
+
+    public function submitOrder(Request $request){
         $user = User::findOrFail(Auth::user()->id);
         $cart = $user->cart;
         $cart_items = $cart->cartItems;
@@ -132,13 +182,127 @@ class OrderController extends Controller
                 'quantity' => $order_item['quantity'] ,
             ]);
         }
+        // create payment_details
+        if($request->payment_method == 'cash'){
+            PaymentDetail::create([
+                'user_id' => $user->id ,
+                'order_id' => $order->id ,
+                'amount' => $order->total ,
+                'provider' => 'cash' ,
+                'status' => 'pending' ,
+            ]);
+        }
         // delete items from cart
         foreach($cart_items as $cart_item){
                 $cart_item->delete();
         }
 
-         return redirect(route('order.details',$order->id));
+        return redirect(route('order.details',$order->id));
 
+    }
+
+    public function submitOrderAsGuest(Request $request){
+        $guest = User::whereHas('roles', function($q){
+            $q->where('name', 'guest');
+        })->first();                       // guest user
+        $cart = Session::get('cart');
+        $cart_items = collect();
+        $total_order_price = 0 ;
+        $tax_row = Setting::where('key','tax')->first();
+        $tax = (float) $tax_row->value;
+        $number_of_today_orders = Order::whereYear('created_at',now()->year)->whereMonth('created_at',now()->month)
+        ->whereDay('created_at',now()->day)->count();
+        $date = Carbon::now();
+        $date = $date->format('ymd');    // third segment
+        $number = $date.str_pad($number_of_today_orders + 1, 4, "0", STR_PAD_LEFT);
+        if($cart){
+            foreach($cart as $c_item){
+                $item = Product::find($c_item['product_id']);  // but we have to take quantity too (its not stored in product object its stored in cart_item table and we dont have cart_item in session process)
+                $item->quantity = $c_item['quantity'];
+                $cart_items->add($item);
+            }
+            //$order_items_arr = array(array());
+            // $order_items_arr is array of arrays
+            foreach($cart_items as $item){
+                if($item->discount){
+                    $discount_type = $item->discount->type;
+                    if($discount_type == 'percent'){
+                        $discount = $item->price * $item->discount->value / 100;
+                        $new_price = $item->price - $discount;
+                        if($item->unit == 'gram')
+                                $total_order_price += $new_price * $item->quantity / 1000 ;
+                        else
+                                $total_order_price += $new_price * $item->quantity;
+                        // order item
+                        $order_items_arr[] = ['product_id' => $item->id , 'price' => $new_price , 'discount' => $discount , 'quantity' => $item->quantity];
+                        }
+                    else {
+                        $new_price = $item->price - $item->discount->value;   
+                        if($item->unit == 'gram')
+                                $total_order_price += $new_price * $item->quantity / 1000 ;
+                        else
+                                $total_order_price += $new_price * $item->quantity;                     // order item
+                        $order_items_arr[] = ['product_id' => $item->id , 'price' => $new_price , 'discount' => $item->discount->value  , 'quantity' => $item->quantity];
+                    }   
+                }
+                else{   // no discount
+                        if($item->unit == 'gram')
+                            $total_order_price += $item->price * $item->quantity / 1000  ;
+                        else
+                            $total_order_price += $item->price * $item->quantity;
+                        // order item
+                        $order_items_arr[] = ['product_id' => $item->id , 'price' => $item->price , 'discount' => 0  , 'quantity' => $item->quantity];
+                } 
+            }
+            $tax_value = $tax * $total_order_price / 100 ;
+            $grand_order_total = $total_order_price + $tax_value ;
+            if($request->payment_method == 'cash')
+                $order_status = 'pending';
+            else
+                $order_status = 'preparing';
+            $address = $request->address1;   // default main address
+            if($request->address2)
+                $address = $request->address2;
+            $order = Order::create([
+                'user_id' => $guest->id ,
+                'number' =>  $number ,
+                'status' => $order_status ,
+                'sub_total' => $total_order_price ,
+                'tax_ratio' => $tax ,
+                'tax_value' => $tax_value ,
+                'shipping' => 0 ,
+                'total' => $grand_order_total ,
+                'first_name' => $request->first_name , 
+                'last_name' => $request->last_name ,
+                'phone' => $request->phone ,
+                'email' => $request->email ,
+                'address' => $address ,
+                'customer_note' => $request->customer_note ,
+            ]);
+            // inserting order_items
+            foreach($order_items_arr as $order_item){
+                OrderItem::create([
+                    'order_id' => $order->id ,
+                    'product_id' => $order_item['product_id'] ,
+                    'price' => $order_item['price'] ,
+                    'discount' => $order_item['discount'] ,
+                    'quantity' => $order_item['quantity'] ,
+                ]);
+            }
+            // create payment_details
+            if($request->payment_method == 'cash'){
+                PaymentDetail::create([
+                    'user_id' => $guest->id ,
+                    'order_id' => $order->id ,
+                    'amount' => $order->total ,
+                    'provider' => 'cash' ,
+                    'status' => 'pending' ,
+                ]);
+            }
+            // delete items from session cart
+            Session::forget('cart');
+            return back();
+        }  // end if ($cart)
     }
 
     public function details($id){

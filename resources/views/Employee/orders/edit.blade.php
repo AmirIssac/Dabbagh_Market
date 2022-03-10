@@ -37,12 +37,20 @@
                 <th style="font-weight: bold" class="text-center">Status</th>
                 <th style="font-weight: bold" class="text-center">Total</th>
                 <th style="font-weight: bold" class="text-center">Address</th>
-                <th style="font-weight: bold" class="text-center">Cusomer note</th>
+                <th style="font-weight: bold" class="text-center">Payment</th>
+                <th style="font-weight: bold" class="text-center">Payment status</th>
+                <th style="font-weight: bold" class="text-center">Customer note</th>
                 <th style="font-weight: bold" class="text-center">Center note</th>
               </thead>
               <tbody>
                 <tr style="font-weight: bold">
-                  <td>{{$order->user->profile->first_name}}</td>
+                  <td>
+                    @if($order->user->isGuest())
+                    Guest
+                    @else
+                    {{$order->user->profile->first_name}}
+                    @endif
+                  </td>
                   <td class="text-center">
                     @if($order->status == 'pending')
                     <b style="color: #ff7300"> {{$order->status}} </b>
@@ -56,6 +64,8 @@
                   </td>
                   <td style="color:#38b818; font-weight:bold;" class="text-center">{{$order->total}}</td>
                   <td class="text-center">{{$order->address}}</td>
+                  <td class="text-center">{{$order->paymentDetail->provider}}</td>
+                  <td class="text-center">{{$order->paymentDetail->status}}</td>
                   <td class="text-center">
                       @if($order->customer_note)
                         {{$order->customer_note}}
@@ -80,6 +90,10 @@
                     </th>
                     <th style="font-weight: bold" class="text-center">
                         Price
+                    </th>
+                    <th>
+                    </th>
+                    <th>
                     </th>
                     <th>
                     </th>
@@ -113,6 +127,10 @@
                         </td>
                         <td>
                         </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
                     </tr>
                 @endforeach
                 <tr>
@@ -127,6 +145,10 @@
                     </td>
                     <td style="font-weight: bold" class="text-center">
                         {{$order->store->name_en}}
+                    </td>
+                    <td>
+                    </td>
+                    <td>
                     </td>
                     <td>
                     </td>
@@ -160,6 +182,10 @@
                         </td>
                         <td>
                         </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
                    </tr>
                    <?php $counter++; ?>
                 @endforeach
@@ -182,9 +208,13 @@
                         </td>
                         <td>
                         </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
                     </tr>
                 @else
-                @if($order->status != 'rejected')
+                @if($order->status != 'rejected' && $order->status != 'delivered')
                  <form action="{{route('employee.change.order.status',$order->id)}}" method="POST">
                     @csrf
                     <tr>
@@ -200,13 +230,15 @@
                                 @elseif($order->status == 'shipping')
                                     <option value="delivered">delivered</option>
                                     <option value="rejected">rejected</option>
-                                @elseif($order->status == 'delivered')
-                                    <option value="rejected">rejected</option>
                                 @endif
                             </select>
                         </td>
                         <td style="font-weight: bold" class="text-center">
                             <button type="submit" class="btn btn-info">Submit</button>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
                         </td>
                         <td>
                         </td>

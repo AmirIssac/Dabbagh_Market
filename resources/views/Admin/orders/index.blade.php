@@ -37,7 +37,13 @@
                       <span class="badge badge-danger"> {{$order->status}} </span>
                       @endif
                   </td>
-                  <td class="text-center">{{$order->user->profile->first_name}}</td>
+                  <td class="text-center">
+                    @if($order->user->isGuest())
+                    Guest
+                    @else
+                    {{$order->user->profile->first_name}}
+                    @endif
+                  </td>
                   <td class="text-center">{{$order->created_at}}</td>
                   <td class="text-center"><a href="{{route('edit.order',$order->id)}}"><i class="fas fa-tools"></i></a></td>
                 </tr>

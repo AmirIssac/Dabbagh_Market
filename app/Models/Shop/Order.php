@@ -52,12 +52,13 @@ class Order extends Model
         return $this->hasMany(OrderSystem::class);
     }
 
+    /*
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
     }
-
-    public function paymentDetails()
+    */
+    public function paymentDetail()
     {
         return $this->hasOne(PaymentDetail::class);
     }

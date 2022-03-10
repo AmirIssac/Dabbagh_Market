@@ -50,7 +50,7 @@ class OrderController extends Controller
                 ]);
             $order_system = $order->orderSystems->first();
             $order_system->update([
-                    'user_id' => Auth::user()->id,
+                    'user_id' => Auth::user()->id ,
                 ]);
         }
         return back();

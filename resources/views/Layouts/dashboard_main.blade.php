@@ -48,7 +48,7 @@
           MD
         </a>
         <a class="simple-text logo-normal">
-          Admin
+          {{$user->name}}
         </a>
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">

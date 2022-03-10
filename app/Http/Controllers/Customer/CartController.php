@@ -93,7 +93,7 @@ class CartController extends Controller
 
         }
         }
-        return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax,
+        return view('Guest.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax,
                                                     'min_order'=>$min_order]);
     }
 

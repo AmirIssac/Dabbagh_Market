@@ -120,6 +120,13 @@ class User extends Authenticatable
         else
             return false;
     }
+    public function isGuest(){
+        if($this->hasRole('guest'))
+            return true;
+        else
+            return false;
+    }
+
 
 
 }

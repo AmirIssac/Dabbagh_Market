@@ -58,6 +58,18 @@ class OrderController extends Controller
             'user_id' => Auth::user()->id ,
             'status' => $status ,
         ]);
+        // change payment cash status
+        $payment_detail = $order->paymentDetail ;
+        if($payment_detail->provider == 'cash' && $status == 'delivered'){
+            $payment_detail->update([
+                'status' => 'success',
+            ]);
+        }
+        if($payment_detail->provider == 'cash' && $status == 'rejected'){
+            $payment_detail->update([
+                'status' => 'declined',
+            ]);
+        }
         return back();
     }
 }
