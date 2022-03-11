@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\Shop\CartItem;
+use App\Models\Shop\Category;
 use App\Models\Shop\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -12,7 +13,23 @@ use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
-    //
+    
+
+    public function indexByCategory($id){
+        $category = Category::findOrFail($id);
+        $categories = Category::all();
+        $products = $category->products;
+        return view('index',['categories'=>$categories,'products'=>$products]);
+    }
+
+    public function search(Request $request){
+        $categories = Category::all();
+        $products = Product::where(function($query) use ($request){
+            $query->where('name_en','like','%'.$request->search.'%')
+            ->orWhere('name_ar','like','%'.$request->search.'%');
+        })->get();
+        return view('index',['categories'=>$categories,'products'=>$products]);
+    }
 
     public function viewProduct($id){
         $product = Product::findOrFail($id);

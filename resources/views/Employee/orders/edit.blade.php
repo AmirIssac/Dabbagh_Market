@@ -39,8 +39,6 @@
                 <th style="font-weight: bold" class="text-center">Address</th>
                 <th style="font-weight: bold" class="text-center">Payment</th>
                 <th style="font-weight: bold" class="text-center">Payment status</th>
-                <th style="font-weight: bold" class="text-center">Customer note</th>
-                <th style="font-weight: bold" class="text-center">Center note</th>
               </thead>
               <tbody>
                 <tr style="font-weight: bold">
@@ -66,20 +64,46 @@
                   <td class="text-center">{{$order->address}}</td>
                   <td class="text-center">{{$order->paymentDetail->provider}}</td>
                   <td class="text-center">{{$order->paymentDetail->status}}</td>
-                  <td class="text-center">
-                      @if($order->customer_note)
-                        {{$order->customer_note}}
-                      @else
-                        <span class="badge badge-danger">NONE</span>
-                      @endif
-                  </td>
-                  <td class="text-center">
-                      @if($order_center_system->employee_note)
-                            {{$order_center_system->employee_note}}
-                      @else
-                            <span class="badge badge-danger">NONE</span>
-                      @endif
-                  </td>
+                </tr>
+                <tr>   {{-- order items --}}
+                    <th>
+                        Email
+                    </th>
+                    <th style="font-weight: bold" class="text-center">
+                        Phone
+                    </th>
+                    <th style="font-weight: bold" class="text-center">Customer note</th>
+                    <th style="font-weight: bold" class="text-center">Center note</th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                </tr>
+                <tr>
+                    <td>
+                        {{$order->email}}
+                    </td>
+                    <td style="font-weight: bold" class="text-center">
+                        {{$order->phone}}
+                    </td>
+                    <td class="text-center">
+                        @if($order->customer_note)
+                          {{$order->customer_note}}
+                        @else
+                          <span class="badge badge-danger">NONE</span>
+                        @endif
+                    </td>
+                    <td class="text-center">
+                        @if($order_center_system->employee_note)
+                              {{$order_center_system->employee_note}}
+                        @else
+                              <span class="badge badge-danger">NONE</span>
+                        @endif
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
                 </tr>
                 <tr>   {{-- order items --}}
                     <th>
@@ -90,10 +114,6 @@
                     </th>
                     <th style="font-weight: bold" class="text-center">
                         Price
-                    </th>
-                    <th>
-                    </th>
-                    <th>
                     </th>
                     <th>
                     </th>
@@ -127,10 +147,6 @@
                         </td>
                         <td>
                         </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
                     </tr>
                 @endforeach
                 <tr>
@@ -145,10 +161,6 @@
                     </td>
                     <td style="font-weight: bold" class="text-center">
                         {{$order->store->name_en}}
-                    </td>
-                    <td>
-                    </td>
-                    <td>
                     </td>
                     <td>
                     </td>
@@ -182,10 +194,6 @@
                         </td>
                         <td>
                         </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
                    </tr>
                    <?php $counter++; ?>
                 @endforeach
@@ -201,8 +209,6 @@
                             </td>
                         </form>
                         <td style="font-weight: bold" class="text-center">
-                        </td>
-                        <td>
                         </td>
                         <td>
                         </td>
@@ -235,10 +241,6 @@
                         </td>
                         <td style="font-weight: bold" class="text-center">
                             <button type="submit" class="btn btn-info">Submit</button>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
                         </td>
                         <td>
                         </td>

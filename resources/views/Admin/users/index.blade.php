@@ -27,7 +27,14 @@
             @endforeach
             @foreach($employees as $employee)
             <div class="alert alert-info">
-                <span><b> {{$employee->name}} - </b> {{$employee->email}} </span>
+                <span><b> {{$employee->name}} - </b> {{$employee->email}} - </span>
+                @if($employee->stores->count() > 1)
+                    <span><b> Multi stores </b> </span>
+                @elseif($employee->stores->count() == 1)
+                    <span> <b> {{$employee->stores->first()->name_en}} </b> </span>
+                @else
+                    <span><b> no </b> </span>
+                @endif
                 <a href="{{route('view.user',$employee->id)}}"><i style="color: white; float: right" class="fa fa-eye"></i></a>
             </div>
             @endforeach

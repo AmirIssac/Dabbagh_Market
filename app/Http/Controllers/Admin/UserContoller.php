@@ -25,7 +25,7 @@ class UserContoller extends Controller
         })->get();
         $employees = User::whereHas('roles', function (Builder $query) {
             $query->where('name','employee');
-        })->get();
+        })->with('stores')->get();
         return view('Admin.users.index',['customers' => $customers , 'super_admins' => $super_admins ,
                                         'admins' => $admins , 'employees' => $employees]);
     }

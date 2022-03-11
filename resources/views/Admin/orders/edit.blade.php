@@ -42,7 +42,6 @@
                 <th style="font-weight: bold" class="text-center">Address</th>
                 <th style="font-weight: bold" class="text-center">Payment</th>
                 <th style="font-weight: bold" class="text-center">Payment status</th>
-                <th style="font-weight: bold" class="text-center">Note</th>
               </thead>
               <tbody>
                 <tr style="font-weight: bold">
@@ -68,19 +67,49 @@
                   <td class="text-center">{{$order->address}}</td>
                   <td class="text-center">{{$order->paymentDetail->provider}}</td>
                   <td class="text-center">{{$order->paymentDetail->status}}</td>
-                  <td class="text-center">
-                    @if($order->customer_note)
-                       {{$order->customer_note}}
-                    @else
-                      <span class="badge badge-danger">NONE</span>
-                    @endif
-                  </td>
+                  
                 </tr>
-                <tr>   {{-- order items --}}
+                <tr>
+                    <th>
+                      Email
+                    </th>
+                    <th style="font-weight: bold" class="text-center">
+                      Phone
+                    </th>
+                    <th style="font-weight: bold" class="text-center">
+                      Note
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                 </tr>
+                 <tr>
+                    <td>
+                      {{$order->email}}
+                    </td>
+                    <td class="text-center">
+                     {{$order->phone}}
+                    </td>
+                    <td class="text-center">
+                      @if($order->customer_note)
+                         {{$order->customer_note}}
+                      @else
+                        <span class="badge badge-danger">NONE</span>
+                      @endif
+                    </td>
+                    <td class="text-center"></td>
+                    <td class="text-center"></td>
+                    <td class="text-center">
+                    </td>
+                 </tr>
+                 <tr>   {{-- order items --}}
                     <th>
                       Code
                     </th>
-                    <th>
+                    <th style="font-weight: bold" class="text-center">
                         Product
                     </th>
                     <th style="font-weight: bold" class="text-center">
@@ -91,12 +120,8 @@
                     </th>
                     <th>
                     </th>
-                    <th>
-                    </th>
                     <th style="font-weight: bold" class="text-center">
                       Total
-                    </th>
-                    <th>
                     </th>
                 </tr>
                 @foreach($order_items as $item)
@@ -104,7 +129,7 @@
                         <td>
                           {{$item->product->code}}
                         </td>
-                        <td>
+                        <td style="font-weight: bold" class="text-center">
                             {{$item->product->name_en}}
                         </td>
                         <td style="font-weight: bold" class="text-center">
@@ -120,8 +145,6 @@
                             @elseif($item->product->unit == 'piece')
                                 {{$item->quantity * $item->price}}
                             @endif
-                        </td>
-                        <td>
                         </td>
                         <td>
                         </td>
@@ -144,10 +167,6 @@
                       </td>
                       <td style="font-weight: bold" class="text-center">
                           {{$order_center_system->created_at}}
-                      </td>
-                      <td>
-                      </td>
-                      <td>
                       </td>
                       <td>
                       </td>
@@ -183,10 +202,6 @@
                         </td>
                         <td>
                         </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
                    </tr>
                    <?php $counter++; ?>
                    @endforeach
@@ -213,8 +228,7 @@
                             </td>
                             <td>
                             </td>
-                            <td>
-                            </td>
+                            <td></td>
                         </tr>
                     </form>
                     @elseif($order->orderSystems()->count() == 1)  {{-- الطلب محول ولكن لم يستلمه الكاشير بعد --}}
@@ -226,8 +240,6 @@
                             <b>{{$order_store->name_en}}</b>
                         </td>
                         <td style="font-weight: bold" class="text-center">
-                        </td>
-                        <td>
                         </td>
                         <td>
                         </td>
@@ -256,8 +268,6 @@
                           </td>
                           <td style="font-weight: bold" class="text-center">
                                 <button class="btn btn-primary">confirm transfer</button>
-                          </td>
-                          <td>
                           </td>
                           <td>
                           </td>

@@ -65,6 +65,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 
 // customer
+Route::get('/by-category/{category_id}', [ProductController::class, 'indexByCategory'])->name('index.by.category');
+Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/product/{product_id}', [ProductController::class, 'viewProduct'])->name('view.product');
 Route::post('/add/product/toCart/{product_id}', [ProductController::class, 'addProductToCart'])->name('add.product.to.cart');
 Route::post('/update/product/inCart/{product_id}', [ProductController::class, 'updateProductCart'])->name('update.product.in.cart');
