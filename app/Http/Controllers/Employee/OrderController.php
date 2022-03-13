@@ -30,8 +30,10 @@ class OrderController extends Controller
         $order_items = $order->orderItems;
         $order_center_system = $order->orderSystems->first();
         $order_employee_systems = $order->orderSystems()->where('id','!=',$order_center_system->id)->get();
+        $estimated_time = $order->estimated_time;
         return view('Employee.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,
-                    'order_center_system'=>$order_center_system,'order_employee_systems'=>$order_employee_systems]);
+                    'order_center_system'=>$order_center_system,'order_employee_systems'=>$order_employee_systems,
+                    'estimated_time' => $estimated_time]);
     }
 
     public function acceptOrder($id){
@@ -57,6 +59,7 @@ class OrderController extends Controller
             'order_id' => $order->id ,
             'user_id' => Auth::user()->id ,
             'status' => $status ,
+            'employee_note' => $request->employee_note ,
         ]);
         // change payment cash status
         $payment_detail = $order->paymentDetail ;
@@ -67,7 +70,7 @@ class OrderController extends Controller
         }
         if($payment_detail->provider == 'cash' && $status == 'rejected'){
             $payment_detail->update([
-                'status' => 'declined',
+                'status' => 'failed',
             ]);
         }
         return back();

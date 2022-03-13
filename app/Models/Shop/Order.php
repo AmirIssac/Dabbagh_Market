@@ -32,6 +32,8 @@ class Order extends Model
         'estimated_time',
     ];
 
+    protected $dates = ['estimated_time'];
+    
     public function user()
     {
         return $this->belongsTo(User::class);

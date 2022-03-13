@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\OrderSystem;
 use App\Models\Shop\Order;
 use App\Models\Store;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,14 +22,22 @@ class OrderController extends Controller
         $order_store = $order->store;
         $order_items = $order->orderItems;
         $order_center_system = $order->orderSystems->first();
+        // calculate the estimated hours remaining
+        /*
+        $estimated = $order->estimated_time ;
+        $estimated_time = $estimated->diffForHumans(now());
+        $estimated_time =  now()->diff($estimated)->format('%H:%I:%S')." Minutes";
+        */
+        $estimated_time = $order->estimated_time;
         if($order_center_system){
             $order_employee_systems = $order->orderSystems()->where('id','!=',$order_center_system->id)->get();
             return view('Admin.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,'order_store'=>$order_store,
-                    'order_center_system'=>$order_center_system,'order_employee_systems'=>$order_employee_systems]);
+                    'order_center_system'=>$order_center_system,'order_employee_systems'=>$order_employee_systems,
+                    'estimated_time' => $estimated_time]);
         }
         else{   // not transfered yet
             return view('Admin.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,'order_store'=>$order_store,
-            ]);
+                        'estimated_time' => $estimated_time]);
         }
     }
     public function transferOrder(Request $request , $id){

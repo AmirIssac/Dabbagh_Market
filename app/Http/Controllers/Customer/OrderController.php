@@ -18,6 +18,22 @@ use Illuminate\Support\Facades\Session;
 class OrderController extends Controller
 {
     public function checkout(){
+        // calculate order time delivery
+        $order_banner = '' ;
+        $time_line =  Carbon::create(now()->year,now()->month,now()->day,19,00);    // 1 pm is the line for delivery time change for next day
+        if(now() < $time_line){   // delivery today
+            // calculate the number of orders not delivered
+            $busy_orders_count = Order::where(function($query){
+                $query->where('status','pending')
+                ->orWhere('status','preparing');
+            })->count();
+            // if we are free we take 4 hours to deliver the order for example
+            // we increase one hour for every 3 orders for example
+            $hours_remaining_to_deliver = ceil($busy_orders_count * 1 / 3) + 4 ;  // round hours to the upper number
+        }
+        else{    // deliver tomorrow
+            $hours_remaining_to_deliver = 'order now and we will deliver it to you tomorrow';
+        }
         $user = User::findOrFail(Auth::user()->id);
         $profile = $user->profile;
         $cart = $user->cart;
@@ -51,8 +67,11 @@ class OrderController extends Controller
                 else
                      $total_order_price += $item->product->price * $item->quantity;
             } 
-        } 
-        return view('Customer.order.checkout',['cart'=>$cart , 'cart_items' => $cart_items,'date' => $date, 'total_order_price' => $total_order_price,'profile'=>$profile,'tax'=>$tax]);
+        }
+        // calculate order time delivery
+
+        return view('Customer.order.checkout',['cart'=>$cart , 'cart_items' => $cart_items,'date' => $date, 'total_order_price' => $total_order_price,
+                                               'profile'=>$profile,'tax'=>$tax,'hours_remaining_to_deliver' => $hours_remaining_to_deliver]);
     }
 
     public function guestCheckout(){
@@ -156,6 +175,25 @@ class OrderController extends Controller
         $address = $request->address1;   // default main address
         if($request->address2)
             $address = $request->address2;
+        
+        // calculate order time delivery
+        $order_banner = '' ;
+        $time_line =  Carbon::create(now()->year,now()->month,now()->day,19,00);    // 1 pm is the line for delivery time change for next day
+        if(now() < $time_line){   // delivery today
+            // calculate the number of orders not delivered
+            $busy_orders_count = Order::where(function($query){
+                $query->where('status','pending')
+                ->orWhere('status','preparing');
+            })->count();
+            // if we are free we take 4 hours to deliver the order for example
+            // we increase one hour for every 3 orders for example
+            $hours_remaining_to_deliver = ceil($busy_orders_count * 1 / 3) + 4 ;  // round hours to the upper number
+            $estimated_time =  Carbon::create(now()->year,now()->month,now()->day,now()->hour + $hours_remaining_to_deliver,now()->minute,now()->second);
+        }
+        else{    // deliver tomorrow
+            $estimated_time =  Carbon::create(now()->year,now()->month,now()->day + 1,now()->hour,now()->minute,now()->second);
+        }
+
         $order = Order::create([
             'user_id' => $user->id ,
             'number' =>  $number ,
@@ -171,6 +209,7 @@ class OrderController extends Controller
             'email' => $request->email ,
             'address' => $address ,
             'customer_note' => $request->customer_note ,
+            'estimated_time' => $estimated_time ,
         ]);
         // inserting order_items
         foreach($order_items_arr as $order_item){

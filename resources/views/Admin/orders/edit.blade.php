@@ -66,8 +66,13 @@
                   <td style="font-weight: bold; color: #38b818;" class="text-center">{{$order->total}}</td>
                   <td class="text-center">{{$order->address}}</td>
                   <td class="text-center">{{$order->paymentDetail->provider}}</td>
-                  <td class="text-center">{{$order->paymentDetail->status}}</td>
-                  
+                  @if($order->paymentDetail->status == 'pending')
+                    <td style="color: #ff7300" class="text-center">{{$order->paymentDetail->status}}</td>
+                  @elseif($order->paymentDetail->status == 'success')
+                    <td style="color: #069e1f" class="text-center">{{$order->paymentDetail->status}}</td>
+                  @elseif($order->paymentDetail->status == 'failed')
+                    <td style="color: #c00202" class="text-center">{{$order->paymentDetail->status}}</td>
+                  @endif
                 </tr>
                 <tr>
                     <th>
@@ -79,7 +84,8 @@
                     <th style="font-weight: bold" class="text-center">
                       Note
                     </th>
-                    <th>
+                    <th style="font-weight: bold" class="text-center">
+                      Deliver must be in
                     </th>
                     <th>
                     </th>
@@ -100,7 +106,10 @@
                         <span class="badge badge-danger">NONE</span>
                       @endif
                     </td>
-                    <td class="text-center"></td>
+                    <td style="color: #c00202; font-weight: bold" class="text-center">
+                      <input type="hidden" id="estimated-time" value="{{$estimated_time}}">
+                      <p id="estimated-time-div"></p>
+                    </td>
                     <td class="text-center"></td>
                     <td class="text-center">
                     </td>
@@ -196,8 +205,9 @@
                         <td style="font-weight: bold" class="text-center">
                             {{$order_employee_process->created_at}}
                         </td>
-                        <td>
-                        </td>
+                        <td style="font-weight: bold" class="text-center">
+                          {{$order_employee_process->employee_note}}
+                      </td>
                         <td>
                         </td>
                         <td>
@@ -286,4 +296,40 @@
     </div>
   </div>
 </div>
+@section('scripts')
+<script>
+  // Set the date we're counting down to
+  /*
+  var countDownDate = new Date("Jan 5, 2024 15:37:25").getTime();
+  */
+  var countDownDate = new Date($('#estimated-time').val()).getTime();
+  
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+  
+    // Get today's date and time
+    var now = new Date().getTime();
+  
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
+  
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  
+    // Display the result in the element with id="demo"
+    document.getElementById("estimated-time-div").innerHTML = days + "d " + hours + "h "
+    + minutes + "m " + seconds + "s ";
+  
+    // If the count down is finished, write some text
+    if (distance < 0) {
+      clearInterval(x);
+      document.getElementById("estimated-time-div").innerHTML = "EXPIRED";
+    }
+  }, 1000);
+  </script>
+  
+@endsection
 @endsection
