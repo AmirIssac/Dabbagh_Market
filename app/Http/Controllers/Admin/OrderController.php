@@ -24,7 +24,7 @@ class OrderController extends Controller
         $order_center_system = $order->orderSystems->first();
         // calculate the estimated hours remaining
         /*
-        $estimated = $order->estimated_time ;
+        $estimated = $order->estimated_time;
         $estimated_time = $estimated->diffForHumans(now());
         $estimated_time =  now()->diff($estimated)->format('%H:%I:%S')." Minutes";
         */

@@ -5,6 +5,7 @@ namespace App\Models\Shop;
 use App\Models\OrderSystem;
 use App\Models\Store;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -64,5 +65,6 @@ class Order extends Model
     {
         return $this->hasOne(PaymentDetail::class);
     }
+
 
 }

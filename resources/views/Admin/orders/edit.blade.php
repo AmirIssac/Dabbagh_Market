@@ -183,7 +183,7 @@
                       </td>
                       <td>
                       </td>
-                 </tr>
+                </tr>
                 {{-- employee life cycle except center one --}}
                 <?php $counter = 2 ; ?>
                 @foreach($order_employee_systems as $order_employee_process)

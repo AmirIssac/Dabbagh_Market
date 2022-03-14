@@ -122,7 +122,19 @@
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
+                            <div>
+                                @if(is_numeric($hours_remaining_to_deliver))
+                                    <h4 style="color: #7fad39">
+                                    You will receive your order in about
+                                    {{$hours_remaining_to_deliver}} Hours
+                                    </h4>
+                                @else
+                                    <h4 style="color: #f44336">
+                                    You will receive your order tomorrow
+                                    </h4>
+                                @endif
                             <button type="submit" class="site-btn">PLACE ORDER</button>
+                        </div>
                         </div>
                     </div>
                 </div>
