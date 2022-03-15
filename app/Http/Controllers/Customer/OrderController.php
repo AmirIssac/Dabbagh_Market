@@ -27,6 +27,7 @@ class OrderController extends Controller
         $total_order_price = 0 ;
         $tax_row = Setting::where('key','tax')->first();
         $tax = (float) $tax_row->value;
+        /*
         foreach($cart_items as $item){
             if($item->product->discount){
                 $discount_type = $item->product->discount->type;
@@ -53,28 +54,13 @@ class OrderController extends Controller
                      $total_order_price += $item->product->price * $item->quantity;
             } 
         }
-
+        */
+        $total_order_price = $cart->getTotal();
         return view('Customer.order.checkout',['cart'=>$cart , 'cart_items' => $cart_items,'date' => $date, 'total_order_price' => $total_order_price,
                                                'profile'=>$profile,'tax'=>$tax,'hours_remaining_to_deliver' => $hours_remaining_to_deliver]);
     }
 
     public function guestCheckout(){
-         // calculate order time delivery
-         $order_banner = '' ;
-         $time_line =  Carbon::create(now()->year,now()->month,now()->day,19,00);    // 1 pm is the line for delivery time change for next day
-         if(now() < $time_line){   // delivery today
-             // calculate the number of orders not delivered
-             $busy_orders_count = Order::where(function($query){
-                 $query->where('status','pending')
-                 ->orWhere('status','preparing');
-             })->count();
-             // if we are free we take 4 hours to deliver the order for example
-             // we increase one hour for every 3 orders for example
-             $hours_remaining_to_deliver = ceil($busy_orders_count * 1 / 3) + 4 ;  // round hours to the upper number
-         }
-         else{    // deliver tomorrow
-             $hours_remaining_to_deliver = 'order now and we will deliver it to you tomorrow';
-         }
         $guest = User::whereHas('roles', function($q){
             $q->where('name', 'guest');
         })->first();                       // guest user
@@ -117,6 +103,8 @@ class OrderController extends Controller
                          $total_order_price += $item->price * $item->quantity;
                 } 
             } 
+            $hours_remaining_to_deliver = $guest->calculateGuestDeliverTime();
+
             return view('Guest.order.checkout',['cart'=>$cart , 'cart_items' => $cart_items,'date' => $date, 'total_order_price' => $total_order_price,'tax'=>$tax,'guest'=>$guest,
                                                 'hours_remaining_to_deliver' => $hours_remaining_to_deliver]);
         }
@@ -134,41 +122,11 @@ class OrderController extends Controller
         $date = Carbon::now();
         $date = $date->format('ymd');    // third segment
         $number = $date.str_pad($number_of_today_orders + 1, 4, "0", STR_PAD_LEFT);
-        //$order_items_arr = array(array());
         // $order_items_arr is array of arrays
-        foreach($cart_items as $item){
-            if($item->product->discount){
-                $discount_type = $item->product->discount->type;
-                if($discount_type == 'percent'){
-                     $discount = $item->product->price * $item->product->discount->value / 100;
-                     $new_price = $item->product->price - $discount;
-                     if($item->product->unit == 'gram')
-                            $total_order_price += $new_price * $item->quantity / 1000 ;
-                     else
-                            $total_order_price += $new_price * $item->quantity;
-                     // order item
-                     $order_items_arr[] = ['product_id' => $item->product->id , 'price' => $new_price , 'discount' => $discount , 'quantity' => $item->quantity];
-                     }
-                else {
-                     $new_price = $item->product->price - $item->product->discount->value;   
-                     if($item->product->unit == 'gram')
-                            $total_order_price += $new_price * $item->quantity / 1000 ;
-                     else
-                            $total_order_price += $new_price * $item->quantity;                     // order item
-                     $order_items_arr[] = ['product_id' => $item->product->id , 'price' => $new_price , 'discount' => $item->product->discount->value  , 'quantity' => $item->quantity];
-                }   
-            }
-            else{   // no discount
-                     if($item->product->unit == 'gram')
-                        $total_order_price += $item->product->price * $item->quantity / 1000  ;
-                     else
-                        $total_order_price += $item->product->price * $item->quantity;
-                      // order item
-                      $order_items_arr[] = ['product_id' => $item->product->id , 'price' => $item->product->price , 'discount' => 0  , 'quantity' => $item->quantity];
-            } 
-        }
-        $tax_value = $tax * $total_order_price / 100 ;
-        $grand_order_total = $total_order_price + $tax_value ;
+        $order_items_arr = array();
+        $total_order_price = 0 ;
+        $tax_value = 0 ;
+        $grand_order_total = $cart->getTotalSubmittingOrder($total_order_price , $order_items_arr , $tax_value );
         if($request->payment_method == 'cash')
             $order_status = 'pending';
         else
@@ -288,6 +246,9 @@ class OrderController extends Controller
             $address = $request->address1;   // default main address
             if($request->address2)
                 $address = $request->address2;
+            
+            $estimated_time = $guest->calculateGuestDeliverTime(true);
+
             $order = Order::create([
                 'user_id' => $guest->id ,
                 'number' =>  $number ,
@@ -303,6 +264,7 @@ class OrderController extends Controller
                 'email' => $request->email ,
                 'address' => $address ,
                 'customer_note' => $request->customer_note ,
+                'estimated_time' => $estimated_time ,
             ]);
             // inserting order_items
             foreach($order_items_arr as $order_item){

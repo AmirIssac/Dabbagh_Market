@@ -25,6 +25,77 @@ class Cart extends Model
         return $this->hasMany(CartItem::class);
     }
 
+    public function getTotal(){
+        $cart_items = $this->cartItems;
+        $cart_total = 0 ;
+        foreach($cart_items as $item){
+            if($item->product->discount){
+                $discount_type = $item->product->discount->type;
+                if($discount_type == 'percent'){
+                            $discount = $item->product->price * $item->product->discount->value / 100;
+                            if($item->product->unit == 'gram')
+                                $cart_total = $cart_total +  (($item->product->price - $discount) * $item->quantity / 1000);
+                            else
+                                $cart_total = $cart_total +  ($item->product->price - $discount) * $item->quantity;
+                            }
+                else{
+                            if($item->product->unit == 'gram')
+                                $cart_total = $cart_total +  (($item->product->price - $item->product->discount->value) * $item->quantity / 1000);
+                            else
+                                $cart_total = $cart_total +  ($item->product->price - $item->product->discount->value) * $item->quantity;
+                }
+            }
+            else  // no discount for this item
+                if($item->product->unit == 'gram')
+                        $cart_total = $cart_total + ($item->product->price * $item->quantity / 1000);
+                else
+                        $cart_total = $cart_total + ($item->product->price * $item->quantity);
+
+        }
+        return $cart_total ;
+    }
+
+    public function getTotalSubmittingOrder(&$total_order_price,&$order_items_arr , &$tax_value){   // argument by reference
+        $cart_items = $this->cartItems;
+        $total_order_price = 0 ;
+        $tax_row = Setting::where('key','tax')->first();
+        $tax = (float) $tax_row->value;
+        foreach($cart_items as $item){
+            if($item->product->discount){
+                $discount_type = $item->product->discount->type;
+                if($discount_type == 'percent'){
+                     $discount = $item->product->price * $item->product->discount->value / 100;
+                     $new_price = $item->product->price - $discount;
+                     if($item->product->unit == 'gram')
+                            $total_order_price += $new_price * $item->quantity / 1000 ;
+                     else
+                            $total_order_price += $new_price * $item->quantity;
+                     // order item
+                     $order_items_arr[] = ['product_id' => $item->product->id , 'price' => $new_price , 'discount' => $discount , 'quantity' => $item->quantity];
+                     }
+                else {
+                     $new_price = $item->product->price - $item->product->discount->value;   
+                     if($item->product->unit == 'gram')
+                            $total_order_price += $new_price * $item->quantity / 1000 ;
+                     else
+                            $total_order_price += $new_price * $item->quantity;                     // order item
+                     $order_items_arr[] = ['product_id' => $item->product->id , 'price' => $new_price , 'discount' => $item->product->discount->value  , 'quantity' => $item->quantity];
+                }   
+            }
+            else{   // no discount
+                     if($item->product->unit == 'gram')
+                        $total_order_price += $item->product->price * $item->quantity / 1000  ;
+                     else
+                        $total_order_price += $item->product->price * $item->quantity;
+                      // order item
+                      $order_items_arr[] = ['product_id' => $item->product->id , 'price' => $item->product->price , 'discount' => 0  , 'quantity' => $item->quantity];
+            } 
+        }
+        $tax_value = $tax * $total_order_price / 100 ;
+        $grand_order_total = $total_order_price + $tax_value ;
+        return $grand_order_total;
+    }
+
     public function calculateDeliverTime($order_submit = false){
         $close_delivery = Setting::where('key','close_delivery')->first()->value;
         $hours_deliver_when_free = (float) Setting::where('key','hours_deliver_when_free')->first()->value;

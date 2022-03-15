@@ -23,34 +23,10 @@ class CartController extends Controller
         $min_order_row = Setting::where('key','min_order_limit')->first();
         $tax = (float) $tax_row->value;
         $min_order = (float) $min_order_row->value;
-        $cart_total = 0 ;
-        foreach($cart_items as $item){
-            if($item->product->discount){
-                $discount_type = $item->product->discount->type;
-                if($discount_type == 'percent'){
-                            $discount = $item->product->price * $item->product->discount->value / 100;
-                            if($item->product->unit == 'gram')
-                                $cart_total = $cart_total +  (($item->product->price - $discount) * $item->quantity / 1000);
-                            else
-                                $cart_total = $cart_total +  ($item->product->price - $discount) * $item->quantity;
-                            }
-                else{
-                            if($item->product->unit == 'gram')
-                                $cart_total = $cart_total +  (($item->product->price - $item->product->discount->value) * $item->quantity / 1000);
-                            else
-                                $cart_total = $cart_total +  ($item->product->price - $item->product->discount->value) * $item->quantity;
-                }
-            }
-            else  // no discount for this item
-                if($item->product->unit == 'gram')
-                        $cart_total = $cart_total + ($item->product->price * $item->quantity / 1000);
-                else
-                        $cart_total = $cart_total + ($item->product->price * $item->quantity);
-
-        }
+        $cart_total = $cart->getTotal();
         return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax,
                                                   'min_order' => $min_order
-                    ]);
+                                                    ]);
     }
 
 
@@ -90,7 +66,6 @@ class CartController extends Controller
                         $cart_total = $cart_total + ($item->price * $item->quantity / 1000);
                 else
                         $cart_total = $cart_total + ($item->price * $item->quantity);
-
         }
         }
         return view('Guest.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax,
