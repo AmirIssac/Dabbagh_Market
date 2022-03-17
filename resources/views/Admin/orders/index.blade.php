@@ -19,6 +19,7 @@
                 <th style="font-weight: bold" class="text-center">Status</th>
                 <th style="font-weight: bold" class="text-center">Customer</th>
                 <th style="font-weight: bold" class="text-center">Date</th>
+                <th style="font-weight: bold" class="text-center">Store</th>
                 <th style="font-weight: bold" class="text-center">Action</th>
               </thead>
               <tbody>
@@ -45,6 +46,13 @@
                     @endif
                   </td>
                   <td class="text-center">{{$order->created_at}}</td>
+                  <td class="text-center">
+                    @if(isset($order->store))
+                    {{$order->store->name_en}}
+                    @else
+                    <span class="badge badge-danger">NONE</span>
+                    @endif
+                  </td>
                   <td class="text-center"><a href="{{route('edit.order',$order->id)}}"><i class="fas fa-tools"></i></a></td>
                 </tr>
                 @endforeach

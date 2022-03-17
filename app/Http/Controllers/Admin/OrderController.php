@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class OrderController extends Controller
 {
     public function index(){
-        $orders = Order::orderBy('created_at','DESC')->simplePaginate(15);
+        $orders = Order::orderBy('store_id')->orderBy('created_at','DESC')->get();
         return view('Admin.orders.index',['orders'=>$orders]);
     }
     public function editOrder($id){

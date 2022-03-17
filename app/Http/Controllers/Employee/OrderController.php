@@ -7,6 +7,7 @@ use App\Models\OrderSystem;
 use App\Models\Shop\Order;
 use App\Models\Store;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,7 +23,16 @@ class OrderController extends Controller
             foreach($store_orders as $store_order)
                 $orders->add($store_order);
         }
-        return view('Employee.orders.index',['orders'=>$orders]);
+        // send to view the updated_at timestamp of last pending order when page opened
+        $pending_orders = collect();
+        foreach($stores as $store){
+            $store_orders = $store->orders()->where('status','pending')->orderBy('updated_at','DESC')->get();
+            foreach($store_orders as $store_order)
+                $pending_orders->add($store_order);
+        }
+        $last_updated_pending_order_timestamp = $pending_orders->first()->updated_at;
+
+        return view('Employee.orders.index',['orders'=>$orders,'last_updated_order_timestamp'=>$last_updated_pending_order_timestamp]);
     }
     public function editOrder($id){
         $order = Order::findOrFail($id);
@@ -74,6 +84,21 @@ class OrderController extends Controller
             ]);
         }
         return back();
+    }
+
+    public function ajaxCheckNewOrders(Request $request){
+        $user = User::findOrFail(Auth::user()->id);
+        $stores = $user->stores;   // stores this employee works in
+        $orders = collect();
+        foreach($stores as $store){
+            $store_orders = $store->orders()->where('status','pending')->orderBy('updated_at','DESC')->get();
+            foreach($store_orders as $store_order)
+                $orders->add($store_order);
+        }
+        // $last_updated_pending_order = $orders->first();
+        $new_orders_count = $orders->where('updated_at' , '>' ,  Carbon::parse($request->updated_at) )->count(); 
+        //return response($orders->first());
+        return response($new_orders_count);
     }
 }
 
