@@ -30,6 +30,20 @@ class UserContoller extends Controller
                                         'admins' => $admins , 'employees' => $employees]);
     }
 
+    public function showCustomers(){
+        $customers = User::whereHas('roles', function (Builder $query) {
+            $query->where('name','customer');
+        })->orderBy('created_at','DESC')->with(['profile','orders'])->simplePaginate(15);
+        return view('Admin.users.customers',['customers'=>$customers]);
+    }
+
+    public function showEmployees(){
+        $employees = User::whereHas('roles', function (Builder $query) {
+            $query->where('name','employee');
+        })->orderBy('created_at','DESC')->with(['profile'])->simplePaginate(15);
+        return view('Admin.users.employees',['employees'=>$employees]);
+    }
+
     public function viewUser($id){
         $person = User::findOrFail($id);
         $all_stores = Store::all();

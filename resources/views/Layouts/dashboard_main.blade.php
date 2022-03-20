@@ -75,22 +75,22 @@
               <p>Orders</p>
             </a>
           </li>
+          <li class="{{Route::is('show.customers') ? 'active' : ''}}">
+            <a href="{{route('show.customers')}}">
+              <i class="now-ui-icons users_single-02"></i>
+              <p>Customers</p>
+            </a>
+          </li>
+          <li class="{{Route::is('show.employees') ? 'active' : ''}}">
+            <a href="{{route('show.employees')}}">
+              <i class="now-ui-icons users_single-02"></i>
+              <p>Employees</p>
+            </a>
+          </li>
           <li>
             <a href="./notifications.html">
               <i class="now-ui-icons objects_key-25"></i>
               <p>Permissions</p>
-            </a>
-          </li>
-          <li class="{{Route::is('show.users') ? 'active' : ''}}">
-            <a href="{{route('show.users')}}">
-              <i class="now-ui-icons users_single-02"></i>
-              <p>Users</p>
-            </a>
-          </li>
-          <li>
-            <a href="./tables.html">
-              <i class="now-ui-icons location_pin"></i>
-              <p>Location</p>
             </a>
           </li>
           <li class="{{Route::is('settings') ? 'active' : ''}}">

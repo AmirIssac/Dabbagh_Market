@@ -6,6 +6,12 @@
     display: none;
   }
 </style>
+<style>
+.radius-span{
+  border-radius:50%;
+  margin: 0 10;
+}
+</style>
 @endsection
 @section('content')
 <div class="panel-header panel-header-sm">
@@ -16,7 +22,15 @@
       <div class="card card-upgrade">
         <span id="new-orders-badge" style="margin: 20px;" class="badge badge-success displaynone"><b id="new-orders-count">2</b> NEW</span>
         <div class="card-header text-center">
-          <h4 class="card-title">Orders <span class="badge badge-primary"> {{$orders->count()}} </span> </h3>
+          <h4 class="card-title">Orders <span class="badge badge-primary radius-span"> {{$orders->count()}} </span>
+          </h4>
+          <h4 class="card-title">
+          Pending <span class="badge badge-danger radius-span"> {{$status_arr['pending']}} </span>
+          preparing <span class="badge badge-info radius-span"> {{$status_arr['preparing']}} </span>
+          shipping <span class="badge badge-info radius-span"> {{$status_arr['shipping']}} </span>
+          delivered <span class="badge badge-success radius-span"> {{$status_arr['delivered']}} </span>
+          rejected <span class="badge badge-warning radius-span"> {{$status_arr['rejected']}} </span>
+          </h4>
             <p class="card-category"></p>
         </div>
         <div class="card-body">
@@ -66,8 +80,7 @@
   </div>
 </div>
 {{-- timestamp for the last order created when the page refreshed  --}}
-<input type="text" id="last-updated-order" value="{{$last_updated_order_timestamp}}">
-<button id="test">click</button>
+<input type="hidden" id="last-updated-order" value="{{$last_updated_order_timestamp}}">
 @section('scripts')
 <script>
   function checkNewOrders(){

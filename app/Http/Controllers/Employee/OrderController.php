@@ -32,7 +32,26 @@ class OrderController extends Controller
         }
         $last_updated_pending_order_timestamp = $pending_orders->first()->updated_at;
 
-        return view('Employee.orders.index',['orders'=>$orders,'last_updated_order_timestamp'=>$last_updated_pending_order_timestamp]);
+
+        // orders statistics
+        $pending = 0 ;
+        $preparing = 0 ;
+        $shipping = 0 ;
+        $delivered = 0 ;
+        $rejected = 0 ;
+        foreach($orders as $single_order){
+            switch($single_order->status){
+                case 'pending' : $pending++ ; break;
+                case 'preparing' : $preparing++ ; break;
+                case 'shipping' : $shipping++ ; break;
+                case 'delivered' : $delivered++ ; break;
+                case 'rejected' : $rejected++ ; break;
+                default : break;
+            }
+        $status_arr = array('pending'=>$pending,'preparing'=>$preparing,'shipping'=>$shipping,'delivered'=>$delivered,'rejected'=>$rejected);
+        }
+        return view('Employee.orders.index',['orders'=>$orders,'last_updated_order_timestamp'=>$last_updated_pending_order_timestamp,
+                                                'status_arr'=>$status_arr]);
     }
     public function editOrder($id){
         $order = Order::findOrFail($id);

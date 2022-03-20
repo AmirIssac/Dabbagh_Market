@@ -1,4 +1,12 @@
 @extends('Layouts.dashboard_main')
+@section('links')
+<style>
+.radius-span{
+  border-radius:50%;
+  margin: 0 10;
+}
+</style>
+@endsection
 @section('content')
 <div class="panel-header panel-header-sm">
 </div>
@@ -7,7 +15,15 @@
     <div class="col-md-12 ml-auto mr-auto">
       <div class="card card-upgrade">
         <div class="card-header text-center">
-          <h4 class="card-title">Orders <span class="badge badge-primary"> {{$orders->count()}} </span> </h3>
+          <h4 class="card-title">Orders <span class="badge badge-primary radius-span"> {{$orders->count()}} </span>
+          </h4>
+          <h4 class="card-title">
+          Pending <span class="badge badge-danger radius-span"> {{$status_arr['pending']}} </span>
+          preparing <span class="badge badge-info radius-span"> {{$status_arr['preparing']}} </span>
+          shipping <span class="badge badge-info radius-span"> {{$status_arr['shipping']}} </span>
+          delivered <span class="badge badge-success radius-span"> {{$status_arr['delivered']}} </span>
+          rejected <span class="badge badge-warning radius-span"> {{$status_arr['rejected']}} </span>
+          </h4>
             <p class="card-category"></p>
         </div>
         <div class="card-body">
@@ -29,13 +45,13 @@
                   <td class="text-center"><span class="badge badge-success">{{$order->total}}</span></td>
                   <td class="text-center">
                       @if($order->status == 'pending')
-                      <span class="badge badge-warning"> {{$order->status}} </span>
+                      <span class="badge badge-danger"> {{$order->status}} </span>
                       @elseif($order->status == 'preparing' || $order->status == 'shipping')
                       <span class="badge badge-info"> {{$order->status}} </span>
                       @elseif($order->status == 'delivered')
                       <span class="badge badge-success"> {{$order->status}} </span>
                       @elseif($order->status == 'failed' || $order->status == 'cancelled' || $order->status == 'rejected')
-                      <span class="badge badge-danger"> {{$order->status}} </span>
+                      <span class="badge badge-warning"> {{$order->status}} </span>
                       @endif
                   </td>
                   <td class="text-center">

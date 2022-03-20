@@ -36,6 +36,8 @@ Route::group(['middleware'=>['is_employee']] , function(){
         Route::get('/edit/product/form/{product_id}',[AdminInventoryController::class, 'editProductForm'])->name('edit.product.form');
         Route::post('/update/product/{product_id}',[AdminInventoryController::class, 'updateProduct'])->name('update.product');
         Route::get('/users',[UserDashboardContoller::class, 'index'])->name('show.users');
+        Route::get('/customers',[UserDashboardContoller::class, 'showCustomers'])->name('show.customers');
+        Route::get('/employees',[UserDashboardContoller::class, 'showEmployees'])->name('show.employees');
         Route::get('/view/user/{user_id}',[UserDashboardContoller::class, 'viewUser'])->name('view.user');
         Route::post('/update/user/{user_id}',[UserDashboardContoller::class, 'update'])->name('update.user');
         Route::post('/store/discount',[AdminInventoryController::class, 'storeNewDiscount'])->name('store.discount');
@@ -56,6 +58,7 @@ Route::group(['middleware'=>['is_employee']] , function(){
     Route::get('/employee/orders',[App\Http\Controllers\Employee\OrderController::class, 'index'])->name('employee.orders');
     Route::get('/employee/edit/order/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'editOrder'])->name('employee.edit.order');
     Route::post('/employee/accept/order/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'acceptOrder'])->name('employee.accept.order');
+    Route::post('/employee/change/orderStatus/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'changeStatus'])->name('employee.change.order.status');
     Route::get('/check/new/orders',[App\Http\Controllers\Employee\OrderController::class, 'ajaxCheckNewOrders'])->name('check.new.orders');
 });
 

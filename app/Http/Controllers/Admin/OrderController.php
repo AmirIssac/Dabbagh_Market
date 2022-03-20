@@ -14,7 +14,25 @@ class OrderController extends Controller
 {
     public function index(){
         $orders = Order::orderBy('store_id')->orderBy('created_at','DESC')->get();
-        return view('Admin.orders.index',['orders'=>$orders]);
+        // orders statistics
+        $pending = 0 ;
+        $preparing = 0 ;
+        $shipping = 0 ;
+        $delivered = 0 ;
+        $rejected = 0 ;
+        $all_orders_no_paginate = Order::get();
+        foreach($all_orders_no_paginate as $single_order){
+            switch($single_order->status){
+                case 'pending' : $pending++ ; break;
+                case 'preparing' : $preparing++ ; break;
+                case 'shipping' : $shipping++ ; break;
+                case 'delivered' : $delivered++ ; break;
+                case 'rejected' : $rejected++ ; break;
+                default : break;
+            }
+        $status_arr = array('pending'=>$pending,'preparing'=>$preparing,'shipping'=>$shipping,'delivered'=>$delivered,'rejected'=>$rejected);
+        }
+        return view('Admin.orders.index',['orders'=>$orders,'status_arr'=>$status_arr]);
     }
     public function editOrder($id){
         $order = Order::findOrFail($id);
