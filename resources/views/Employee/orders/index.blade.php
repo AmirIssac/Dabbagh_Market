@@ -51,13 +51,13 @@
                   <td class="text-center"><span class="badge badge-success">{{$order->total}}</span></td>
                   <td class="text-center">
                       @if($order->status == 'pending')
-                      <span class="badge badge-warning"> {{$order->status}} </span>
+                      <span class="badge badge-danger"> {{$order->status}} </span>
                       @elseif($order->status == 'preparing' || $order->status == 'shipping')
                       <span class="badge badge-info"> {{$order->status}} </span>
                       @elseif($order->status == 'delivered')
                       <span class="badge badge-success"> {{$order->status}} </span>
                       @elseif($order->status == 'failed' || $order->status == 'cancelled' || $order->status == 'rejected')
-                      <span class="badge badge-danger"> {{$order->status}} </span>
+                      <span class="badge badge-warning"> {{$order->status}} </span>
                       @endif
                   </td>
                   <td class="text-center">

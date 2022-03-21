@@ -1,5 +1,7 @@
 @extends('Layouts.main')
 @section('links')
+<script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+<link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css"/>
     <style>
         .taken{
             background-color: #7fad39;
@@ -49,10 +51,12 @@
                             <input type="text" placeholder="type address here if it's different from your main profile address" name="address2" id="address2">
                         @else
                             Address
-                        <input type="text" name="address2" class="form-control">
-                        <p>complete your profile to get address automatically
+                        <input type="text" name="address2" class="form-control" id="address2">
+                        {{--
+                        <p>complete your profile
                         <a href="{{route('my.profile')}}" target="__blank" id="complete-profile">complete profile</a>
                         </p>
+                        --}}
                         @endif
                         </div>
                         <div class="row">
@@ -163,5 +167,57 @@
         }
     })
     </script>
+    {{-- if profile not completed so we get the customer address automatically --}}
+    @if(!$profile->address_address)
+            <script>
+                $(document).ready(function(){
+                
+                // check for Geolocation support
+                if (navigator.geolocation) {
+                console.log('Geolocation is supported!');
+                }
+                else {
+                console.log('Geolocation is not supported for this Browser/OS.');
+                }
+                
+                var startPos;
+                var  MQ, map, directions, routes = new Array();
+                L.mapquest.key = 'GPUOqQDwMnMxLWNY1wVUe96aw4ihyVr9';
+                
+                    var geoSuccess = function(position) {    // find your current position and load the map
+                        startPos = position;
+                        var latitude = startPos.coords.latitude;
+                        var longitude = startPos.coords.longitude;
+                
+                        //$('#latitude').val(latitude);
+                        //$('#longitude').val(longitude);
+                        // reverse geocoding (request api)
+                        function httpGet(theUrl)
+                        {
+                            var xmlHttp = new XMLHttpRequest();
+                            xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+                            xmlHttp.send( null );
+                            return xmlHttp.responseText;
+                        }
+                
+                        console.log(httpGet('http://www.mapquestapi.com/geocoding/v1/reverse?key=GPUOqQDwMnMxLWNY1wVUe96aw4ihyVr9&location='+latitude+','+longitude+'&includeRoadMetadata=true&includeNearestIntersection=true'));
+                        var json_location = httpGet('http://www.mapquestapi.com/geocoding/v1/reverse?key=GPUOqQDwMnMxLWNY1wVUe96aw4ihyVr9&location='+latitude+','+longitude+'&includeRoadMetadata=true&includeNearestIntersection=true');
+                        var location_info_object = JSON.parse(json_location);  // object
+                        var address = "";
+                        //address = address.concat(location_info_object.locations[0].adminArea1)
+                        //$('#address').val(address);
+                        address = address.concat(location_info_object.results[0].locations[0].street.concat(' , '+location_info_object.results[0].locations[0].adminArea5).concat(' , '+location_info_object.results[0].locations[0].adminArea3).concat(' , '+location_info_object.results[0].locations[0].adminArea1));
+                        $('#address2').val(address);
+                    };
+                    navigator.geolocation.getCurrentPosition(geoSuccess);
+                    /*
+                    alert('final lat is ' + latitude);
+                    */
+                
+                // 'map' refers to a <div> element with the ID map
+                
+                });
+                </script>
+        @endif
 @endsection
 @endsection

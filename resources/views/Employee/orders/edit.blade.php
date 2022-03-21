@@ -51,7 +51,7 @@
                   </td>
                   <td class="text-center">
                     @if($order->status == 'pending')
-                    <b style="color: #ff7300"> {{$order->status}} </b>
+                    <b style="color: #c00202"> {{$order->status}} </b>
                     @elseif($order->status == 'preparing' || $order->status == 'shipping')
                     <b style="color: #04558b"> {{$order->status}} </b>
                     @elseif($order->status == 'delivered')
