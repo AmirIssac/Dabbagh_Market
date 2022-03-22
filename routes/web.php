@@ -72,8 +72,10 @@ Route::get('/by-category/{category_id}', [ProductController::class, 'indexByCate
 Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/product/{product_id}', [ProductController::class, 'viewProduct'])->name('view.product');
 Route::post('/add/product/toCart/{product_id}', [ProductController::class, 'addProductToCart'])->name('add.product.to.cart');
+Route::post('/add/product/toFavorite/{product_id}', [ProductController::class, 'ProductToFavorite'])->name('add.product.to.favorite');
 Route::post('/update/product/inCart/{product_id}', [ProductController::class, 'updateProductCart'])->name('update.product.in.cart');
 Route::get('/view/my-cart', [CartController::class, 'viewCart'])->name('view.cart');
+Route::get('/view/my-favorite', [ProfileController::class, 'viewFavorite'])->name('view.favorite');
 Route::get('/view/guest-cart', [CartController::class, 'viewGuestCart'])->name('view.guest.cart');
 Route::post('/delete/cart/item/{cart_item}', [CartController::class, 'deleteCartItem'])->name('delete.cart.item');
 Route::post('/delete/cart/content/{cart_id?}', [CartController::class, 'deleteCartContent'])->name('delete.cart.content');

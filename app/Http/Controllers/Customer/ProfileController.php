@@ -29,4 +29,11 @@ class ProfileController extends Controller
         ]);
         return back();
     }
+
+    public function viewFavorite(){
+        $user = User::findOrFail(Auth::user()->id);
+        $favorite = $user->favorite;
+        $products = $favorite->products;
+        return view('Customer.profile.view_favorite',['favorite'=>$favorite,'products'=>$products]);
+    }
 }

@@ -5,6 +5,20 @@
     #add-to-cart{
         border: 1px solid #ffffff;
     }
+    #favorite-btn,#unfavorite-btn{
+        background: none!important;
+        border: none;
+        padding: 0!important;
+        /*optional*/
+        font-family: arial, sans-serif;
+        /*input has OS specific font-family*/
+        color: #069;
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    .displaynone{
+        display: none;
+    }
 </style>
 @endsection
 @section('content')
@@ -105,7 +119,21 @@
                         <button id="add-to-cart" class="disabled-btn" disabled> ADD TO CART <i class="fa fa-exclamation-circle"></i> </button>
                         @endif
                         {{--<a href="#" class="primary-btn">ADD TO CART</a>--}}
-                        <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
+                        {{--
+                        <button class="heart-icon"><span class="icon_heart_alt"></span></button>
+                        --}}
+                        @if($user->favorite->products->count() > 0)  {{-- user favorite contain products --}}
+                                @if($user->favorite->products->contains('id', $product->id))
+                                    <button id="favorite-btn" class="to-favorite"><img src="{{asset('img/pngs/red-heart.png')}}" height="35px"></button>
+                                    <button id="unfavorite-btn" class="to-favorite displaynone"><img src="{{asset('img/pngs/empty-heart.png')}}" height="35px"></button>
+                                @else
+                                    <button id="favorite-btn" class="to-favorite displaynone"><img src="{{asset('img/pngs/red-heart.png')}}" height="35px"></button>
+                                    <button id="unfavorite-btn" class="to-favorite"><img src="{{asset('img/pngs/empty-heart.png')}}" height="35px"></button>
+                                @endif
+                        @else       
+                                <button id="favorite-btn" class="to-favorite displaynone"><img src="{{asset('img/pngs/red-heart.png')}}" height="35px"></button>
+                                <button id="unfavorite-btn" class="to-favorite"><img src="{{asset('img/pngs/empty-heart.png')}}" height="35px"></button>                 
+                        @endif
                         <ul>
                             <li><b>Availability</b>
                                  @if($product->availability)
@@ -234,6 +262,30 @@
                 success: function(data){    // data is the response come from controller
                     if(data == 'success')
                         alert('added to cart !!');
+                }
+            }); // ajax close
+        });
+
+
+        $('.to-favorite').on('click',function(){
+            var product_id = $('#product-id').val();
+            $.ajax({
+                headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "post",
+                url: '/add/product/toFavorite/'+product_id,
+                success: function(data){    // data is the response come from controller
+                    if(data == 'added'){
+                        $('#unfavorite-btn').addClass('displaynone');
+                        $('#favorite-btn').removeClass('displaynone');
+                        //alert('added to favorite !!');
+                    }
+                    else{
+                        $('#favorite-btn').addClass('displaynone');
+                        $('#unfavorite-btn').removeClass('displaynone');
+                        //alert('removed from favorite !!')
+                    }
                 }
             }); // ajax close
         });

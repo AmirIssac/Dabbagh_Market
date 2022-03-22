@@ -20,10 +20,24 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 
+    // pause
+    
     public function cartItems()
     {
         return $this->hasMany(CartItem::class);
     }
+    
+    // pause
+    /*
+    public function products()
+    {
+        return $this->belongsToMany(Product::class)->as('cart_items');
+    }
+    */
+
+
+
+
 
     public function getTotal(){
         $cart_items = $this->cartItems;

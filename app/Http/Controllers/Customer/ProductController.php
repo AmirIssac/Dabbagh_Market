@@ -114,6 +114,32 @@ class ProductController extends Controller
         }
     }
 
+    public function ProductToFavorite($id){
+        $product = Product::findOrFail($id);
+        if(Auth::user()){     // logged user
+                $user = User::findOrFail(Auth::user()->id);
+                $favorite = $user->favorite;
+                // check if product repeated in favorite so we remove it
+                $favorite_products = $favorite->products;
+                $check_product = false;
+                foreach($favorite_products as $favorite_product){
+                    if($favorite_product->id == $product->id){
+                        $check_product = true;
+                        break;
+                    }
+                }
+                if(!$check_product){
+                    $favorite->products()->attach($product->id);
+                    return response('added');
+                }
+                else{
+                    $favorite->products()->detach($product->id);
+                    return response('removed');
+                }
+                
+        }
+    }
+
     public function updateProductCart(Request $request , $id){
             $product = Product::findOrFail($id);
             if(Auth::user()){    // Customer

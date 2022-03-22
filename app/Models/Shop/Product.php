@@ -49,6 +49,11 @@ class Product extends Model
         return $this->hasMany(OrderItem::class);
     }
 
+    public function favorites()
+    {
+        return $this->belongsToMany(Favorite::class);
+    }
+
     /*
     public function carts()
     {

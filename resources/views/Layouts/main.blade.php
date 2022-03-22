@@ -41,7 +41,7 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
-                <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
+                <li><a href="{{route('view.favorite')}}"><i class="fa fa-heart"></i> <span>0</span></a></li>
                 <li><a href="#"><i class="fa fa-cart"></i> <span>0</span></a></li>
             </ul>
             <div class="header__cart__price">item: <span>00.00 AED</span></div>
@@ -229,7 +229,7 @@
                     <div class="header__cart">
                         <ul>
                             @if(Auth::user())
-                                <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
+                                <li><a href="{{route('view.favorite')}}"><i class="fa fa-heart"></i></a></li>
                                 <li><a href="{{route('view.cart')}}"><i class="fa fa-shopping-cart"></i>
                                     <span>
                                         @if($cart_items->count() > 0)

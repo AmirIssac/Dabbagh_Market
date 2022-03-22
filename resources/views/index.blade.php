@@ -59,7 +59,9 @@
                     <div class="featured__item">
                         <div class="featured__item__pic set-bg" data-setbg="{{asset('storage/'.$product->image)}}">
                             <ul class="featured__item__pic__hover">
-                                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                                <li>
+                                    <a href=""><i class="fa fa-heart"></i></a>
+                                </li>
                                 <li><a href="{{route('view.product',$product->id)}}"><i class="fa fa-eye"></i></a></li>
                                 <li>
                                     @if($product->availability)
