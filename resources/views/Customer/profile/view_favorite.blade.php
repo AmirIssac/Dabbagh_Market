@@ -2,33 +2,14 @@
 @section('links')
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <style>
-    #clear-cart-btn{
-        background-color: white;
-        border: 1px solid #2b201e;
-        border-radius: 5px;
-        font-size: 13px;
-        font-weight: bold;
-        color: black;
-    }
-    #clear-cart-btn:hover{
+    .add-to-cart{
         background-color: #2b201e;
         border: 1px solid #2b201e;
         border-radius: 5px;
         font-size: 13px;
         color: white;
-    }
-    #proceed-to-checkout{
-        border: 1px solid white;
-    }
-    #login-btn{
-        border: 1px solid white;
-    }
-    #checkout-box , #have-account-form{
-        filter: drop-shadow(3px 3px 3px #7fad39);
-    }
-    #min-order-warning{
-        color: #dd2222;
-        font-weight: bold;
+        font-weight : bold;
+        width: 100px;
     }
     .displaynone{
         display: none;
@@ -36,7 +17,7 @@
 </style>
 @endsection
 @section('content')
-    <!-- Shoping Cart Section Begin -->
+    <!-- Favorite Section Begin -->
     <section style="margin-top:-100px;" class="shoping-cart spad">
         <div class="container">
             <div class="row">
@@ -49,7 +30,9 @@
                                     <th>1 K.G Price Piece Price</th>
                                     <th>Quantity</th>
                                     <th>Total</th>
-                                    <th>     
+                                    <th>
+                                    </th>
+                                    <th>
                                     </th>
                                 </tr>
                             </thead>
@@ -57,7 +40,7 @@
                                 <?php $counter = 0 ?>
                                 @if($products->count() > 0)
                                 @foreach($products as $item)
-                                <input type="hidden" value="{{$item->id}}" id="product{{$counter}}">
+                                <input type="hidden" value="{{$item->min_weight}}" id="min-weight-{{$item->id}}">
                                 <tr>
                                     <td class="shoping__cart__item">
                                         <img src="{{asset('storage/'.$item->image)}}" alt="" height="75px">
@@ -102,7 +85,16 @@
                                         @endif
                                     </td>
                                     <td class="shoping__cart__item__close">
+                                        {{--
                                             <button style="border: none; background-color: transparent" onclick="javascript:this.form.submit();" class="icon_close"></button>
+                                            --}}
+                                            <button id="add-to-cart-{{$item->id}}" class="add-to-cart">Add to cart</button>
+                                    </td>
+                                    <td>
+                                            <form action="{{route('remove.product.from.favorite',$item->id)}}" method="POST">
+                                                @csrf
+                                                <button style="border: none; background-color: transparent" class="icon_close"></button>
+                                            </form>
                                     </td>
                                 </tr>
                                 <?php $counter++; ?>
@@ -132,10 +124,30 @@
           
         </div>
     </section>
-    <!-- Shoping Cart Section End -->
+    <!-- Favorite Section End -->
 @section('scripts')
 <script>
-
+    /*function addToCart(){*/
+$('document').ready(function(){
+    $('[id^=add-to-cart-]').on('click',function(){
+        var gold = $(this).attr('id').slice(12);
+        var qty = parseInt($('#min-weight-'+gold).val());
+        var product_id = gold;
+        $.ajax({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "post",
+            url: '/add/product/toCart/'+product_id,
+            data : { quantity : qty },
+            //dataType: 'json',
+            success: function(data){    // data is the response come from controller
+                if(data == 'success')
+                    alert('added to cart !!');
+            }
+        }); // ajax close
+    });
+});
 </script>
 @endsection
 @endsection

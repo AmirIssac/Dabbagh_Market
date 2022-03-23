@@ -73,6 +73,7 @@ Route::get('/search', [ProductController::class, 'search'])->name('search');
 Route::get('/product/{product_id}', [ProductController::class, 'viewProduct'])->name('view.product');
 Route::post('/add/product/toCart/{product_id}', [ProductController::class, 'addProductToCart'])->name('add.product.to.cart');
 Route::post('/add/product/toFavorite/{product_id}', [ProductController::class, 'ProductToFavorite'])->name('add.product.to.favorite');
+Route::post('/remove/product/fromFavorite/{product_id}', [ProductController::class, 'removeFromFavorite'])->name('remove.product.from.favorite'); // for deleting from favorite view without ajax
 Route::post('/update/product/inCart/{product_id}', [ProductController::class, 'updateProductCart'])->name('update.product.in.cart');
 Route::get('/view/my-cart', [CartController::class, 'viewCart'])->name('view.cart');
 Route::get('/view/my-favorite', [ProfileController::class, 'viewFavorite'])->name('view.favorite');

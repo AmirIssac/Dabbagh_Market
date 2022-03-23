@@ -140,6 +140,16 @@ class ProductController extends Controller
         }
     }
 
+    public function removeFromFavorite($id){
+        $product = Product::findOrFail($id);
+        if(Auth::user()){     // logged user
+                $user = User::findOrFail(Auth::user()->id);
+                $favorite = $user->favorite;
+                $favorite->products()->detach($product->id);
+                return back();
+        }
+    }
+
     public function updateProductCart(Request $request , $id){
             $product = Product::findOrFail($id);
             if(Auth::user()){    // Customer
