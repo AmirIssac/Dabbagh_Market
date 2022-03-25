@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Shop\Cart;
+use App\Models\Shop\Favorite;
 use App\Models\Shop\Profile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -34,6 +35,9 @@ class SuperAdminSeeder extends Seeder
             'address_longitude' => null,
         ]);
         Cart::create([
+            'user_id' => $superAdmin->id,
+        ]);
+        Favorite::create([
             'user_id' => $superAdmin->id,
         ]);
         $superAdmin->assignRole('super_admin');

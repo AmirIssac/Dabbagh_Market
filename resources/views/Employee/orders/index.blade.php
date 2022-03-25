@@ -11,6 +11,42 @@
   border-radius:50%;
   margin: 0 10;
 }
+.orders-container-notification{
+  background-color: black;
+  color: white;
+  outline: 10px solid rgb(240, 6, 6);
+  animation-name: border-animation;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+/*
+@keyframes border-animation {
+  0%   {border: 3px solid rgb(240, 6, 6);}
+  25%  {border: 6px solid rgb(240, 6, 6);}
+  50%  {border: 9px solid rgb(240, 6, 6);}
+  75%  {border: 12px solid rgb(240, 6, 6);}
+  100% {border: 15px solid rgb(240, 6, 6);}
+}
+*/
+@keyframes border-animation {
+  0%   {outline: 8px solid rgb(240, 6, 6);
+        background-color: black;
+        color : white;
+        }
+  25%  {outline: 0px solid rgb(240, 6, 6);
+        background-color: white;
+        color : black;
+        }
+  50%  {outline: 8px solid rgb(240, 6, 6);
+        background-color: black;
+        color : white;}
+  75%  {outline: 0px solid rgb(240, 6, 6);
+        background-color: white;
+        color : black;}
+  100% {outline: 8px solid rgb(240, 6, 6);
+        background-color: black;
+        color : white;}
+}
 </style>
 @endsection
 @section('content')
@@ -20,7 +56,8 @@
   <div class="row">
     <div class="col-md-12 ml-auto mr-auto">
       <div class="card card-upgrade">
-        <span id="new-orders-badge" style="margin: 20px;" class="badge badge-success displaynone"><b id="new-orders-count">2</b> NEW</span>
+        <span id="new-orders-badge" style="margin: 20px;" class="badge badge-danger displaynone"><b id="new-orders-count">2</b> NEW</span>
+        <p style="color:rgb(240, 6, 6) !important; margin-left: 20px; font-weight:bold;" id="text-notification" class="displaynone">please press F5 or Refresh the page</p>
         <div class="card-header text-center">
           <h4 class="card-title">Orders <span class="badge badge-primary radius-span"> {{$orders->count()}} </span>
           </h4>
@@ -81,13 +118,15 @@
 </div>
 {{-- timestamp for the last order created when the page refreshed  --}}
 <input type="hidden" id="last-updated-order" value="{{$last_updated_order_timestamp}}">
+{{-- audio link --}}
+<input type="hidden" id="notification-audio-link" value="{{asset('audio/new-order.wav')}}">
 @section('scripts')
 <script>
   function checkNewOrders(){
     var token = $("meta[name='csrf-token']").attr("content");
     var updated_at = $('#last-updated-order').val();
     $.ajax(
-                {
+            {
                     url: "/check/new/orders/",
                     type: 'GET',
                     data: {
@@ -98,6 +137,10 @@
                       if(data > 0){
                         $('#new-orders-badge').removeClass('displaynone');
                         $('#new-orders-count').html(data);
+                        $('#text-notification').removeClass('displaynone');
+                        $('.card').addClass('orders-container-notification');
+                        var audio = new Audio($('#notification-audio-link').val());
+                        audio.play();
                       }
                     }
     });

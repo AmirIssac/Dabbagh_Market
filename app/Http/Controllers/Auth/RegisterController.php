@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\Shop\Cart;
 use App\Models\Shop\CartItem;
+use App\Models\Shop\Favorite;
 use App\Models\Shop\Profile;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -97,6 +98,9 @@ class RegisterController extends Controller
             'address_longitude' => null,
         ]);
         $cart = Cart::create([
+            'user_id' => $user->id,
+        ]);
+        $favorite = Favorite::create([
             'user_id' => $user->id,
         ]);
         $user->assignRole('customer');

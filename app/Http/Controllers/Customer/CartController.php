@@ -29,7 +29,6 @@ class CartController extends Controller
                                                     ]);
     }
 
-
     public function viewGuestCart(){
         $cart = Session::get('cart');
         $cart_items = collect();

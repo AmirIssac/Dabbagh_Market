@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Shop\Cart;
+use App\Models\Shop\Favorite;
 use App\Models\Shop\Profile;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -52,6 +53,9 @@ class EmployeeSeeder extends Seeder
             'address_longitude' => null,
         ]);
         Cart::create([
+            'user_id' => $employee->id,
+        ]);
+        Favorite::create([
             'user_id' => $employee->id,
         ]);
         $employee->assignRole('employee');
