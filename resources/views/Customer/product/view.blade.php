@@ -57,7 +57,7 @@
                             <span>(18 reviews)</span>
                         </div>
                         
-                        @if($product->discount)  {{-- product has discount --}}
+                        @if($product->hasDiscount())  {{-- product has discount --}}
                                     <h6 style="text-decoration: line-through; color: #f44336">    {{$product->price}}  </h6>
                                     <?php
                                         $discount_type = $product->discount->type;

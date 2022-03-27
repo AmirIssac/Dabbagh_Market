@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\OrderSystem;
+use App\Models\RejectReason;
 use App\Models\Shop\Order;
 use App\Models\Store;
 use Carbon\Carbon;
@@ -54,12 +55,30 @@ class OrderController extends Controller
                     'estimated_time' => $estimated_time]);
         }
         else{   // not transfered yet
+            // get reasons of reject
+            $reject_reasons = RejectReason::all();
             return view('Admin.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,'order_store'=>$order_store,
-                        'estimated_time' => $estimated_time]);
+                        'estimated_time' => $estimated_time,'reject_reasons'=>$reject_reasons]);
         }
     }
     public function transferOrder(Request $request , $id){
         $order = Order::findOrFail($id);
+        // check if order rejected
+        if($request->store_id == 'reject'){
+            $order->update([
+                'status' => 'rejected'
+            ]);
+            $reason_id = $request->reject_reason;
+            $order->rejectReasons()->attach($reason_id);
+            $reason_note = RejectReason::find($reason_id);
+            $order_system = OrderSystem::create([
+                'order_id' => $order->id,
+                'user_id' => Auth::user()->id,
+                'status' => $order->status,
+                'employee_note' => $reason_note->name_en,
+            ]);
+            return back();
+        }
         if(!$request->change_order_transfer){    // transfer
             $order->update([
             'store_id' => $request->store_id,
@@ -70,6 +89,7 @@ class OrderController extends Controller
                 'status' => $order->status,
                 'employee_note' => $request->admin_note,
             ]);
+            return back();
         }
         else{     // change transfer
             $order->update([
@@ -79,7 +99,7 @@ class OrderController extends Controller
             $order_system->update([
                     'user_id' => Auth::user()->id ,
                 ]);
+            return back();
         }
-        return back();
     }
 }

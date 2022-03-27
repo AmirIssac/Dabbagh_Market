@@ -61,4 +61,11 @@ class Product extends Model
     }
     */
 
+    public function hasDiscount(){
+        if($this->discount)
+            return true;
+        else
+            return false;
+    }
+
 }

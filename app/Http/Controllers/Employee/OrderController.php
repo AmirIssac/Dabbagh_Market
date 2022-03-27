@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
 use App\Models\OrderSystem;
+use App\Models\RejectReason;
 use App\Models\Shop\Order;
 use App\Models\Store;
 use App\Models\User;
@@ -60,9 +61,11 @@ class OrderController extends Controller
         $order_center_system = $order->orderSystems->first();
         $order_employee_systems = $order->orderSystems()->where('id','!=',$order_center_system->id)->get();
         $estimated_time = $order->estimated_time;
+        // get reasons of reject
+        $reject_reasons = RejectReason::all();
         return view('Employee.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,
                     'order_center_system'=>$order_center_system,'order_employee_systems'=>$order_employee_systems,
-                    'estimated_time' => $estimated_time]);
+                    'estimated_time' => $estimated_time,'reject_reasons'=>$reject_reasons]);
     }
 
     public function acceptOrder($id){

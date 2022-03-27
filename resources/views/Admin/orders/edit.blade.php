@@ -19,6 +19,9 @@
         background-color: #c00202;
         color: white;
     }
+    .displaynone{
+      display: none;
+    }
 </style>
 @endsection
 @section('content')
@@ -166,6 +169,7 @@
                 @endforeach
                 @if(isset($order_center_system))
                 {{-- center transfer process --}}
+                @if($order_center_system->status == 'pending')
                 <tr class="pending-row">
                       <td>
                           <b>1</b>
@@ -175,6 +179,29 @@
                         transfered
                       </td>
                       <td style="font-weight: bold" class="text-center">
+                        {{$order_center_system->created_at}}
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                @elseif($order_center_system->status == 'rejected')
+                      <tr class="rejected-row">
+                        <td>
+                            <b>1</b>
+                        </td>
+                        <td style="font-weight: bold" class="text-center">
+                          {{--  {{$order_center_system->status}}  --}}
+                          Rejected
+                        </td>
+                        <td style="font-weight: bold" class="text-center">
+                          @foreach($order->rejectReasons as $reason)
+                            {{$reason->name_en}}
+                          @endforeach
+                        </td>
+                      <td style="font-weight: bold" class="text-center">
                           {{$order_center_system->created_at}}
                       </td>
                       <td>
@@ -183,6 +210,7 @@
                       </td>
                       <td>
                       </td>
+                @endif
                 </tr>
                 {{-- employee life cycle except center one --}}
                 <?php $counter = 2 ; ?>
@@ -216,7 +244,7 @@
                    <?php $counter++; ?>
                    @endforeach
                    @endif
-                    @if(!$order->store)  {{-- الطلب غير محول بعد --}}
+                    @if(!$order->store && $order->status != 'rejected')  {{-- الطلب غير محول بعد --}}
                     <form action="{{route('transfer.order',$order->id)}}" method="POST">
                       @csrf
                         <tr>
@@ -224,24 +252,30 @@
                                 Transfer the order to
                             </td>
                             <td style="font-weight: bold" class="text-center">
-                                <select name="store_id" class="form-control">
+                                <select name="store_id" id="store-select" class="form-control">
                                     @foreach($stores as $store)
                                         <option value="{{$store->id}}">{{$store->name_en}}</option>
                                     @endforeach
+                                    <option value="reject" style="background-color: #c00202; color:white">Reject</option>
                                 </select>
                             </td>
                             <td>
-                              <input type="text" name="admin_note" class="form-control" placeholder="additional note...">
+                              <input type="text" name="admin_note" id="admin-note" class="form-control" placeholder="additional note...">
+                              <select name="reject_reason" id="reject-reasons" class="form-control displaynone" style="background-color: #c00202; color:white">
+                                @foreach($reject_reasons as $reject_reason)
+                                    <option value="{{$reject_reason->id}}">{{$reject_reason->name_en}}</option>
+                                @endforeach
+                              </select>
                             </td>
                             <td style="font-weight: bold" class="text-center">
-                              <button type="submit" class="btn btn-primary">confirm transfer</button>
+                              <button type="submit" class="btn btn-primary">confirm</button>
                             </td>
                             <td>
                             </td>
                             <td></td>
                         </tr>
                     </form>
-                    @elseif($order->orderSystems()->count() == 1)  {{-- الطلب محول ولكن لم يستلمه الكاشير بعد --}}
+                    @elseif($order->orderSystems()->count() == 1 && $order->status != 'rejected')  {{-- الطلب محول ولكن لم يستلمه الكاشير بعد --}}
                       <tr>
                         <td style="font-weight: bold;">
                             Order in 
@@ -277,7 +311,7 @@
                           <input type="hidden" name="change_order_transfer" value="yes">
                           </td>
                           <td style="font-weight: bold" class="text-center">
-                                <button class="btn btn-primary">confirm transfer</button>
+                                <button class="btn btn-primary">confirm</button>
                           </td>
                           <td>
                           </td>
@@ -330,6 +364,17 @@
     }
   }, 1000);
   </script>
-  
+  <script>
+    $('#store-select').on('change',function(){
+      if($(this).val() == 'reject'){
+        $('#admin-note').addClass('displaynone');
+        $('#reject-reasons').removeClass('displaynone');
+      }
+      else{
+        $('#admin-note').removeClass('displaynone');
+        $('#reject-reasons').addClass('displaynone');
+      }
+    });
+  </script>
 @endsection
 @endsection

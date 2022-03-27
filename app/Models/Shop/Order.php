@@ -3,6 +3,7 @@
 namespace App\Models\Shop;
 
 use App\Models\OrderSystem;
+use App\Models\RejectReason;
 use App\Models\Store;
 use App\Models\User;
 use Carbon\Carbon;
@@ -64,6 +65,10 @@ class Order extends Model
     public function paymentDetail()
     {
         return $this->hasOne(PaymentDetail::class);
+    }
+
+    public function rejectReasons(){
+        return $this->belongsToMany(RejectReason::class);
     }
 
 

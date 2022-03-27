@@ -47,7 +47,7 @@
                                         <h5>{{$item->name_en}}</h5>
                                     </td>
                                     <td class="shoping__cart__price">
-                                    @if($item->discount)  {{-- product has discount --}}
+                                    @if($item->hasDiscount())  {{-- product has discount --}}
                                         <?php
                                             $discount_type = $item->discount->type;
                                             if($discount_type == 'percent'){
@@ -76,12 +76,12 @@
                                     <td class="shoping__cart__total">
                                         @if($item->unit == 'gram')    
                                         <input type="hidden" id="single-item-unit{{$counter}}" value="gram">
-                                        <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->discount ? ($new_price * $item->min_weight) / 1000 : ($item->price * $item->min_weight) / 1000}}">
-                                        <h3 id="h-item-total{{$counter}}">{{$item->discount ? ($new_price * $item->min_weight) / 1000 : ($item->price * $item->min_weight) / 1000}}</h6>
+                                        <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->hasDiscount() ? ($new_price * $item->min_weight) / 1000 : ($item->price * $item->min_weight) / 1000}}">
+                                        <h3 id="h-item-total{{$counter}}">{{$item->hasDiscount() ? ($new_price * $item->min_weight) / 1000 : ($item->price * $item->min_weight) / 1000}}</h6>
                                         @else
                                         <input type="hidden" id="single-item-unit{{$counter}}" value="piece">
-                                        <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->discount ? $new_price * $item->min_weight : $item->price * $item->min_weight}}">
-                                        <h3 id="h-item-total{{$counter}}">{{$item->discount ? $new_price * $item->min_weight : $item->price * $item->min_weight}}</h6>
+                                        <input type="hidden" id="single-item-total{{$counter}}" value="{{$item->hasDiscount() ? $new_price * $item->min_weight : $item->price * $item->min_weight}}">
+                                        <h3 id="h-item-total{{$counter}}">{{$item->hasDiscount() ? $new_price * $item->min_weight : $item->price * $item->min_weight}}</h6>
                                         @endif
                                     </td>
                                     <td class="shoping__cart__item__close">

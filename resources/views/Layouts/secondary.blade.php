@@ -229,7 +229,7 @@
                     <div class="header__cart">
                         <ul>
                             @if(Auth::user())
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>0</span></a></li>
+                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
                             <li><a href="{{route('view.cart')}}"><i class="fa fa-shopping-cart"></i>
                                  <span>
                                      @if($cart_items->count() > 0)
@@ -241,11 +241,9 @@
                                 </a>
                             </li>
                             @else
-                            <li><a data-toggle="modal" data-target="#exampleModal"><i style="cursor: pointer" class="fa fa-heart"></i></a> </li>
                             <li><a data-toggle="modal" data-target="#exampleModal"><i style="cursor: pointer" class="fa fa-shopping-cart"></i></a></li>
                             @endif
                         </ul>
-                        <div class="header__cart__price">item: <span>00.00 AED</span></div>
                     </div>
                 </div>
             </div>

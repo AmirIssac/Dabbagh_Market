@@ -41,7 +41,9 @@
         </div>
         <div class="humberger__menu__cart">
             <ul>
+                @auth
                 <li><a href="{{route('view.favorite')}}"><i class="fa fa-heart"></i> <span>0</span></a></li>
+                @endif
                 <li><a href="#"><i class="fa fa-cart"></i> <span>0</span></a></li>
             </ul>
             <div class="header__cart__price">item: <span>00.00 AED</span></div>
@@ -241,7 +243,6 @@
                                     </a>
                                 </li>
                             @else
-                                <li><a href="#"><i class="fa fa-heart"></i> <span></span></a></li>
                                 <li><a href="{{Auth::user() ? route('view.cart') : route('view.guest.cart')}}"><i class="fa fa-shopping-cart"></i>
                                     <span>
                                         
@@ -250,7 +251,7 @@
                                 </li>
                             @endif
                         </ul>
-                        <div class="header__cart__price">item: <span>00.00 AED</span></div>
+                        
                     </div>
                 </div>
             </div>
@@ -271,21 +272,6 @@
                             <i class="fa fa-bars"></i>
                             <span>All departments</span>
                         </div>
-                        {{--
-                        <ul>
-                            <li><a href="#">Fresh Meat</a></li>
-                            <li><a href="#">Vegetables</a></li>
-                            <li><a href="#">Fruit & Nut Gifts</a></li>
-                            <li><a href="#">Fresh Berries</a></li>
-                            <li><a href="#">Ocean Foods</a></li>
-                            <li><a href="#">Butter & Eggs</a></li>
-                            <li><a href="#">Fastfood</a></li>
-                            <li><a href="#">Fresh Onion</a></li>
-                            <li><a href="#">Papayaya & Crisps</a></li>
-                            <li><a href="#">Oatmeal</a></li>
-                            <li><a href="#">Fresh Bananas</a></li>
-                        </ul>
-                        --}}
                     </div>
                 </div>
                 <div class="col-lg-9">
@@ -293,10 +279,7 @@
                         <div class="hero__search__form">
                             <form action="{{route('search')}}" method="GET">
                                 @csrf
-                                <div class="hero__search__categories">
-                                    All Categories
-                                    <span class="arrow_carrot-down"></span>
-                                </div>
+                                
                                 <input type="text" name="search" placeholder="What do you need?">
                                 <button type="submit" class="site-btn">SEARCH</button>
                             </form>
@@ -313,17 +296,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    {{--
-                    <div class="hero__item set-bg" data-setbg="img/banner/banner-1.jpg">
-                        <div class="hero__text">
-                            <span>Fresh Meat</span>
-                            <h2>Meat <br />Best Service</h2>
-                            <p>Free Pickup and Delivery Available</p>
-                            <a href="#" class="primary-btn">SHOP NOW</a>
-                        </div>
-                    </div>
-                    --}}
                      
                 </div>
             </div>

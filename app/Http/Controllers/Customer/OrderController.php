@@ -78,7 +78,7 @@ class OrderController extends Controller
                 $cart_items->add($item);
             }
             foreach($cart_items as $item){
-                if($item->discount){
+                if($item->hasDiscount()){
                     $discount_type = $item->discount->type;
                     if($discount_type == 'percent'){
                          $discount = $item->price * $item->discount->value / 100;
@@ -130,7 +130,7 @@ class OrderController extends Controller
         if($request->payment_method == 'cash')
             $order_status = 'pending';
         else
-            $order_status = 'preparing';
+            $order_status = 'pending'; // we will keep it pending I think
         $address = $request->address1;   // default main address
         if($request->address2)
             $address = $request->address2;
@@ -207,7 +207,7 @@ class OrderController extends Controller
             //$order_items_arr = array(array());
             // $order_items_arr is array of arrays
             foreach($cart_items as $item){
-                if($item->discount){
+                if($item->hasDiscount()){
                     $discount_type = $item->discount->type;
                     if($discount_type == 'percent'){
                         $discount = $item->price * $item->discount->value / 100;

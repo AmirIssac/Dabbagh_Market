@@ -86,7 +86,7 @@
                             <div class="checkout__order__products">Products <span>Total</span></div>
                             <ul>
                                 @foreach($cart_items as $item)
-                                    @if($item->product->discount)  {{-- product has discount --}}
+                                    @if($item->product->hasDiscount())  {{-- product has discount --}}
                                         <?php
                                             $discount_type = $item->product->discount->type;
                                             if($discount_type == 'percent'){

@@ -44,7 +44,7 @@ class CartController extends Controller
             $cart_items->add($item);
         }
         foreach($cart_items as $item){
-            if($item->discount){
+            if($item->hasDiscount()){
                 $discount_type = $item->discount->type;
                 if($discount_type == 'percent'){
                             $discount = $item->price * $item->discount->value / 100;

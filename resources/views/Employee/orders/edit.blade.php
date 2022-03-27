@@ -16,6 +16,9 @@
         background-color: #c00202;
         color: white;
     }
+    .displaynone{
+        display: none;
+    }
 </style>
 @endsection
 @section('content')
@@ -232,19 +235,24 @@
                             <b>Change order status to</b>
                         </td>
                         <td style="font-weight: bold" class="text-center">
-                            <select name="order_status" class="form-control">
+                            <select name="order_status" id="status-select" class="form-control">
                                 @if($order->status == 'preparing')
                                     <option value="shipping">shipping</option>
                                     <option value="delivered">delivered</option>
-                                    <option value="rejected">rejected</option>
+                                    <option value="rejected" style="background-color: #c00202; color: white;">rejected</option>
                                 @elseif($order->status == 'shipping')
                                     <option value="delivered">delivered</option>
-                                    <option value="rejected">rejected</option>
+                                    <option value="rejected" style="background-color: #c00202; color: white;">rejected</option>
                                 @endif
                             </select>
                         </td>
                         <td>
-                            <input type="text" name="employee_note" class="form-control" placeholder="type your note here...">
+                            <input type="text" name="employee_note" id="employee-note" class="form-control" placeholder="type your note here...">
+                            <select name="reject_reason" id="reject-reasons" class="form-control displaynone" style="background-color: #c00202; color:white">
+                                @foreach($reject_reasons as $reject_reason)
+                                    <option value="{{$reject_reason->id}}">{{$reject_reason->name_en}}</option>
+                                @endforeach
+                            </select>
                         </td>
                         <td style="font-weight: bold" class="text-center">
                             <button type="submit" class="btn btn-info">Submit</button>
@@ -278,7 +286,7 @@
   
     // Get today's date and time
     var now = new Date().getTime();
-  
+
     // Find the distance between now and the count down date
     var distance = countDownDate - now;
   
@@ -299,6 +307,17 @@
     }
   }, 1000);
   </script>
-  
+  <script>
+    $('#status-select').on('change',function(){
+      if($(this).val() == 'rejected'){
+        $('#employee-note').addClass('displaynone');
+        $('#reject-reasons').removeClass('displaynone');
+      }
+      else{
+        $('#employee-note').removeClass('displaynone');
+        $('#reject-reasons').addClass('displaynone');
+      }
+    });
+  </script>
 @endsection
 @endsection
