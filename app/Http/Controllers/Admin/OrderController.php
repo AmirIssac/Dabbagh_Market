@@ -48,17 +48,26 @@ class OrderController extends Controller
         $estimated_time =  now()->diff($estimated)->format('%H:%I:%S')." Minutes";
         */
         $estimated_time = $order->estimated_time;
+
+
+        $done_in = false ; // caculate the time between making order and finish it
+        if($order->status == 'delivered' || $order->status == 'rejected'){
+            $last_process_time = $order->orderSystems->last()->created_at;
+            $done_in = $last_process_time->diffInSeconds($order->created_at);
+            $done_in = gmdate('H:i:s', $done_in);
+        }
+
         if($order_center_system){
             $order_employee_systems = $order->orderSystems()->where('id','!=',$order_center_system->id)->get();
             return view('Admin.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,'order_store'=>$order_store,
                     'order_center_system'=>$order_center_system,'order_employee_systems'=>$order_employee_systems,
-                    'estimated_time' => $estimated_time]);
+                    'estimated_time' => $estimated_time,'done_in' => $done_in]);
         }
         else{   // not transfered yet
             // get reasons of reject
             $reject_reasons = RejectReason::all();
             return view('Admin.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,'order_store'=>$order_store,
-                        'estimated_time' => $estimated_time,'reject_reasons'=>$reject_reasons]);
+                        'estimated_time' => $estimated_time,'reject_reasons'=>$reject_reasons,'done_in' => $done_in]);
         }
     }
     public function transferOrder(Request $request , $id){

@@ -87,9 +87,15 @@
                     <th style="font-weight: bold" class="text-center">
                       Note
                     </th>
+                    @if($order->status != 'delivered' && $order->status != 'rejected')
                     <th style="font-weight: bold" class="text-center">
                       Deliver must be in
                     </th>
+                  @else
+                  <th style="color: #c00202; font-weight: bold" class="text-center">
+                    Finished in
+                  </th>
+                  @endif
                     <th>
                     </th>
                     <th>
@@ -109,10 +115,16 @@
                         <span class="badge badge-danger">NONE</span>
                       @endif
                     </td>
-                    <td style="color: #c00202; font-weight: bold" class="text-center">
-                      <input type="hidden" id="estimated-time" value="{{$estimated_time}}">
-                      <p id="estimated-time-div"></p>
+                    @if($order->status != 'delivered' && $order->status != 'rejected')
+                      <td style="color: #c00202; font-weight: bold" class="text-center">
+                        <input type="hidden" id="estimated-time" value="{{$estimated_time}}">
+                        <p id="estimated-time-div"></p>
+                      </td>
+                    @else
+                    <td style="color: #0254c0; font-weight: bold" class="text-center">
+                      <p>{{$done_in}}</p>
                     </td>
+                    @endif
                     <td class="text-center"></td>
                     <td class="text-center">
                     </td>

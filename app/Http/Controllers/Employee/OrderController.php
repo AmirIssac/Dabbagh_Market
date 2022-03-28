@@ -95,15 +95,24 @@ class OrderController extends Controller
         ]);
         // change payment cash status
         $payment_detail = $order->paymentDetail ;
-        if($payment_detail->provider == 'cash' && $status == 'delivered'){
-            $payment_detail->update([
-                'status' => 'success',
-            ]);
+        if($payment_detail->isCash()){
+            if($status == 'delivered')
+                $payment_detail->update([
+                    'status' => 'success',
+                ]);
+            elseif($status == 'rejected')
+                $payment_detail->update([
+                    'status' => 'failed',
+                ]);
         }
-        if($payment_detail->provider == 'cash' && $status == 'rejected'){
-            $payment_detail->update([
-                'status' => 'failed',
-            ]);
+        // check if order rejected so we put the reason
+        if($status == 'rejected'){
+            $reason_id = $request->reject_reason;
+            $order->rejectReasons()->attach($reason_id);
+            $reason_note = RejectReason::find($reason_id);
+            $order_system->update([
+                    'employee_note' => $reason_note->name_en,
+                ]);
         }
         return back();
     }

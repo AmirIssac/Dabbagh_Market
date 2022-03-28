@@ -35,6 +35,9 @@
 					<span class="login100-form-title">
 						 Sign up
 					</span>
+					@error('first_name')
+						    <div style="color: red; font-weight:bold;">{{ $message }}</div>
+					@enderror
                     <div class="wrap-input100">
 						<input class="input100" type="text" name="first_name" placeholder="First Name">
 						<span class="focus-input100"></span>
@@ -42,6 +45,9 @@
 							<i class="fa fa-user" aria-hidden="true"></i>
 						</span>
 					</div>
+					@error('last_name')
+						    <div style="color: red; font-weight:bold;">{{ $message }}</div>
+					@enderror
                     <div class="wrap-input100">
 						<input class="input100" type="text" name="last_name" placeholder="Last Name">
 						<span class="focus-input100"></span>
@@ -49,6 +55,9 @@
 							<i class="fa fa-user" aria-hidden="true"></i>
 						</span>
 					</div>
+					@error('email')
+						    <div style="color: red; font-weight:bold;">{{ $message }}</div>
+					@enderror
 					<div class="wrap-input100">
 						<input class="input100" type="email" name="email" placeholder="Email">
 						<span class="focus-input100"></span>
@@ -56,7 +65,9 @@
 							<i class="fa fa-envelope" aria-hidden="true"></i>
 						</span>
 					</div>
-
+					@error('password')
+					<div style="color: red; font-weight:bold;">{{ $message }}</div>
+					@enderror
 					<div class="wrap-input100">
 						<input class="input100" type="password" name="password" placeholder="Password">
 						<span class="focus-input100"></span>
@@ -64,14 +75,32 @@
 							<i class="fa fa-lock" aria-hidden="true"></i>
 						</span>
 					</div>
+					{{--
                     <div class="wrap-input100">
 						<input class="input100" type="text" name="phone" placeholder="Phone">
 						<span class="focus-input100"></span>
 						<span class="symbol-input100">
 							<i class="fa fa-phone" aria-hidden="true"></i>
 						</span>
+					</div>--}}
+					{{--
+					<div class="wrap-input100">
+					<div class="input-group">
+						<span class="input-group-addon">+971</span>
+						<input type="text" name="phone" placeholder="Phone">
 					</div>
-					
+					</div>
+					--}}
+					@error('phone')
+					<div style="color: red; font-weight:bold;">{{ $message }}</div>
+					@enderror
+					<div class="wrap-input100">
+						<input class="input100" type="text" name="phone" placeholder="500000000">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							+971
+						</span>
+					</div>
 					<div class="container-login100-form-btn">
 						<button class="login100-form-btn">
 							Sign up

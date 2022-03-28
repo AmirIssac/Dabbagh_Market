@@ -29,4 +29,12 @@ class PaymentDetail extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function isCash(){
+        if($this->provider == 'cash')
+            return true;
+        else
+            return false;
+
+    }
+
 }

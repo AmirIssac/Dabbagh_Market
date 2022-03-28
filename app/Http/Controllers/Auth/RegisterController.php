@@ -10,6 +10,7 @@ use App\Models\Shop\Profile;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -62,9 +63,11 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            //'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string']//, 'min:8', 'confirmed'],
+            'password' => ['required', 'string'],//, 'min:8', 'confirmed'],
+            'phone' => 'required|digits:9|regex:/(5)[0-9]{8}/',
+            'first_name' => 'required',
+            'last_name' => 'required' ,
         ]);
     }
 
@@ -74,6 +77,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
+    
     protected function create(array $data)
     {
         /*
@@ -119,4 +123,45 @@ class RegisterController extends Controller
         //$user->assignRole('customer');
         return $user;
     }
+    
+    /*
+    protected function create(Request $request)
+    {
+        $user = User::create([
+            'name' => $request->first_name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        Profile::create([
+            'user_id' => $user->id,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'address_address' => null,
+            'address_latitude' => null,
+            'address_longitude' => null,
+        ]);
+        $cart = Cart::create([
+            'user_id' => $user->id,
+        ]);
+        $favorite = Favorite::create([
+            'user_id' => $user->id,
+        ]);
+        $user->assignRole('customer');
+        // add session cart to DB
+        $session_cart = Session::get('cart');
+        if($session_cart){    // there is cart in the session
+            foreach($session_cart as $item){
+                    $cartItem = CartItem::create([
+                        'cart_id' => $cart->id,
+                        'product_id' => $item['product_id'],
+                        'quantity' => $item['quantity'],
+                    ]);
+            }
+        }
+        Session::forget('cart');
+        //$user->assignRole('customer');
+        return $user;
+    }
+    */
 }
