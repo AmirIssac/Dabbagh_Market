@@ -41,21 +41,8 @@ class OrderController extends Controller
         $order_store = $order->store;
         $order_items = $order->orderItems;
         $order_center_system = $order->orderSystems->first();
-        // calculate the estimated hours remaining
-        /*
-        $estimated = $order->estimated_time;
-        $estimated_time = $estimated->diffForHumans(now());
-        $estimated_time =  now()->diff($estimated)->format('%H:%I:%S')." Minutes";
-        */
         $estimated_time = $order->estimated_time;
-
-
-        $done_in = false ; // caculate the time between making order and finish it
-        if($order->status == 'delivered' || $order->status == 'rejected'){
-            $last_process_time = $order->orderSystems->last()->created_at;
-            $done_in = $last_process_time->diffInSeconds($order->created_at);
-            $done_in = gmdate('H:i:s', $done_in);
-        }
+        $done_in = $order->finishedIn();
 
         if($order_center_system){
             $order_employee_systems = $order->orderSystems()->where('id','!=',$order_center_system->id)->get();

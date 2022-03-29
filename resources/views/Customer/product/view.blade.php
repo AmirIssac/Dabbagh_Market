@@ -122,6 +122,7 @@
                         {{--
                         <button class="heart-icon"><span class="icon_heart_alt"></span></button>
                         --}}
+                        @auth
                         @if($user->favorite->products->count() > 0)  {{-- user favorite contain products --}}
                                 @if($user->favorite->products->contains('id', $product->id))
                                     <button id="favorite-btn" class="to-favorite"><img src="{{asset('img/pngs/red-heart.png')}}" height="35px"></button>
@@ -134,6 +135,7 @@
                                 <button id="favorite-btn" class="to-favorite displaynone"><img src="{{asset('img/pngs/red-heart.png')}}" height="35px"></button>
                                 <button id="unfavorite-btn" class="to-favorite"><img src="{{asset('img/pngs/empty-heart.png')}}" height="35px"></button>                 
                         @endif
+                        @endauth
                         <ul>
                             <li><b>Availability</b>
                                  @if($product->availability)

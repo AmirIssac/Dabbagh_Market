@@ -61,11 +61,12 @@ class OrderController extends Controller
         $order_center_system = $order->orderSystems->first();
         $order_employee_systems = $order->orderSystems()->where('id','!=',$order_center_system->id)->get();
         $estimated_time = $order->estimated_time;
+        $done_in = $order->finishedIn();
         // get reasons of reject
         $reject_reasons = RejectReason::all();
         return view('Employee.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,
                     'order_center_system'=>$order_center_system,'order_employee_systems'=>$order_employee_systems,
-                    'estimated_time' => $estimated_time,'reject_reasons'=>$reject_reasons]);
+                    'estimated_time' => $estimated_time,'reject_reasons'=>$reject_reasons,'done_in' => $done_in]);
     }
 
     public function acceptOrder($id){

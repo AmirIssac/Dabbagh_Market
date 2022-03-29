@@ -111,6 +111,13 @@ class OrderController extends Controller
     }
 
     public function submitOrder(Request $request){
+        $validatedData = $request->validate([
+            'first_name' => ['required', 'max:200'],
+            'last_name' => ['required','max:200'],
+            'phone' => ['required','digits:10','regex:/(05)[0-9]{8}/'],
+            'email' => ['required','email']
+        ]);
+
         $user = User::findOrFail(Auth::user()->id);
         $cart = $user->cart;
         $cart_items = $cart->cartItems;
@@ -185,6 +192,13 @@ class OrderController extends Controller
     }
 
     public function submitOrderAsGuest(Request $request){
+        $validatedData = $request->validate([
+            'first_name' => ['required', 'max:200'],
+            'last_name' => ['required','max:200'],
+            'phone' => ['required','digits:10','regex:/(05)[0-9]{8}/'],
+            'email' => ['required','email']
+        ]);
+
         $guest = User::whereHas('roles', function($q){
             $q->where('name', 'guest');
         })->first();                       // guest user

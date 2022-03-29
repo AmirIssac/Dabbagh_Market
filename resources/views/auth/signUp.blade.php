@@ -29,7 +29,6 @@
 				<div class="login100-pic js-tilt" data-tilt>
 					<img src="img/logo.png" alt="IMG">
 				</div>
-
                 <form method="POST" action="{{ route('register') }}" class="login100-form">
                     @csrf
 					<span class="login100-form-title">

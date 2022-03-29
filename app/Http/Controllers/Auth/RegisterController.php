@@ -92,11 +92,12 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        $phone = '00971'.$data['phone'];
         Profile::create([
             'user_id' => $user->id,
             'first_name' => $data['first_name'],
             'last_name' => $data['last_name'],
-            'phone' => $data['phone'],
+            'phone' => $phone,
             'address_address' => null,
             'address_latitude' => null,
             'address_longitude' => null,

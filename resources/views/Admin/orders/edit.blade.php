@@ -91,11 +91,11 @@
                     <th style="font-weight: bold" class="text-center">
                       Deliver must be in
                     </th>
-                  @else
-                  <th style="color: #c00202; font-weight: bold" class="text-center">
-                    Finished in
-                  </th>
-                  @endif
+                    @else
+                    <th style="color: #c00202; font-weight: bold" class="text-center">
+                      Finished in
+                    </th>
+                    @endif
                     <th>
                     </th>
                     <th>
@@ -190,14 +190,14 @@
                         {{--  {{$order_center_system->status}}  --}}
                         transfered
                       </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
                       <td style="font-weight: bold" class="text-center">
                         {{$order_center_system->created_at}}
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
                       </td>
                 @elseif($order_center_system->status == 'rejected')
                       <tr class="rejected-row">
@@ -213,14 +213,14 @@
                             {{$reason->name_en}}
                           @endforeach
                         </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
+                      <td>
+                      </td>
                       <td style="font-weight: bold" class="text-center">
-                          {{$order_center_system->created_at}}
-                      </td>
-                      <td>
-                      </td>
-                      <td>
-                      </td>
-                      <td>
+                        {{$order_center_system->created_at}}
                       </td>
                 @endif
                 </tr>
@@ -243,14 +243,15 @@
                             {{$order_employee_process->status}}
                         </td>
                         <td style="font-weight: bold" class="text-center">
-                            {{$order_employee_process->created_at}}
+                          {{$order_employee_process->employee_note}}
+                        </td>
+                        <td>
                         </td>
                         <td style="font-weight: bold" class="text-center">
-                          {{$order_employee_process->employee_note}}
-                      </td>
-                        <td>
+                          {{$order_employee_process->user->name}}
                         </td>
-                        <td>
+                        <td style="font-weight: bold" class="text-center">
+                          {{$order_employee_process->created_at}}
                         </td>
                    </tr>
                    <?php $counter++; ?>

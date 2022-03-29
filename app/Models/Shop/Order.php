@@ -71,5 +71,22 @@ class Order extends Model
         return $this->belongsToMany(RejectReason::class);
     }
 
-
+    /* 
+        calc the time between creating the order by customer
+        and delivery or reject status
+    */
+    public function finishedIn(){   
+        if($this->status == 'delivered' || $this->status == 'rejected'){
+            $last_process_time = $this->orderSystems->last()->created_at;
+            //$done_in = $last_process_time->diffInSeconds($this->created_at);
+            //$done_in = gmdate('H:i:s', $done_in);
+            $interval = $last_process_time->diff($this->created_at);
+            $done_in = $interval->format('%ad %H:%I:%S');
+            return $done_in ;
+        }
+        else{
+            $done_in = false;
+            return $done_in;
+        }
+    }
 }

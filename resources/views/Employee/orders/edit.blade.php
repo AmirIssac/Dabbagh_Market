@@ -77,9 +77,15 @@
                     </th>
                     <th style="font-weight: bold" class="text-center">Customer note</th>
                     <th style="font-weight: bold" class="text-center">Center note</th>
+                    @if($order->status != 'delivered' && $order->status != 'rejected')
                     <th style="font-weight: bold" class="text-center">
-                        Deliver must be in
+                      Deliver must be in
                     </th>
+                    @else
+                    <th style="color: #c00202; font-weight: bold" class="text-center">
+                      Finished in
+                    </th>
+                    @endif
                     <th>
                     </th>
                 </tr>
@@ -103,10 +109,16 @@
                         @else
                               <span class="badge badge-danger">NONE</span>
                         @endif
-                    <td style="color: #c00202; font-weight: bold" class="text-center">
-                            <input type="hidden" id="estimated-time" value="{{$estimated_time}}">
-                            <p id="estimated-time-div"></p>
-                    </td>
+                        @if($order->status != 'delivered' && $order->status != 'rejected')
+                        <td style="color: #c00202; font-weight: bold" class="text-center">
+                          <input type="hidden" id="estimated-time" value="{{$estimated_time}}">
+                          <p id="estimated-time-div"></p>
+                        </td>
+                        @else
+                        <td style="color: #0254c0; font-weight: bold" class="text-center">
+                            <p>{{$done_in}}</p>
+                        </td>
+                        @endif
                     </td>
                     <td>
                     </td>
@@ -192,14 +204,15 @@
                             {{$order_employee_process->status}}
                         </td>
                         <td style="font-weight: bold" class="text-center">
-                            {{$order_employee_process->created_at}}
-                        </td>
-                        <td style="font-weight: bold" class="text-center">
                             {{$order_employee_process->employee_note}}
                         </td>
                         <td>
                         </td>
-                        <td>
+                        <td style="font-weight: bold" class="text-center">
+                            {{$order_employee_process->user->name}}
+                        </td>
+                        <td style="font-weight: bold" class="text-center">
+                            {{$order_employee_process->created_at}}
                         </td>
                    </tr>
                    <?php $counter++; ?>

@@ -50,14 +50,32 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
+                                {{--
                                 <div class="checkout__input">
                                     <p>Phone<span>*</span></p>
                                     <input type="text" name="phone" value="" required>
                                 </div>
+                                --}}
+                                <div class="checkout__input">
+                                    @if($errors->has('phone'))
+                                    <p style="color: red; font-weight:bold;">Phone<span>*</span>
+                                        {{ $errors->first('phone') }}
+                                    </p>
+                                    @else
+                                    <p>Phone<span>*</span></p>
+                                    @endif
+                                    <input type="text" name="phone" placeholder="0500000000">
+                                </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="checkout__input">
+                                    @if($errors->has('email'))
+                                    <p style="color: red; font-weight:bold;">Email<span>*</span>
+                                        {{ $errors->first('email') }}
+                                    </p>
+                                    @else
                                     <p>Email<span>*</span></p>
+                                    @endif
                                     <input type="text" name="email" value="" required>
                                 </div>
                             </div>
