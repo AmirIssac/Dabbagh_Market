@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class UserContoller extends Controller
 {
@@ -75,7 +76,7 @@ class UserContoller extends Controller
         ]);
         // attach stores
         $user->stores()->sync($request->stores);
-
+        Session::flash('success', 'Updated successfully'); 
         return back();
     }
 }

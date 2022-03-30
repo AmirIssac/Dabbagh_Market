@@ -218,7 +218,19 @@ demo = {
     var gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
     gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
     gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
-
+    var orders_count = $('#orders-byyear-count').val();
+    var jan_count = $('#orders-byyear-month-1').val();
+    var feb_count = $('#orders-byyear-month-2').val();
+    var mar_count = $('#orders-byyear-month-3').val();
+    var apr_count = $('#orders-byyear-month-4').val();
+    var may_count = $('#orders-byyear-month-5').val();
+    var jun_count = $('#orders-byyear-month-6').val();
+    var jul_count = $('#orders-byyear-month-7').val();
+    var aug_count = $('#orders-byyear-month-8').val();
+    var sep_count = $('#orders-byyear-month-9').val();
+    var oct_count = $('#orders-byyear-month-10').val();
+    var nov_count = $('#orders-byyear-month-11').val();
+    var dec_count = $('#orders-byyear-month-12').val();
     var myChart = new Chart(ctx, {
       type: 'line',
       data: {
@@ -237,7 +249,7 @@ demo = {
           fill: true,
           backgroundColor: gradientFill,
           borderWidth: 2,
-          data: [50, 150, 100, 190, 130, 90, 150, 160, 120, 140, 190, 95]
+          data: [jan_count, feb_count, mar_count, apr_count, may_count, jun_count, jul_count, aug_count, sep_count, oct_count, nov_count, dec_count]
         }]
       },
       options: {

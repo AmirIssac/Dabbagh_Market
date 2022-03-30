@@ -48,6 +48,7 @@
                 <div class="col-lg-6 col-md-6">
                     <div class="product__details__text">
                         <h3>{{$product->name_en}}</h3>
+                        <input type="hidden" value="{{$product->name_en}}" id="product-name">
                         <div class="product__details__rating">
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
@@ -247,6 +248,57 @@
     <!-- Product Details Section End -->
 @section('scripts')
 <script>
+    function addToCartNotification(from, align){
+        color = 'success';
+        name = $('#product-name').val();
+        if($('#unit').val() == 'gram'){
+            unit = 'K.G' ;
+            weight = $('#weight-in-gram').val() / 1000;
+        }
+        else{
+            unit = 'pieces' ;
+            weight = $('#weight-in-gram').val();
+        }
+
+        $.notify({
+            message: "added to cart <b> "+name+" "+weight+" "+unit,
+        },{
+            type: color,
+            timer: 20,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+    }
+    function addToFavoriteNotification(from, align){
+        color = 'info';
+        name = $('#product-name').val();
+        $.notify({
+            message: "Added <b>"+name+"</b> to favorite",
+        },{
+            type: color,
+            timer: 20,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+    }
+    function removeFromFavoriteNotification(from, align){
+        color = 'danger';
+        name = $('#product-name').val();
+        $.notify({
+            message: "Remove <b>"+name+"</b> from favorite",
+        },{
+            type: color,
+            timer: 20,
+            placement: {
+                from: from,
+                align: align
+            }
+        });
+    }
         /*function addToCart(){*/
     $('document').ready(function(){
         $('#add-to-cart').on('click',function(){
@@ -263,7 +315,8 @@
                 //dataType: 'json',
                 success: function(data){    // data is the response come from controller
                     if(data == 'success')
-                        alert('added to cart !!');
+                        //nowuiDashboard.showNotification('top','center','Added to Cart','success');
+                        addToCartNotification('top','center');
                 }
             }); // ajax close
         });
@@ -281,12 +334,14 @@
                     if(data == 'added'){
                         $('#unfavorite-btn').addClass('displaynone');
                         $('#favorite-btn').removeClass('displaynone');
+                        addToFavoriteNotification('top','center');
                         //alert('added to favorite !!');
                     }
                     else{
                         $('#favorite-btn').addClass('displaynone');
                         $('#unfavorite-btn').removeClass('displaynone');
-                        //alert('removed from favorite !!')
+                        removeFromFavoriteNotification('top','center');
+                        //alert('removed from favorite !!');
                     }
                 }
             }); // ajax close

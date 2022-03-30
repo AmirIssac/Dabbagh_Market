@@ -210,7 +210,7 @@
   <script src="{{asset('dashboard_asset/js/core/jquery.min.js')}}"></script>
   <script src="{{asset('dashboard_asset/js/core/popper.min.js')}}"></script>
   <script src="{{asset('dashboard_asset/js/core/bootstrap.min.js')}}"></script>
-  <script src="../dashboard_asset/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <script src="{{asset('dashboard_asset/js/plugins/perfect-scrollbar.jquery.min.js')}}"></script>
   <!--  Google Maps Plugin    -->
   <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
   <!-- Chart JS -->

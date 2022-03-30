@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\Dashboard;
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -21,7 +22,9 @@ class Controller extends BaseController
     }
 
     public function adminDashboard(){
-        return view('Admin.dashboard');
+        $dashboard = new Dashboard;
+        $orders_by_year = $dashboard->ordersByYearChart(2022);
+        return view('Admin.dashboard',['orders_by_year'=>$orders_by_year]);
     }
 
     public function signUpForm(){

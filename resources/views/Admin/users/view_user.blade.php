@@ -190,10 +190,12 @@
               <button type="submit" class="btn btn-primary">update</button>
             </form>
           </div>
-        </div>
-    
+        </div>    
   </div>
 </div>
+@if(Session::has('success'))
+<input type="text" id="session-notification" value="{{Session::get('success')}}">
+@endif
 @section('scripts')
 <script>
     $('#edit-user-btn').on('click',function(){
@@ -204,6 +206,12 @@
         }, 1000);
     })
 </script>
+@if(Session::has('success'))
+  <script>
+      nowuiDashboard.showNotification('top','center',$('#session-notification').val(),'success');
+     // alert('ok');
+  </script>
+@endif
 @endsection
 
 @endsection

@@ -15,7 +15,7 @@
     <div class="col-md-12 ml-auto mr-auto">
       <div class="card card-upgrade">
         <div class="card-header text-center">
-          <h4 class="card-title">Orders <span class="badge badge-primary radius-span"> {{$orders->count()}} </span>
+          <h4 class="card-title">Orders <span class="badge badge-primary radius-span"> {{$orders_count}} </span>
           </h4>
           <h4 class="card-title">
           Pending <span class="badge badge-danger radius-span"> {{$status_arr['pending']}} </span>
@@ -74,6 +74,7 @@
                 @endforeach
               </tbody>
             </table>
+            {!! $orders->links() !!}
           </div>
         </div>
       </div>
