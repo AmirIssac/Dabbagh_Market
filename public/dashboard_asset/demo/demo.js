@@ -218,7 +218,7 @@ demo = {
     var gradientFill = ctx.createLinearGradient(0, 200, 0, 50);
     gradientFill.addColorStop(0, "rgba(128, 182, 244, 0)");
     gradientFill.addColorStop(1, "rgba(255, 255, 255, 0.24)");
-    var orders_count = $('#orders-byyear-count').val();
+    // orders
     var jan_count = $('#orders-byyear-month-1').val();
     var feb_count = $('#orders-byyear-month-2').val();
     var mar_count = $('#orders-byyear-month-3').val();
@@ -231,12 +231,25 @@ demo = {
     var oct_count = $('#orders-byyear-month-10').val();
     var nov_count = $('#orders-byyear-month-11').val();
     var dec_count = $('#orders-byyear-month-12').val();
+    // delivered
+    var jan_del = $('#delivered-byyear-month-1').val();
+    var feb_del = $('#delivered-byyear-month-2').val();
+    var mar_del = $('#delivered-byyear-month-3').val();
+    var apr_del = $('#delivered-byyear-month-4').val();
+    var may_del = $('#delivered-byyear-month-5').val();
+    var jun_del = $('#delivered-byyear-month-6').val();
+    var jul_del = $('#delivered-byyear-month-7').val();
+    var aug_del = $('#delivered-byyear-month-8').val();
+    var sep_del = $('#delivered-byyear-month-9').val();
+    var oct_del = $('#delivered-byyear-month-10').val();
+    var nov_del = $('#delivered-byyear-month-11').val();
+    var dec_del = $('#delivered-byyear-month-12').val();
     var myChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
         datasets: [{
-          label: "Data",
+          label: "Order",
           borderColor: chartColor,
           pointBorderColor: chartColor,
           pointBackgroundColor: "#1e3d60",
@@ -250,7 +263,24 @@ demo = {
           backgroundColor: gradientFill,
           borderWidth: 2,
           data: [jan_count, feb_count, mar_count, apr_count, may_count, jun_count, jul_count, aug_count, sep_count, oct_count, nov_count, dec_count]
-        }]
+        },
+        {
+        label: "delivered",
+        borderColor: chartColor,
+        pointBorderColor: chartColor,
+        pointBackgroundColor: "#2ed15e",
+        pointHoverBackgroundColor: "#2ed15e",
+        pointHoverBorderColor: chartColor,
+        pointBorderWidth: 1,
+        pointHoverRadius: 7,
+        pointHoverBorderWidth: 2,
+        pointRadius: 5,
+        fill: true,
+        backgroundColor: gradientFill,
+        borderWidth: 2,
+        data: [jan_del, feb_del, mar_del, apr_del, may_del, jun_del, jul_del, aug_del, sep_del, oct_del, nov_del, dec_del]
+        }
+      ]
       },
       options: {
         layout: {

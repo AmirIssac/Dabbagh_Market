@@ -59,7 +59,7 @@
         <span id="new-orders-badge" style="margin: 20px;" class="badge badge-danger displaynone"><b id="new-orders-count">2</b> NEW</span>
         <p style="color:rgb(240, 6, 6) !important; margin-left: 20px; font-weight:bold;" id="text-notification" class="displaynone">please press F5 or Refresh the page</p>
         <div class="card-header text-center">
-          <h4 class="card-title">Orders <span class="badge badge-primary radius-span"> {{$orders->count()}} </span>
+          <h4 class="card-title">Orders <span class="badge badge-primary radius-span"> {{$orders_count}} </span>
           </h4>
           <h4 class="card-title">
           Pending <span class="badge badge-danger radius-span"> {{$status_arr['pending']}} </span>
@@ -110,6 +110,7 @@
                 @endforeach
               </tbody>
             </table>
+            {!! $orders->links() !!}
           </div>
         </div>
       </div>

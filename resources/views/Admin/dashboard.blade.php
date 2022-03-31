@@ -1,8 +1,12 @@
     @extends('Layouts.dashboard_main')
     @section('content')
       <div class="panel-header panel-header-lg">
-        @foreach($orders_by_year as $order)  {{-- to store array in input --}}
+
+        @foreach($orders_by_year['orders_count'] as $order)
         <input type="hidden" id="orders-byyear-month-{{$loop->index+1}}" value="{{$order}}">
+        @endforeach
+        @foreach($orders_by_year['delivered'] as $order)
+        <input type="hidden" id="delivered-byyear-month-{{$loop->index+1}}" value="{{$order}}">
         @endforeach
         <canvas id="bigDashboardChart"></canvas>
       </div>

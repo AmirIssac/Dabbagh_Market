@@ -23,7 +23,7 @@ class Controller extends BaseController
 
     public function adminDashboard(){
         $dashboard = new Dashboard;
-        $orders_by_year = $dashboard->ordersByYearChart(2022);
+        $orders_by_year = $dashboard->ordersByYearChart(now()->year);
         return view('Admin.dashboard',['orders_by_year'=>$orders_by_year]);
     }
 

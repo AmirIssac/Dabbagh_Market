@@ -10,20 +10,46 @@ use App\Models\Store;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
+    // to paginate on a collection
+    public function paginate($items, $perPage = 2, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof \Illuminate\Support\Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
+    }
+    public function paginateCollection($items, $perPage = 2, $page = null, $options = [])
+    {
+        $page = $page ?: (\Illuminate\Pagination\Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof \Illuminate\Support\Collection ? $items : \Illuminate\Support\Collection::make($items);
+        return new \Illuminate\Pagination\LengthAwarePaginator(array_values($items->forPage($page, $perPage)->toArray()), $items->count(), $perPage, $page, $options);
+    }
     public function index(){
-        //$orders = Order::orderBy('created_at','DESC')->simplePaginate(15);
         $user = User::findOrFail(Auth::user()->id);
+        /*   we stop taking all worker stores orders for paginate purpose
         $stores = $user->stores;   // stores this employee works in
         $orders = collect();
         foreach($stores as $store){
-            $store_orders = $store->orders()->orderBy('created_at','DESC')->get();
+            $store_orders = $store->orders()->orderBy('status')->orderBy('created_at','DESC')->get();
             foreach($store_orders as $store_order)
                 $orders->add($store_order);
         }
+        */
+        /*
+        $orders_with_paginate = $this->paginateCollection($orders);
+        */
+
+        $stores = $user->stores;
+        $user_store = $stores->first();
+        $orders = Order::where('store_id',$user_store->id)->orderBy('status')->orderBy('created_at','DESC')->simplePaginate(15);
+        $orders_no_paginate = Order::where('store_id',$user_store->id)->get();
+        $orders_count = $orders_no_paginate->count();
         // send to view the updated_at timestamp of last pending order when page opened
         $pending_orders = collect();
         foreach($stores as $store){
@@ -33,14 +59,13 @@ class OrderController extends Controller
         }
         $last_updated_pending_order_timestamp = $pending_orders->first()->updated_at;
 
-
         // orders statistics
         $pending = 0 ;
         $preparing = 0 ;
         $shipping = 0 ;
         $delivered = 0 ;
         $rejected = 0 ;
-        foreach($orders as $single_order){
+        foreach($orders_no_paginate as $single_order){
             switch($single_order->status){
                 case 'pending' : $pending++ ; break;
                 case 'preparing' : $preparing++ ; break;
@@ -52,7 +77,7 @@ class OrderController extends Controller
         $status_arr = array('pending'=>$pending,'preparing'=>$preparing,'shipping'=>$shipping,'delivered'=>$delivered,'rejected'=>$rejected);
         }
         return view('Employee.orders.index',['orders'=>$orders,'last_updated_order_timestamp'=>$last_updated_pending_order_timestamp,
-                                                'status_arr'=>$status_arr]);
+                                                'status_arr'=>$status_arr,'orders_count'=>$orders_count]);
     }
     public function editOrder($id){
         $order = Order::findOrFail($id);

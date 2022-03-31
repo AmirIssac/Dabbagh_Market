@@ -38,7 +38,8 @@ class OrderController extends Controller
     }
     */
     public function index(){
-        $orders = Order::where('status','!=','rejected')->orderBy('store_id')->orderBy('created_at','DESC')->simplePaginate(15);
+        //$orders = Order::where('status','!=','rejected')->orderBy('store_id')->orderBy('created_at','DESC')->simplePaginate(15);
+        $orders = Order::orderBy('status')->orderBy('store_id')->orderBy('created_at','DESC')->simplePaginate(15);        
         // orders statistics
         $pending = 0 ;
         $preparing = 0 ;
