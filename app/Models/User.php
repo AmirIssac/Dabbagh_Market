@@ -91,6 +91,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Store::class, 'store_user');
     }
 
+    public function productsRate()
+    {
+        return $this->hasMany(ProductRate::class);
+    }
+
 
     // custom functions
 

@@ -314,7 +314,20 @@ class OrderController extends Controller
 
     public function showMyOrders(){
         $user = User::findOrFail(Auth::user()->id);
-        $orders = $user->orders()->orderBy('updated_at','DESC')->get();
+        $orders = $user->orders()->orderBy('updated_at','DESC')->simplePaginate(10);
         return view('Customer.order.my_orders',['orders'=>$orders]);
+    }
+
+    public function viewOrder($id){
+        $order = Order::findOrFail($id);
+        $order_items = $order->orderItems;
+        if($order->orderSystems()->count() > 0){
+            $order_process = $order->orderSystems->last();
+            $last_update_status = $order_process->updated_at->diffForHumans();
+        }
+        else{
+            $last_update_status = $order->updated_at->diffForHumans();
+        }
+        return view('Customer.order.view_order',['order' => $order , 'order_items' => $order_items,'last_update_status'=>$last_update_status]);
     }
 }

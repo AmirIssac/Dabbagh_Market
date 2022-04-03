@@ -19,6 +19,10 @@
     .displaynone{
         display: none;
     }
+    .star-btn{
+        border: none;
+        background-color: transparent;
+    }
 </style>
 @endsection
 @section('content')
@@ -151,12 +155,17 @@
                             @else
                             <li><b>Min quantity</b> <span>{{$product->min_weight}} piece</span></li>
                             @endif
-                            <li><b>Share on</b>
+                            <li><b>Rate this product</b>
                                 <div class="share">
-                                    <a href="#"><i class="fa fa-facebook"></i></a>
-                                    <a href="#"><i class="fa fa-twitter"></i></a>
-                                    <a href="#"><i class="fa fa-instagram"></i></a>
-                                    <a href="#"><i class="fa fa-pinterest"></i></a>
+                                    <form action="" method="POST">
+                                    @for($i=1;$i<=5;$i++)
+                                            @csrf
+                                            <button class="star-btn" id="star-btn-{{$i}}">
+                                            <img src="{{asset('img/pngs/empty-star.png')}}" height="35px" id="empty-star-{{$i}}">
+                                            <img src="{{asset('img/pngs/star.png')}}" height="35px" class="displaynone" id="star-{{$i}}">
+                                            </button>
+                                    @endfor
+                                    </form>
                                 </div>
                             </li>
                         </ul>
@@ -302,7 +311,8 @@
         /*function addToCart(){*/
     $('document').ready(function(){
         $('#add-to-cart').on('click',function(){
-            var product_id = $('#product-id').val();
+           // var product_id = $('#product-id').val();
+           var product_id = {!! json_encode($product->id, JSON_HEX_TAG) !!};
             //var qty = parseInt($('#quantity-input').val());
             var qty = parseInt($('#weight-in-gram').val());
             $.ajax({
@@ -323,7 +333,8 @@
 
 
         $('.to-favorite').on('click',function(){
-            var product_id = $('#product-id').val();
+            //var product_id = $('#product-id').val();
+            var product_id = {!! json_encode($product->id, JSON_HEX_TAG) !!};
             $.ajax({
                 headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

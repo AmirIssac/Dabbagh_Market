@@ -3,11 +3,8 @@
 
 @endsection
 @section('content')
-<!-- Checkout Section Begin -->
 <section style="margin-top: -75px;" class="checkout spad">
     <div class="container">
-            <form action="{{route('submit.order')}}" method="POST">
-                @csrf
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
                         <div class="shoping__cart__table">
@@ -31,29 +28,28 @@
                                             </td>
                                             <td>
                                                 @if($order->status == 'pending')
-                                               <span class="badge badge-warning"> {{$order->status}} </span>
+                                               <span class="badge badge-danger"> {{$order->status}} </span>
                                                @elseif($order->status == 'preparing' || $order->status == 'shipping')
                                                <span class="badge badge-info"> {{$order->status}} </span>
                                                @elseif($order->status == 'delivered')
                                                <span class="badge badge-success"> {{$order->status}} </span>
                                                @elseif($order->status == 'failed' || $order->status == 'cancelled' || $order->status == 'rejected')
-                                               <span class="badge badge-danger"> {{$order->status}} </span>
+                                               <span class="badge badge-warning"> {{$order->status}} </span>
                                                @endif
                                             </td>
                                             <td>
-                                                <a href="#"><i class="fa fa-eye"></i></a>
+                                                <a href="{{route('view.order',$order->id)}}"><i class="fa fa-eye"></i></a>
                                             </td>
                                         </tr>
                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
+                        {!! $orders->links() !!}
                     </div>
                 </div>
-            </form>
     </div>
 </section>
-<!-- Checkout Section End -->
 @section('scripts')
     
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Models\Shop;
 
+use App\Models\ProductRate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -52,6 +53,11 @@ class Product extends Model
     public function favorites()
     {
         return $this->belongsToMany(Favorite::class);
+    }
+
+    public function productsRate()
+    {
+        return $this->hasMany(ProductRate::class);
     }
 
     /*

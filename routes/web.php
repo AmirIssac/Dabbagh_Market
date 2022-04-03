@@ -29,8 +29,7 @@ Route::group(['middleware'=>['global_data_share']] , function(){
 Route::get('/', [Controller::class, 'index'])->name('index');
 
 // Admin
-Route::group(['middleware'=>['is_employee']] , function(){
-        Route::get('/dashboard',[Controller::class, 'adminDashboard'])->name('dashboard')->middleware('auth');
+Route::group(['middleware'=>['is_admin']] , function(){
         Route::get('/inventory',[AdminInventoryController::class, 'index'])->name('inventory.index');
         Route::post('/store/product',[AdminInventoryController::class, 'storeProduct'])->name('store.product');
         Route::get('/edit/product/form/{product_id}',[AdminInventoryController::class, 'editProductForm'])->name('edit.product.form');
@@ -55,6 +54,7 @@ Route::get('/login-form',function(){
 
 // Employee
 Route::group(['middleware'=>['is_employee']] , function(){
+    Route::get('/dashboard',[Controller::class, 'adminDashboard'])->name('dashboard')->middleware('auth');
     Route::get('/employee/orders',[App\Http\Controllers\Employee\OrderController::class, 'index'])->name('employee.orders');
     Route::get('/employee/edit/order/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'editOrder'])->name('employee.edit.order');
     Route::post('/employee/accept/order/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'acceptOrder'])->name('employee.accept.order');
@@ -86,6 +86,8 @@ Route::get('/checkout/guest',[OrderController::class, 'guestCheckout'])->name('c
 Route::post('/submit/order',[App\Http\Controllers\Customer\OrderController::class, 'submitOrder'])->name('submit.order');
 Route::post('/submit/order/as-guest',[App\Http\Controllers\Customer\OrderController::class, 'submitOrderAsGuest'])->name('submit.order.as.guest');
 Route::get('/my-orders',[App\Http\Controllers\Customer\OrderController::class, 'showMyOrders'])->name('my.orders');
+Route::get('/view/order/{order_id}',[App\Http\Controllers\Customer\OrderController::class, 'viewOrder'])->name('view.order');
+ // after checkout
 Route::get('/order/details/{order_id}',[App\Http\Controllers\Customer\OrderController::class, 'details'])->name('order.details');
 
 
