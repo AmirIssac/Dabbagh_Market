@@ -54,16 +54,22 @@
                         <h3>{{$product->name_en}}</h3>
                         <input type="hidden" value="{{$product->name_en}}" id="product-name">
                         <div class="product__details__rating">
+                            {{--
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star"></i>
                             <i class="fa fa-star-half-o"></i>
                             <span>(18 reviews)</span>
+                            --}}
+                            @for($k=1;$k<=$rate;$k++)
+                            <i class="fa fa-star"></i>
+                            @endfor
+                            <span>({{$reviews}} reviews)</span>
                         </div>
                         
                         @if($product->hasDiscount())  {{-- product has discount --}}
-                                    <h6 style="text-decoration: line-through; color: #f44336">    {{$product->price}}  </h6>
+                                    <h6 style="text-decoration: line-through; color: #f44336"> {{$product->price}} </h6>
                                     <?php
                                         $discount_type = $product->discount->type;
                                         if($discount_type == 'percent'){
@@ -155,19 +161,32 @@
                             @else
                             <li><b>Min quantity</b> <span>{{$product->min_weight}} piece</span></li>
                             @endif
-                            <li><b>Rate this product</b>
-                                <div class="share">
-                                    <form action="" method="POST">
-                                    @for($i=1;$i<=5;$i++)
-                                            @csrf
-                                            <button class="star-btn" id="star-btn-{{$i}}">
-                                            <img src="{{asset('img/pngs/empty-star.png')}}" height="35px" id="empty-star-{{$i}}">
-                                            <img src="{{asset('img/pngs/star.png')}}" height="35px" class="displaynone" id="star-{{$i}}">
-                                            </button>
-                                    @endfor
-                                    </form>
-                                </div>
-                            </li>
+                            @if(!$exist_rate)
+                                <li><b>Rate this product</b>
+                                    <div class="share">
+                                        <form action="{{route('rate.product',$product->id)}}" method="POST">
+                                        @for($i=1;$i<=5;$i++)
+                                                @csrf
+                                                <button class="star-btn" id="star-btn-{{$i}}" name="rate" value="{{$i}}">
+                                                <img src="{{asset('img/pngs/empty-star.png')}}" height="35px" id="empty-star-{{$i}}">
+                                                <img src="{{asset('img/pngs/star.png')}}" height="35px" class="displaynone" id="star-{{$i}}">
+                                                </button>
+                                        @endfor
+                                        </form>
+                                    </div>
+                                </li>
+                            @else
+                                <li><b>Thanx for rating</b>
+                                    <div class="share">
+                                        @for($i=1;$i<=$user_rate_val;$i++)
+                                                <img src="{{asset('img/pngs/star.png')}}" height="35px">
+                                        @endfor
+                                        @for($i=$user_rate_val+1;$i<=5;$i++)
+                                                <img src="{{asset('img/pngs/empty-star.png')}}" height="35px">
+                                        @endfor
+                                    </div>
+                                </li>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -357,6 +376,18 @@
                 }
             }); // ajax close
         });
+    });
+
+    $("[id^='star-btn-']").hover(function() {
+        var gold = $(this).attr('id').slice(9);  // number of star
+        for(var i = parseInt(gold) ; i >= 1 ; --i ){  // fill
+            $('#empty-star-'+i).addClass('displaynone');
+            $('#star-'+i).removeClass('displaynone');
+        }
+        for( i = parseInt(gold)+1 ; i <= 5 ; ++i ){  // gaping
+            $('#star-'+i).addClass('displaynone');
+            $('#empty-star-'+i).removeClass('displaynone');
+        }
     });
 </script>
 @endsection

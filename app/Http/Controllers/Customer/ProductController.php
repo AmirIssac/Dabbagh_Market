@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProductRate;
 use App\Models\Shop\CartItem;
 use App\Models\Shop\Category;
 use App\Models\Shop\Product;
@@ -14,7 +15,6 @@ use Illuminate\Support\Facades\Session;
 class ProductController extends Controller
 {
     
-
     public function indexByCategory($id){
         $category = Category::findOrFail($id);
         $categories = Category::all();
@@ -33,7 +33,23 @@ class ProductController extends Controller
 
     public function viewProduct($id){
         $product = Product::findOrFail($id);
-        return view ('Customer.product.view',['product'=>$product]);
+        $exist_rate = false ;
+        $user_rate_value = 0 ;
+        $rate = $product->rating();
+        $reviews = $product->reviews();
+        if(Auth::user()){
+            $user_rate = ProductRate::where('product_id',$product->id)->where('user_id',Auth::user()->id)->first();
+            if($user_rate){
+                $exist_rate = true;
+                $user_rate_value = $user_rate->value;
+            }
+            return view ('Customer.product.view',['product'=>$product,'rate'=>$rate,'exist_rate'=>$exist_rate,'user_rate_val' => $user_rate_value,
+                                                  'reviews'=>$reviews]);
+        }
+        else{
+            return view ('Customer.product.view',['product'=>$product,'rate'=>$rate ,'exist_rate'=>$exist_rate,'user_rate_val' => $user_rate_value,
+                                                  'reviews'=>$reviews]);
+        }
     }
 
     /*
@@ -180,5 +196,28 @@ class ProductController extends Controller
                 return response('success');
             }
             
+    }
+
+    public function rateProduct(Request $request,$id){
+        $product = Product::findOrFail($id);
+        switch($request->rate){
+            case 1 : $value = 1 ;
+                     break;
+            case 2 : $value = 2 ;
+                     break;
+            case 3 : $value = 3 ;
+                     break;
+            case 4 : $value = 4 ;
+                     break;
+            case 5 : $value = 5 ;
+                     break;
+        }
+        ProductRate::create([
+            'product_id' => $product->id ,
+            'user_id' => Auth::user()->id ,
+            'value' => $value,
+        ]);
+        
+        return back();
     }
 }

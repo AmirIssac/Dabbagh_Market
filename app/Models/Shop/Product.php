@@ -74,4 +74,17 @@ class Product extends Model
             return false;
     }
 
+    public function rating(){
+        $rate = 0 ;
+        $product_rates = $this->productsRate;
+        foreach($product_rates as $product_rate)
+            $rate += $product_rate->value;
+        $rate = ceil($rate / $this->productsRate()->count());
+        return $rate;
+    }
+
+    public function reviews(){
+        return $this->productsRate()->count();
+    }
+
 }

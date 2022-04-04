@@ -95,6 +95,8 @@ Route::get('/my-profile',[ProfileController::class, 'myProfile'])->name('my.prof
 Route::post('/submit/profile',[ProfileController::class, 'submitProfile'])->name('submit.profile');
 
 
+Route::post('rate/product/{product_id}',[ProductController::class, 'rateProduct'])->name('rate.product');
+
 // display session
 Route::get('/session', function(){
     return Session::get('cart');
