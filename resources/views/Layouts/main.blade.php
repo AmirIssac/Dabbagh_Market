@@ -88,7 +88,7 @@
         </div>
         <div class="humberger__menu__contact">
             <ul>
-                <li><i class="fa fa-envelope"></i> info@dabbaghtrading.com</li>
+                <li><i class="fa fa-envelope"></i>{{$contact_email}}</li>
                 <li>Free Shipping for all Orders</li>
             </ul>
         </div>
@@ -103,7 +103,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
-                                <li><i class="fa fa-envelope"></i> info@dabbaghtrading.com</li>
+                                <li><i class="fa fa-envelope"></i>{{$contact_email}}</li>
                                 <li>Free Shipping for all Orders</li>
                             </ul>
                         </div>
@@ -270,10 +270,14 @@
                     <div class="hero__categories">
                         <div class="hero__categories__all">
                             <i class="fa fa-bars"></i>
-                            <span>All departments</span>
+                            <span>our centers</span>
                         </div>
                     </div>
                 </div>
+                {{--
+                <div class="col-lg-3">
+                </div>
+                --}}
                 <div class="col-lg-9">
                     <div class="hero__search">
                         <div class="hero__search__form">
@@ -291,7 +295,7 @@
                             </div>
                            {{-- </a>  --}}
                             <div class="hero__search__phone__text">
-                                <h5>+971569940660</h5>
+                                <h5>{{$contact_phone}}</h5>
                                 <span>support 24/7 time</span>
                             </div>
                         </div>
@@ -314,9 +318,9 @@
                             <a href="/"><img src="{{asset('img/logo.png')}}" alt=""></a>
                         </div>
                         <ul>
-                            <li>Address: 60-49 Road 11378 New York</li>
-                            <li>Phone: +65 11.188.888</li>
-                            <li>Email: hello@colorlib.com</li>
+                            <li>Address: Sharjah</li>
+                            <li>Phone: {{$contact_phone}}</li>
+                            <li>Email: {{$contact_email}}</li>
                         </ul>
                     </div>
                 </div>

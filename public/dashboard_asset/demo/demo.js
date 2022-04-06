@@ -422,7 +422,7 @@ demo = {
       data: {
         labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
         datasets: [{
-          label: "Active Countries",
+          label: "Cash",
           backgroundColor: gradientFill,
           borderColor: "#2CA8FF",
           pointBorderColor: "#FFF",
@@ -434,12 +434,26 @@ demo = {
           fill: true,
           borderWidth: 1,
           data: [80, 99, 86, 96, 123, 85, 100, 75, 88, 90, 123, 155]
-        }]
+        } , 
+        {
+          label: "Card",
+          backgroundColor: gradientFill,
+          borderColor: "#2CA8FF",
+          pointBorderColor: "#FFF",
+          pointBackgroundColor: "black",
+          pointBorderWidth: 2,
+          pointHoverRadius: 4,
+          pointHoverBorderWidth: 1,
+          pointRadius: 4,
+          fill: true,
+          borderWidth: 1,
+          data: [80, 99, 86, 96, 123, 85, 100, 75, 88, 90, 123, 155]
+        }] ,
       },
       options: {
         maintainAspectRatio: false,
         legend: {
-          display: false
+          display: true
         },
         tooltips: {
           bodySpacing: 4,

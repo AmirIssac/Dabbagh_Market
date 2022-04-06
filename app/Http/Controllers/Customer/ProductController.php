@@ -195,11 +195,17 @@ class ProductController extends Controller
                 Session::put('cart',$cart);
                 return response('success');
             }
-            
     }
 
     public function rateProduct(Request $request,$id){
+        // check if not auth || rate this product before so we prevent the function of rating
+        if(!Auth::user())
+            return back();
+        $user = User::find(Auth::user()->id);
         $product = Product::findOrFail($id);
+        $check = $user->productsRate()->where('product_id',$product->id)->first();
+        if($check)  // prvent user from rating same product twice
+            return back();
         switch($request->rate){
             case 1 : $value = 1 ;
                      break;
@@ -217,7 +223,6 @@ class ProductController extends Controller
             'user_id' => Auth::user()->id ,
             'value' => $value,
         ]);
-        
         return back();
     }
 }

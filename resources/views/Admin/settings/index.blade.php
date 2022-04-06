@@ -50,6 +50,20 @@
                   <input type="number" name="number_of_orders_increase" value="{{$number_of_orders_increase_time}}" class="form-control">
                 </div>
               </div>
+              <div class="col-md-6 pr-1">
+              </div>
+              <div class="col-md-3 pr-1">
+                <div style="display: flex; flex-direction: column;" class="form-group">
+                  <label> Contact phone </label>
+                  <input type="text" name="contact_phone" value="{{$contact_phone}}" class="form-control">
+                </div>
+              </div>
+              <div class="col-md-6 pr-1">
+                <div style="display: flex; flex-direction: column;" class="form-group">
+                  <label> Contact Email </label>
+                  <input type="email" name="contact_email" value="{{$contact_email}}" class="form-control">
+                </div>
+              </div>
             </div>
             <button id="edit-user-btn" class="btn btn-primary">Update</button>
             </form>

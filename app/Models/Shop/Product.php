@@ -77,9 +77,11 @@ class Product extends Model
     public function rating(){
         $rate = 0 ;
         $product_rates = $this->productsRate;
-        foreach($product_rates as $product_rate)
-            $rate += $product_rate->value;
-        $rate = ceil($rate / $this->productsRate()->count());
+        if($product_rates->count() > 0){
+            foreach($product_rates as $product_rate)
+                $rate += $product_rate->value;
+            $rate = ceil($rate / $this->productsRate()->count());
+        }
         return $rate;
     }
 
