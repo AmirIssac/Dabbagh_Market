@@ -29,7 +29,9 @@
     <div class="col-md-12 ml-auto mr-auto">
       <div class="card card-upgrade">
         <div class="card-header text-center">
-          <h4 class="card-title"> <span class="badge badge-primary"> #{{$order->number}} </span> </h3>
+          <h4 class="card-title"> <span class="badge badge-primary"> #{{$order->number}} </span>
+            <a style="float: right" href="{{route('print.delivery.order',$order->id)}}" class="btn btn-info">print</a>
+           </h4>
             <p class="card-category"></p>
         </div>
         <div class="card-body">

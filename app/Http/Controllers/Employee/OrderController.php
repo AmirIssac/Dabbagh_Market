@@ -157,5 +157,13 @@ class OrderController extends Controller
         //return response($orders->first());
         return response($new_orders_count);
     }
+
+    public function printDeliveryOrder($id){
+        $order = Order::find($id);
+        $store = $order->store->name_en;
+        $order_items = $order->orderItems;
+        return view('Employee.orders.print_delivery_order',['order'=>$order,'store'=>$store,'order_items'=>$order_items,
+                                                            ]);
+    }
 }
 

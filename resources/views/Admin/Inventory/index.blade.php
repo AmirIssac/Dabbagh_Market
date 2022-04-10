@@ -161,6 +161,9 @@
                   <th>
                     Increase by
                   </th>
+                  <th>
+                    Options
+                  </th>
                 </tr>
                 <tr>
                   <td>
@@ -172,6 +175,13 @@
                   <td> <input type="number" step="0.1" name="price" class="form-control"> </td>
                   <td> <input type="number" name="min_weight" class="form-control"> </td>
                   <td> <input type="number" name="increase_by" class="form-control"> </td>
+                  <td>
+                    <select name="options[]" class="form-control" multiple>
+                      @foreach($options as $option)
+                        <option value="{{$option->id}}">{{$option->name_en}}</option>
+                      @endforeach
+                    </select>
+                  </td>
                 </tr>
                 <tr>
                     <th>

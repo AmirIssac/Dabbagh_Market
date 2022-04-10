@@ -446,5 +446,25 @@
 
     });
     </script>
+     @if(session()->has('success'))
+     <script>
+        function orderSubmittedSuccessfully(from, align){
+            color = 'success';
+            $.notify({
+                message: "order created successfully"
+            },{
+                type: color,
+                timer: 20,
+                placement: {
+                    from: from,
+                    align: align
+                }
+            });
+        }
+        // call notification function
+        orderSubmittedSuccessfully('top','center');
+    </script>
+     @endif
+    
     @endsection
     @endsection

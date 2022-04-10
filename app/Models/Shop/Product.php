@@ -2,6 +2,7 @@
 
 namespace App\Models\Shop;
 
+use App\Models\Option;
 use App\Models\ProductRate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -60,12 +61,31 @@ class Product extends Model
         return $this->hasMany(ProductRate::class);
     }
 
+    public function options()
+    {
+        return $this->belongsToMany(Option::class);
+    }
+
     /*
     public function carts()
     {
         return $this->belongsToMany(Cart::class , 'cart_product');
     }
     */
+
+    public function isGram(){
+        if($this->unit == 'gram')
+            return true;
+        else
+            return false;
+    }
+
+    public function isPiece(){
+        if($this->unit == 'piece')
+            return true;
+        else
+            return false;
+    }
 
     public function hasDiscount(){
         if($this->discount)

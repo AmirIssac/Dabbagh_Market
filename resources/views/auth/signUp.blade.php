@@ -140,7 +140,7 @@
 	<script src="login_v1/vendor/select2/select2.min.js"></script>
 <!--===============================================================================================-->
 	<script src="login_v1/vendor/tilt/tilt.jquery.min.js"></script>
-	<script >
+	<script>
 		$('.js-tilt').tilt({
 			scale: 1.1
 		})

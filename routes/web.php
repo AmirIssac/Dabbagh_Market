@@ -60,6 +60,7 @@ Route::group(['middleware'=>['is_employee']] , function(){
     Route::post('/employee/accept/order/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'acceptOrder'])->name('employee.accept.order');
     Route::post('/employee/change/orderStatus/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'changeStatus'])->name('employee.change.order.status');
     Route::get('/check/new/orders',[App\Http\Controllers\Employee\OrderController::class, 'ajaxCheckNewOrders'])->name('check.new.orders');
+    Route::get('/print/delivery/order/{order_id}',[App\Http\Controllers\Employee\OrderController::class, 'printDeliveryOrder'])->name('print.delivery.order');
 });
 
 Auth::routes();
@@ -87,9 +88,10 @@ Route::post('/submit/order',[App\Http\Controllers\Customer\OrderController::clas
 Route::post('/submit/order/as-guest',[App\Http\Controllers\Customer\OrderController::class, 'submitOrderAsGuest'])->name('submit.order.as.guest');
 Route::get('/my-orders',[App\Http\Controllers\Customer\OrderController::class, 'showMyOrders'])->name('my.orders');
 Route::get('/view/order/{order_id}',[App\Http\Controllers\Customer\OrderController::class, 'viewOrder'])->name('view.order');
- // after checkout
-Route::get('/order/details/{order_id}',[App\Http\Controllers\Customer\OrderController::class, 'details'])->name('order.details');
 
+Route::group(['middleware'=>['customer_order_check']] , function(){
+    Route::get('/order/details/{order_id}',[App\Http\Controllers\Customer\OrderController::class, 'details'])->name('order.details');
+});
 
 Route::get('/my-profile',[ProfileController::class, 'myProfile'])->name('my.profile');
 Route::post('/submit/profile',[ProfileController::class, 'submitProfile'])->name('submit.profile');

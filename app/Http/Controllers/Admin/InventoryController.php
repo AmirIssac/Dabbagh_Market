@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Option;
 use App\Models\Shop\Category;
 use App\Models\Shop\Discount;
 use App\Models\Shop\Product;
@@ -18,7 +19,9 @@ class InventoryController extends Controller
         $products = Product::orderBy('updated_at','DESC')->simplePaginate(10);
         $categories = Category::all();
         $discounts = Discount::all();
-        return view('Admin.Inventory.index',['products'=>$products,'categories'=>$categories,'discounts'=>$discounts]);
+        $options = Option::all();
+        return view('Admin.Inventory.index',['products'=>$products,'categories'=>$categories,'discounts'=>$discounts,
+                                             'options' => $options]);
     }
 
     public function storeProduct(Request $request){
@@ -58,6 +61,8 @@ class InventoryController extends Controller
                 ]);
                 }
         }
+        // add options for this product (pivot table)
+        $product->options()->attach($request->options);
         return back();
     }
 

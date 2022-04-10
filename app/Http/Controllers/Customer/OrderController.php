@@ -302,7 +302,8 @@ class OrderController extends Controller
             }
             // delete items from session cart
             Session::forget('cart');
-            return redirect(route('order.details',$order->id));
+            //return redirect(route('order.details',$order->id));
+            return redirect('/')->with('success','your order created successfully');
         }  // end if ($cart)
     }
 
