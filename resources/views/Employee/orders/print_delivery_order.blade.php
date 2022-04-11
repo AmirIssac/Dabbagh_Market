@@ -117,6 +117,14 @@
                             {{$order->total}}
                         </td>
                     </tr>
+                    <tr>
+                        <td class="quantity">
+                        </td>
+                        <td class="description"></td>
+                        <td class="price">
+                            {{$order->paymentDetail->provider}}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <p class="centered">Thanks for chosing DabbaghFoods

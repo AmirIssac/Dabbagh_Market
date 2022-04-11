@@ -86,6 +86,9 @@ class OrderController extends Controller
     }
     public function transferOrder(Request $request , $id){
         $order = Order::findOrFail($id);
+        // validate
+        if($order->status != 'pending')
+            return back();
         // check if order rejected
         if($request->store_id == 'reject'){
             $order->update([

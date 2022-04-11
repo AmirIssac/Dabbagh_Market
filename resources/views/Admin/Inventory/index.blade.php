@@ -367,7 +367,7 @@
                   @endif
                 </td>
                 <td>
-                  <a><i class="fas fa-tools"></i></a>
+                  <a href="{{route('edit.discount.form',$discount->id)}}"><i class="fas fa-tools"></i></a>
                   .
                   <a><i class="fas fa-trash-alt"></i></a>
                 </td>

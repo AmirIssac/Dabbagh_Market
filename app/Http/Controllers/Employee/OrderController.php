@@ -96,6 +96,17 @@ class OrderController extends Controller
 
     public function acceptOrder($id){
         $order = Order::findOrFail($id);
+        // validate that this order reference for this employee store
+        $store_id = $order->store->id;
+        $check_related = User::whereHas('stores', function($q) use ($store_id) {
+                $q->where('stores.id', $store_id);
+            })->where('users.id',Auth::user()->id)->count();
+        if($check_related < 1)  // the order is not in the store that this employee work
+                return back();
+        // validate this order status is pending
+        if($order->status != 'pending')
+            return back();
+
         $order->update([
             'status' => 'preparing',
         ]);
@@ -109,6 +120,9 @@ class OrderController extends Controller
 
     public function changeStatus(Request $request , $id){
         $order = Order::findOrFail($id);
+        // validate
+        if($order->status == 'delivered' || $order->status == 'rejected')
+            return back();
         $status = $request->order_status;
         $order->update([
             'status' => $status,

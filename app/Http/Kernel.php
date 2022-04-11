@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'is_employee' => \App\Http\Middleware\IsEmployee::class,
         'global_data_share' => \App\Http\Middleware\GlobalDataShare::class,
         'customer_order_check' => \App\Http\Middleware\CustomerOrderCheck::class,
+        'employee_order_access' => \App\Http\Middleware\EmployeeOrderAccess::class,
     ];
 }

@@ -140,4 +140,10 @@ class InventoryController extends Controller
         return back();
 
     }
+
+    public function editDiscountForm($id){
+        $discount = Discount::find($id);
+        $products = Product::all();
+        return view('Admin.Inventory.edit_discount_form',['discount'=>$discount,'products' => $products]);
+    }
 }

@@ -28,6 +28,10 @@ class RedirectIfAuthenticated
                 //return redirect(RouteServiceProvider::HOME);
                 if($user->hasRole(['super_admin']))
                     return redirect(route('dashboard'));
+                if($user->hasRole(['admin']))
+                    return redirect(route('dashboard'));
+                if($user->hasRole(['employee']))
+                    return redirect(route('employee.orders'));
                 elseif($user->hasRole(['customer']))
                     return redirect(route('index'));
             }
