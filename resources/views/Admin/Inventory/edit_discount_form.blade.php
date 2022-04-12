@@ -12,7 +12,7 @@
 <div class="content">
   <div class="row">
     <div class="col-md-12">
-      <form action="" method="POST">
+      <form action="{{route('update.discount',$discount->id)}}" method="POST">
           @csrf
       <div id="new-product-form" class="card">
         <div class="card-header">
@@ -70,15 +70,22 @@
                     <input type="datetime" name="expired_at" value="{{$discount->expired_at}}" class="form-control">
                 </td>
                 <td>
+                  {{--
                     <select name="status" class="form-control">
                         @if($discount->active)
-                            <option value="enable" selected>Enabled</option>
-                            <option value="disable">Disabled</option>
+                            <option value="1" selected>Enabled</option>
+                            <option value="0">Disabled</option>
                         @else
-                            <option value="enable">Enabled</option>
-                            <option value="disable" selected>Disabled</option>
+                            <option value="1">Enabled</option>
+                            <option value="0" selected>Disabled</option>
                         @endif
                     </select>
+                  --}}
+                  @if($discount->active)
+                      active
+                  @else
+                      inactive
+                  @endif
                 </td>
                </tr>
                <tr>

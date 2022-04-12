@@ -43,7 +43,7 @@ class Cart extends Model
         $cart_items = $this->cartItems;
         $cart_total = 0 ;
         foreach($cart_items as $item){
-            if($item->product->discount){
+            if($item->product->hasDiscount()){
                 $discount_type = $item->product->discount->type;
                 if($discount_type == 'percent'){
                             $discount = $item->product->price * $item->product->discount->value / 100;
@@ -75,7 +75,7 @@ class Cart extends Model
         $tax_row = Setting::where('key','tax')->first();
         $tax = (float) $tax_row->value;
         foreach($cart_items as $item){
-            if($item->product->discount){
+            if($item->product->hasDiscount()){
                 $discount_type = $item->product->discount->type;
                 if($discount_type == 'percent'){
                      $discount = $item->product->price * $item->product->discount->value / 100;

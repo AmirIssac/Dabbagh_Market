@@ -146,4 +146,22 @@ class InventoryController extends Controller
         $products = Product::all();
         return view('Admin.Inventory.edit_discount_form',['discount'=>$discount,'products' => $products]);
     }
+
+    public function updateDiscount(Request $request,$id){
+        $discount = Discount::find($id);
+        $type = $request->discount_type;
+        $value = $request->discount_value;
+        $expired_at = $request->expired_at;
+        $status = false;
+        // check status by new expired input
+        if($expired_at > now())
+            $status = true;
+        $discount->update([
+            'type' => $type ,
+            'value' => $value ,
+            'expired_at' => $expired_at ,
+            'active' => $status ,
+        ]);
+        return back();
+    }
 }

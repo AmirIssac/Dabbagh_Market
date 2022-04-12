@@ -27,34 +27,6 @@ class OrderController extends Controller
         $total_order_price = 0 ;
         $tax_row = Setting::where('key','tax')->first();
         $tax = (float) $tax_row->value;
-        /*
-        foreach($cart_items as $item){
-            if($item->product->discount){
-                $discount_type = $item->product->discount->type;
-                if($discount_type == 'percent'){
-                     $discount = $item->product->price * $item->product->discount->value / 100;
-                     $new_price = $item->product->price - $discount;
-                     if($item->product->unit == 'gram')
-                        $total_order_price += $new_price * $item->quantity / 1000 ;
-                     else
-                        $total_order_price += $new_price * $item->quantity;
-                     }
-                else {
-                     $new_price = $item->product->price - $item->product->discount->value;   
-                     if($item->product->unit == 'gram')
-                        $total_order_price += $new_price * $item->quantity / 1000 ;
-                     else
-                        $total_order_price += $new_price * $item->quantity;
-                }   
-            }
-            else{   // no discount
-                if($item->product->unit == 'gram')
-                     $total_order_price += $item->product->price * $item->quantity / 1000  ;
-                else
-                     $total_order_price += $item->product->price * $item->quantity;
-            } 
-        }
-        */
         $total_order_price = $cart->getTotal();
         return view('Customer.order.checkout',['cart'=>$cart , 'cart_items' => $cart_items,'date' => $date, 'total_order_price' => $total_order_price,
                                                'profile'=>$profile,'tax'=>$tax,'hours_remaining_to_deliver' => $hours_remaining_to_deliver]);
