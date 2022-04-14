@@ -248,7 +248,25 @@ demo = {
       type: 'line',
       data: {
         labels: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
-        datasets: [{
+        datasets: [
+          {
+            label: "delivered",
+            borderColor: chartColor,
+            pointBorderColor: chartColor,
+            pointBackgroundColor: "#2ed15e",
+            pointHoverBackgroundColor: "#2ed15e",
+            pointHoverBorderColor: chartColor,
+            pointBorderWidth: 1,
+            pointHoverRadius: 7,
+            pointHoverBorderWidth: 2,
+            pointRadius: 5,
+            fill: true,
+            backgroundColor: gradientFill,
+            borderWidth: 2,
+            data: [jan_del, feb_del, mar_del, apr_del, may_del, jun_del, jul_del, aug_del, sep_del, oct_del, nov_del, dec_del]
+            }
+            ,
+          {
           label: "Order",
           borderColor: chartColor,
           pointBorderColor: chartColor,
@@ -264,22 +282,6 @@ demo = {
           borderWidth: 2,
           data: [jan_count, feb_count, mar_count, apr_count, may_count, jun_count, jul_count, aug_count, sep_count, oct_count, nov_count, dec_count]
         },
-        {
-        label: "delivered",
-        borderColor: chartColor,
-        pointBorderColor: chartColor,
-        pointBackgroundColor: "#2ed15e",
-        pointHoverBackgroundColor: "#2ed15e",
-        pointHoverBorderColor: chartColor,
-        pointBorderWidth: 1,
-        pointHoverRadius: 7,
-        pointHoverBorderWidth: 2,
-        pointRadius: 5,
-        fill: true,
-        backgroundColor: gradientFill,
-        borderWidth: 2,
-        data: [jan_del, feb_del, mar_del, apr_del, may_del, jun_del, jul_del, aug_del, sep_del, oct_del, nov_del, dec_del]
-        }
       ]
       },
       options: {

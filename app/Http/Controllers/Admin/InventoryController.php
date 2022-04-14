@@ -162,6 +162,25 @@ class InventoryController extends Controller
             'expired_at' => $expired_at ,
             'active' => $status ,
         ]);
+        // update products
+        $old_products_discounted = Product::whereHas('discount',function($q) use ($discount){
+          $q->where('id',$discount->id);  
+        })->get();
+        $new_products_selected = $request->apply_discount_on_products;
+        foreach($old_products_discounted as $old_product){
+            if(in_array($old_product->id ,  $new_products_selected))
+                continue;
+            else
+                Product::find($old_product->id)->update([
+                    'discount_id' => null ,
+                ]);
+        }
+        foreach($new_products_selected as $new_product){
+            $product = Product::find($new_product);
+            $product->update([
+                'discount_id' => $discount->id,
+            ]);
+        }
         return back();
     }
 }
