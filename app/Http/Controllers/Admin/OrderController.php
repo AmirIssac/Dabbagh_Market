@@ -128,4 +128,17 @@ class OrderController extends Controller
             return back();
         }
     }
+
+    public function printOrder($id){
+        $order = Order::find($id);
+        $store = $order->store->name_en;
+        $order_items = $order->orderItems;
+        $order_systems_count = $order->orderSystems()->count();
+        if($order_systems_count > 1)  // employee did an action on this order
+            $employee = $order->orderSystems->last()->user->name ;
+        else
+            $employee = '/' ;
+        return view('Admin.orders.print_order',['order'=>$order,'store'=>$store,'order_items'=>$order_items,
+                                                'employee' => $employee]);
+    }
 }

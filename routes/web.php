@@ -29,7 +29,7 @@ Route::group(['middleware'=>['global_data_share']] , function(){
 Route::get('/', [Controller::class, 'index'])->name('index');
 
 // Admin
-Route::group(['middleware'=>['is_admin']] , function(){
+Route::group(['middleware'=>['is_admin','auth']] , function(){
         Route::get('/inventory',[AdminInventoryController::class, 'index'])->name('inventory.index');
         Route::post('/store/product',[AdminInventoryController::class, 'storeProduct'])->name('store.product');
         Route::get('/edit/product/form/{product_id}',[AdminInventoryController::class, 'editProductForm'])->name('edit.product.form');
@@ -47,6 +47,7 @@ Route::group(['middleware'=>['is_admin']] , function(){
         Route::post('/transfer/order/{order_id}',[App\Http\Controllers\Admin\OrderController::class, 'transferOrder'])->name('transfer.order');
         Route::get('/settings' , [App\Http\Controllers\Admin\SettingController::class , 'index'])->name('settings');
         Route::post('/update/settings' , [App\Http\Controllers\Admin\SettingController::class , 'update'])->name('update.settings');
+        Route::get('/print/order/{order_id}',[App\Http\Controllers\Admin\OrderController::class, 'printOrder'])->name('print.order');
 });
 /*
 Route::get('/login-form',function(){

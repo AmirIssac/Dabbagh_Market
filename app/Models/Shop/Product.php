@@ -94,6 +94,36 @@ class Product extends Model
             return false;
     }
 
+    public function isPercentDiscount(){
+        if($this->discount->type == 'percent')
+            return true;
+        else
+            return false;
+    }
+
+    public function isValueDiscount(){
+        if($this->discount->type == 'value')
+            return true;
+        else
+            return false;
+    }
+    
+    public function getSavedMoney(){   // وفر
+        if($this->isPercentDiscount()){
+            $discount = $this->price * $this->discount->value / 100 ;
+            $new_price = $this->price - $discount ;
+            $value_saved = $this->price - $new_price ;
+            $percent_saved =  $this->discount->value ;
+        }
+        else{
+            $new_price = $this->price - $this->discount->value ;
+            $value_saved = $this->discount->value ;
+            $percent_saved = $value_saved * 100 / $this->price ;
+        }
+        $save = array('percent'=>$percent_saved , 'value' =>$value_saved);
+        return $save;
+    }
+
     public function rating(){
         $rate = 0 ;
         $product_rates = $this->productsRate;

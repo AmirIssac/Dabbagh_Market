@@ -75,8 +75,7 @@
                                     <td class="shoping__cart__price">
                                     @if($item->product->hasDiscount())  {{-- product has discount --}}
                                         <?php
-                                            $discount_type = $item->product->discount->type;
-                                            if($discount_type == 'percent'){
+                                            if($item->product->isPercentDiscount()){
                                                 $discount = $item->product->price * $item->product->discount->value / 100;
                                                 $new_price = $item->product->price - $discount;
                                             }
@@ -201,8 +200,7 @@
                                     <td class="shoping__cart__price">
                                     @if($item->hasDiscount())  {{-- product has discount --}}
                                         <?php
-                                            $discount_type = $item->discount->type;
-                                            if($discount_type == 'percent'){
+                                           if($item->isPercentDiscount()){
                                                 $discount = $item->price * $item->discount->value / 100;
                                                 $new_price = $item->price - $discount;
                                             }

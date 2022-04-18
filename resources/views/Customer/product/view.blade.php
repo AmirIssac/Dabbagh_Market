@@ -71,8 +71,7 @@
                         @if($product->hasDiscount())  {{-- product has discount --}}
                                     <h6 style="text-decoration: line-through; color: #f44336"> {{$product->price}} </h6>
                                     <?php
-                                        $discount_type = $product->discount->type;
-                                        if($discount_type == 'percent'){
+                                        if($product->isPercentDiscount()){
                                             $discount = $product->price * $product->discount->value / 100;
                                             $new_price = $product->price - $discount;
                                         }
@@ -86,8 +85,8 @@
                                     {{-- final price --}}
                                     <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$new_price * $product->min_weight / 1000}}" readonly/>AED</div>
                                     @else  {{-- By piece --}}
-                                    <input style="display: none;" type="number" id="initial-price" value="{{$product->price}}">
-                                    <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$product->price * $product->min_weight}}" readonly/>AED</div>
+                                    <input style="display: none;" type="number" id="initial-price" value="{{$new_price}}">
+                                    <div class="product__details__price"><input class="product__details__price" style="height:40px; width:100px; font-size:30px; border:0px solid white" id="price-input" type='number' name='name' value="{{$new_price * $product->min_weight}}" readonly/>AED</div>
                                     @endif
                         @else
                                     @if($product->unit == 'gram')

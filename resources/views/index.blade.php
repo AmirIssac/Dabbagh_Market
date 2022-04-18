@@ -74,6 +74,10 @@
                         </div>
                         <div class="featured__item__text">
                             <h6 style="font-weight: bold;"><a href="#">{{$product->name_en}}</a></h6>
+                            @if($product->hasDiscount())  {{-- product has discount --}}
+                            <?php $save = $product->getSavedMoney(); ?>
+                            <span class="badge badge-success">save {{$save['percent']}}% ({{$save['value']}} AED)</span>
+                            @endif
                             <h5>
                                 @if(!$product->availability)
                                 <span class="badge badge-danger">not available now</span>
@@ -83,8 +87,7 @@
                             @if($product->hasDiscount())  {{-- product has discount --}}
                                     <h6 style="text-decoration: line-through; color: #f44336">    {{$product->price}}  </h6>
                                     <?php
-                                        $discount_type = $product->discount->type;
-                                        if($discount_type == 'percent'){
+                                        if($product->isPercentDiscount()){
                                             $discount = $product->price * $product->discount->value / 100;
                                             $new_price = $product->price - $discount;
                                         }

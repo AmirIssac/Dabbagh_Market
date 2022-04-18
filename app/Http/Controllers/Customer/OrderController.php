@@ -51,8 +51,7 @@ class OrderController extends Controller
             }
             foreach($cart_items as $item){
                 if($item->hasDiscount()){
-                    $discount_type = $item->discount->type;
-                    if($discount_type == 'percent'){
+                    if($item->isPercentDiscount()){
                          $discount = $item->price * $item->discount->value / 100;
                          $new_price = $item->price - $discount;
                          if($item->unit == 'gram')
@@ -114,7 +113,6 @@ class OrderController extends Controller
         if($request->address2)
             $address = $request->address2;
         
-
         $estimated_time = $cart->calculateDeliverTime(true);
 
         $order = Order::create([
@@ -194,8 +192,7 @@ class OrderController extends Controller
             // $order_items_arr is array of arrays
             foreach($cart_items as $item){
                 if($item->hasDiscount()){
-                    $discount_type = $item->discount->type;
-                    if($discount_type == 'percent'){
+                    if($item->isPercentDiscount()){
                         $discount = $item->price * $item->discount->value / 100;
                         $new_price = $item->price - $discount;
                         if($item->unit == 'gram')
