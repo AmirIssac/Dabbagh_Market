@@ -10,6 +10,7 @@
         @endforeach
         <canvas id="bigDashboardChart"></canvas>
       </div>
+      {{--
       <div class="content">
         <div class="row">
 
@@ -278,6 +279,6 @@
           </div>
         </div>
       </div>
-
+      --}}
   @endsection
   

@@ -17,9 +17,16 @@ use Illuminate\Support\Facades\Session;
 
 class OrderController extends Controller
 {
-    public function checkout(){
+    public function checkout(Request $request){
         $user = User::findOrFail(Auth::user()->id);
         $profile = $user->profile;
+        // validate points
+            $points_applied = $request->points_applied;
+            $user_max_points = $user->maxAppliedPoints();
+            if($points_applied > $user_max_points || $points_applied % 100 != 0)
+                return abort(403);
+        // save points applied to session
+        Session::put('points_applied',$points_applied);
         $cart = $user->cart;
         $hours_remaining_to_deliver = $cart->calculateDeliverTime();
         $cart_items = $cart->cartItems;

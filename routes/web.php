@@ -48,6 +48,7 @@ Route::group(['middleware'=>['is_admin','auth']] , function(){
         Route::get('/settings' , [App\Http\Controllers\Admin\SettingController::class , 'index'])->name('settings');
         Route::post('/update/settings' , [App\Http\Controllers\Admin\SettingController::class , 'update'])->name('update.settings');
         Route::get('/print/order/{order_id}',[App\Http\Controllers\Admin\OrderController::class, 'printOrder'])->name('print.order');
+        Route::get('/roles-permissions',[App\Http\Controllers\Admin\PermissionController::class, 'rolesAndPermissionsIndex'])->name('roles.permissions');
 });
 /*
 Route::get('/login-form',function(){

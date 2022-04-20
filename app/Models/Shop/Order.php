@@ -2,6 +2,7 @@
 
 namespace App\Models\Shop;
 
+use App\Models\DiscountDetail;
 use App\Models\OrderSystem;
 use App\Models\RejectReason;
 use App\Models\Store;
@@ -65,6 +66,11 @@ class Order extends Model
     public function paymentDetail()
     {
         return $this->hasOne(PaymentDetail::class);
+    }
+
+    public function discountDetail()
+    {
+        return $this->hasOne(DiscountDetail::class);
     }
 
     public function rejectReasons(){

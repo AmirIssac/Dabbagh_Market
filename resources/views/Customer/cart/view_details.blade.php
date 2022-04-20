@@ -33,6 +33,13 @@
     .displaynone{
         display: none;
     }
+    #question-mark{
+        border-radius : 50%;
+        padding: 5px;
+    }
+    #question-mark:hover{
+        cursor: pointer;
+    }
 </style>
 @endsection
 @section('content')
@@ -142,6 +149,26 @@
                                 </tr>
                                 <?php $counter++; ?>
                                 @endforeach
+                                <tr>
+                                    <td class="shoping__cart__item">
+                                       <span class="badge badge-info"> Apply points </span>
+                                    </td>
+                                    <td class="shoping__cart__price">
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <span id="question-mark" class="badge badge-warning" data-toggle="tooltip" data-placement="top" title="each 100 point give you 1% discount">?</span>
+                                        <select name="points" class="form-control" id="points-select">
+                                            <option value="none">/</option>
+                                            @for($i = $points ; $i > 0 ; $i-=100)
+                                                <option value="{{$i}}">{{$i}}</option>
+                                            @endfor
+                                        </select>
+                                    </td>
+                                </tr>
                                 @else {{-- Empty cart --}}
                                 <tr>
                                     <td>
@@ -303,6 +330,7 @@
                       </form>
                     </div>
                 </div>
+               
                 <div id="div-checkout" class="col-lg-12">
                     <div id="checkout-box" class="shoping__checkout">
                         <h5>Cart Total</h5>
@@ -324,10 +352,17 @@
                             <a href="{{route('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
                             </div>
                             @else
-                            <h4 id="min-order-warning" class="displaynone">You can't submit order by less than {{$min_order}} AED</h4>
-                            <div id="proceed-to-checkout-div">
-                            <a href="{{route('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
-                            </div>
+                            <form action="{{route('checkout')}}" method="GET" id="checkout-form">
+                                @csrf
+                                <h4 id="min-order-warning" class="displaynone">You can't submit order by less than {{$min_order}} AED</h4>
+                                <div id="proceed-to-checkout-div">
+                                    {{--
+                                <a href="{{route('checkout')}}" class="primary-btn">PROCEED TO CHECKOUT</a>
+                                     --}}
+                                <input type="hidden" name="points_applied" id="points-input">
+                                <button class="primary-btn">PROCEED TO CHECKOUT</button>
+                                </div>
+                            </form>
                             @endif
                         @else
                             @if($min_order > $cart_grand_total)
@@ -414,6 +449,21 @@
     $('#proceed-to-checkout').on('click',function(){
         $('#div-checkout').removeClass('col-lg-12').addClass('col-lg-6');
         $('#have-account-form').fadeIn('slow');
+    });
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    /*
+    // take points value into input hidden when submit the form
+    $('#checkout-form').submit(function(){
+    $('#points-input').val($('points-select').val());
+    return true;
+    });
+    */
+    
+    $('#points-select').on('change',function(){
+        $('#points-input').val($(this).val());
     });
 </script>
 @endsection

@@ -130,7 +130,12 @@
                                     @endif
                                 @endforeach
                             </ul>
+                            @if(Session::get('points_applied') && Session::get('total_before_discount'))
+                            <div><span style="text-decoration: line-through">{{Session::get('total_before_discount')}}</span> <span style="float: right" class="badge badge-info"> saved {{Session::get('discount')}} AED </span></div>
                             <div class="checkout__order__subtotal">Subtotal <span>{{$total_order_price}} AED</span></div>
+                            @else
+                            <div class="checkout__order__subtotal">Subtotal <span>{{$total_order_price}} AED</span></div>
+                            @endif
                             <div class="checkout__order__total">Tax <span>{{$tax}}%</span></div>
                             <?php $tax_value = $tax * $total_order_price / 100 ;
                                   $order_grand_total = $total_order_price + $tax_value ;

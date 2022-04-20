@@ -87,6 +87,11 @@ class User extends Authenticatable
         return $this->hasMany(PaymentDetail::class);
     }
 
+    public function discountDetails()
+    {
+        return $this->hasMany(DiscountDetail::class);
+    }
+
     public function stores(){
         return $this->belongsToMany(Store::class, 'store_user');
     }
@@ -171,8 +176,16 @@ class User extends Authenticatable
                 return  Carbon::create(now()->year,now()->month,now()->day + 1,now()->hour,now()->minute,now()->second);
             }
         }
+
     }
 
-
-
+    public function maxAppliedPoints(){
+        $points = $this->profile->points;
+        // can apply max 1000 point in each order
+        // points applied as hundreds only
+        $points = $points >= 1000 ? 1000 : $points ;
+        if($points < 1000)
+            $points = floor($points / 100) * 100;
+        return $points;
+    }
 }

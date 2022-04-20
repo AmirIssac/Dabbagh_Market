@@ -87,8 +87,8 @@
               <p>Employees</p>
             </a>
           </li>
-          <li>
-            <a href="./notifications.html">
+          <li class="{{Route::is('roles.permissions') ? 'active' : ''}}">
+            <a href="{{route('roles.permissions')}}">
               <i class="now-ui-icons objects_key-25"></i>
               <p>Permissions</p>
             </a>
@@ -146,6 +146,7 @@
       <!-- End Navbar -->
       @yield('content')
       <footer class="footer">
+        {{--
         <div class=" container-fluid ">
           <nav>
             <ul>
@@ -172,6 +173,7 @@
             </script>, Designed by <a href="https://www.invisionapp.com" target="_blank">Invision</a>. Coded by <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a>.
           </div>
         </div>
+        --}}
       </footer>
     </div>
   </div>

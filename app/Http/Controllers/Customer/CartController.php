@@ -17,6 +17,7 @@ class CartController extends Controller
     //
     public function viewCart(){
         $user = User::findOrFail(Auth::user()->id);
+        $points = $user->maxAppliedPoints();
         $cart = $user->cart;
         $cart_items = $cart->cartItems;
         $tax_row = Setting::where('key','tax')->first();
@@ -25,7 +26,7 @@ class CartController extends Controller
         $min_order = (float) $min_order_row->value;
         $cart_total = $cart->getTotal();
         return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax,
-                                                  'min_order' => $min_order
+                                                  'min_order' => $min_order,'points'=>$points,
                                                     ]);
     }
 

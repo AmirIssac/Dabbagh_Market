@@ -6,6 +6,7 @@ use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Session;
 
 class Cart extends Model
 {
@@ -65,6 +66,17 @@ class Cart extends Model
                 else
                         $cart_total = $cart_total + ($item->product->price * $item->quantity);
 
+        }
+        // points discount
+        $points_applied = Session::get('points_applied');
+        if($points_applied){
+            $discount_percent = $points_applied / 100 ;
+            $discount = $discount_percent * $cart_total / 100 ;
+            $cart_total -= $discount;
+            // save data in session to output it
+            Session::put('discount_percent',$discount_percent);
+            Session::put('discount',$discount);
+            Session::put('total_before_discount',$cart_total + $discount);
         }
         return $cart_total ;
     }
