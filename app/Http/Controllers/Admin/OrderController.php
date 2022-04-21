@@ -68,6 +68,7 @@ class OrderController extends Controller
         $order_store = $order->store;
         $order_items = $order->orderItems;
         $order_center_system = $order->orderSystems->first();
+        $order_discount = $order->discountDetail;
         $estimated_time = $order->estimated_time;
         $done_in = $order->finishedIn();
 
@@ -75,13 +76,13 @@ class OrderController extends Controller
             $order_employee_systems = $order->orderSystems()->where('id','!=',$order_center_system->id)->get();
             return view('Admin.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,'order_store'=>$order_store,
                     'order_center_system'=>$order_center_system,'order_employee_systems'=>$order_employee_systems,
-                    'estimated_time' => $estimated_time,'done_in' => $done_in]);
+                    'estimated_time' => $estimated_time,'done_in' => $done_in,'order_discount'=>$order_discount]);
         }
         else{   // not transfered yet
             // get reasons of reject
             $reject_reasons = RejectReason::all();
             return view('Admin.orders.edit',['order'=>$order,'stores'=>$stores,'order_items'=>$order_items,'order_store'=>$order_store,
-                        'estimated_time' => $estimated_time,'reject_reasons'=>$reject_reasons,'done_in' => $done_in]);
+                        'estimated_time' => $estimated_time,'reject_reasons'=>$reject_reasons,'done_in' => $done_in,'order_discount'=>$order_discount]);
         }
     }
     public function transferOrder(Request $request , $id){

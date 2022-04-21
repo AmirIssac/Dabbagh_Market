@@ -66,7 +66,7 @@
                     @elseif($order->status == 'failed' || $order->status == 'cancelled' || $order->status == 'rejected')
                     <b style="color: #c00202"> {{$order->status}} </b>
                     @endif
-                </td>
+                  </td>
                   <td style="font-weight: bold; color: #38b818;" class="text-center">{{$order->total}}</td>
                   <td class="text-center">{{$order->address}}</td>
                   <td class="text-center">{{$order->paymentDetail->provider}}</td>
@@ -87,6 +87,12 @@
                     </th>
                     <th style="font-weight: bold" class="text-center">
                       Note
+                    </th>
+                    <th style="font-weight: bold" class="text-center">
+                      Discount
+                    </th>
+                    <th style="font-weight: bold" class="text-center">
+                      Discount type
                     </th>
                     @if($order->status != 'delivered' && $order->status != 'rejected')
                     <th style="font-weight: bold" class="text-center">
@@ -114,6 +120,24 @@
                          {{$order->customer_note}}
                       @else
                         <span class="badge badge-danger">NONE</span>
+                      @endif
+                    </td>
+                    <td class="text-center">
+                      @if($order_discount)
+                        <b style="color: #74690c">
+                        {{$order_discount->value}}
+                        </b>
+                      @else
+                        <span class="badge badge-danger">none</span>
+                      @endif
+                    </td>
+                    <td class="text-center">
+                      @if($order_discount)
+                        <b style="color: #74690c">
+                        {{$order_discount->type}} / {{$order_discount->code}}
+                        </b>
+                      @else
+                        /
                       @endif
                     </td>
                     @if($order->status != 'delivered' && $order->status != 'rejected')

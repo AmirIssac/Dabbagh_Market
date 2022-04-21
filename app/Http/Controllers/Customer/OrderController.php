@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\DiscountDetail;
 use App\Models\Setting;
+use App\Models\Shop\Discount;
 use App\Models\Shop\Order;
 use App\Models\Shop\OrderItem;
 use App\Models\Shop\PaymentDetail;
@@ -147,6 +149,17 @@ class OrderController extends Controller
                 'price' => $order_item['price'] ,
                 'discount' => $order_item['discount'] ,
                 'quantity' => $order_item['quantity'] ,
+            ]);
+        }
+        // create discount 
+        if(Session::get('points_applied')){
+            DiscountDetail::create([
+                'user_id' => $user->id ,
+                'order_id'=> $order->id ,
+                'type' => 'points',
+                'percent' => Session::get('discount_percent'),
+                'value' => Session::get('discount'),
+                'code' => Session::get('points_applied'),
             ]);
         }
         // create payment_details

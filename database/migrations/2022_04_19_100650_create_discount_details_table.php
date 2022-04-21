@@ -20,7 +20,7 @@ class CreateDiscountDetailsTable extends Migration
             $table->unsignedBigInteger('order_id')->unsigned();
             $table->foreign('order_id')->references('id')->on('orders');//onDelete('set null');
             $table->string('type');  // points , coupon , .....
-            $table->decimal('percent',3,2);
+            $table->decimal('percent',10,2);
             $table->decimal('value',10,2);
             $table->string('code',100)->nullable();  // number of points , ....
             $table->timestamps();

@@ -15,7 +15,8 @@ class SettingSeeder extends Seeder
     public function run()
     {
         $settings = array('tax' => '5' , 'min_order_limit' => '125' , 'close_delivery' => '13:00:00',
-                         'hours_deliver_when_free' => '3' , 'number_of_orders_increase_time' => '5');
+                         'hours_deliver_when_free' => '3' , 'number_of_orders_increase_time' => '5',
+                         'one_percent_discount_by_points'=>'100','add_points_by'=>'25','purchase_value_to_add_points'=>'100');
 
         foreach($settings as $setting){
             Setting::create([

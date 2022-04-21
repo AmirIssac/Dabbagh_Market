@@ -52,6 +52,24 @@
               </div>
               <div class="col-md-6 pr-1">
               </div>
+              <div class="col-md-4 pr-1">
+                <div style="display: flex; flex-direction: column;" class="form-group">
+                  <label> 1% discount for each points </label>
+                  <input type="number" name="one_percent_discount_for_each_points" value="{{$one_percent_discount_by_points}}" class="form-control">
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div style="display: flex; flex-direction: column;" class="form-group">
+                  <label> Purchase value to add points </label>
+                  <input type="number" step="0.01" name="purchase_value_to_add_points" value="{{$purchase_value_to_add_points}}" class="form-control">
+                </div>
+              </div>
+              <div class="col-md-4 pr-1">
+                <div style="display: flex; flex-direction: column;" class="form-group">
+                  <label> Add points when purchase </label>
+                  <input type="number" name="add_points_when_purchase" value="{{$add_points_by}}" class="form-control">
+                </div>
+              </div>
               <div class="col-md-3 pr-1">
                 <div style="display: flex; flex-direction: column;" class="form-group">
                   <label> Contact phone </label>

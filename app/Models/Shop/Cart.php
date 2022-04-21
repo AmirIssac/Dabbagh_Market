@@ -70,7 +70,8 @@ class Cart extends Model
         // points discount
         $points_applied = Session::get('points_applied');
         if($points_applied){
-            $discount_percent = $points_applied / 100 ;
+            $one_percent_discount_by_points = (float) Setting::where('key','one_percent_discount_by_points')->first()->value;
+            $discount_percent = $points_applied / $one_percent_discount_by_points ;
             $discount = $discount_percent * $cart_total / 100 ;
             $cart_total -= $discount;
             // save data in session to output it
@@ -116,6 +117,14 @@ class Cart extends Model
                       // order item
                       $order_items_arr[] = ['product_id' => $item->product->id , 'price' => $item->product->price , 'discount' => 0  , 'quantity' => $item->quantity];
             } 
+        }
+        // check if points applied so we make discount
+        $points_applied = Session::get('points_applied');
+        if($points_applied){
+            $one_percent_discount_by_points = (float) Setting::where('key','one_percent_discount_by_points')->first()->value;
+            $discount_percent = $points_applied / $one_percent_discount_by_points ;
+            $discount = $discount_percent * $total_order_price / 100 ;
+            $total_order_price -= $discount;
         }
         $tax_value = $tax * $total_order_price / 100 ;
         $grand_order_total = $total_order_price + $tax_value ;
