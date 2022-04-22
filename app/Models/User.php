@@ -183,9 +183,18 @@ class User extends Authenticatable
         $points = $this->profile->points;
         // can apply max 1000 point in each order
         // points applied as hundreds only
+        /*
         $points = $points >= 1000 ? 1000 : $points ;
         if($points < 1000)
             $points = floor($points / 100) * 100;
+        */
+
+        $one_percent_discount = Setting::where('key','one_percent_discount_by_points')->first()->value;
+        $frac = floor($points / $one_percent_discount) ;
+        $max = 1000 - (1000 % $one_percent_discount) ;
+        $points = $points >= $max ? $max : $points ;
+        if($points < $max)
+            $points = $frac * $one_percent_discount;
         return $points;
     }
 }

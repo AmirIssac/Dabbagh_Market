@@ -22,11 +22,12 @@ class CartController extends Controller
         $cart_items = $cart->cartItems;
         $tax_row = Setting::where('key','tax')->first();
         $min_order_row = Setting::where('key','min_order_limit')->first();
+        $one_percent_discount = Setting::where('key','one_percent_discount_by_points')->first()->value;
         $tax = (float) $tax_row->value;
         $min_order = (float) $min_order_row->value;
         $cart_total = $cart->getTotal();
         return view('Customer.cart.view_details',['cart'=>$cart,'cart_items'=>$cart_items,'cart_total' => $cart_total,'tax'=>$tax,
-                                                  'min_order' => $min_order,'points'=>$points,
+                                                  'min_order' => $min_order,'points'=>$points,'one_percent_discount'=>$one_percent_discount
                                                     ]);
     }
 

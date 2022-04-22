@@ -160,10 +160,10 @@
                                     <td>
                                     </td>
                                     <td>
-                                        <span id="question-mark" class="badge badge-warning" data-toggle="tooltip" data-placement="top" title="each 100 point give you 1% discount">?</span>
+                                        <span id="question-mark" class="badge badge-warning" data-toggle="tooltip" data-placement="top" title="each {{$one_percent_discount}} point give you 1% discount">?</span>
                                         <select name="points" class="form-control" id="points-select">
                                             <option value="none">/</option>
-                                            @for($i = $points ; $i > 0 ; $i-=100)
+                                            @for($i = $points ; $i >= $one_percent_discount ; $i-=$one_percent_discount)
                                                 <option value="{{$i}}">{{$i}}</option>
                                             @endfor
                                         </select>

@@ -15,6 +15,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class OrderController extends Controller
@@ -25,7 +26,8 @@ class OrderController extends Controller
         // validate points
             $points_applied = $request->points_applied;
             $user_max_points = $user->maxAppliedPoints();
-            if($points_applied > $user_max_points || $points_applied % 100 != 0)
+            $one_percent_discount = Setting::where('key','one_percent_discount_by_points')->first()->value;
+            if($points_applied > $user_max_points || $points_applied % $one_percent_discount != 0)
                 return abort(403);
         // save points applied to session
         Session::put('points_applied',$points_applied);
@@ -124,57 +126,65 @@ class OrderController extends Controller
         
         $estimated_time = $cart->calculateDeliverTime(true);
 
-        $order = Order::create([
-            'user_id' => $user->id ,
-            'number' =>  $number ,
-            'status' => $order_status ,
-            'sub_total' => $total_order_price ,
-            'tax_ratio' => $tax ,
-            'tax_value' => $tax_value ,
-            'shipping' => 0 ,
-            'total' => $grand_order_total ,
-            'first_name' => $request->first_name , 
-            'last_name' => $request->last_name ,
-            'phone' => $request->phone ,
-            'email' => $request->email ,
-            'address' => $address ,
-            'customer_note' => $request->customer_note ,
-            'estimated_time' => $estimated_time ,
-        ]);
-        // inserting order_items
-        foreach($order_items_arr as $order_item){
-            OrderItem::create([
-                'order_id' => $order->id ,
-                'product_id' => $order_item['product_id'] ,
-                'price' => $order_item['price'] ,
-                'discount' => $order_item['discount'] ,
-                'quantity' => $order_item['quantity'] ,
-            ]);
+        DB::beginTransaction();
+        try{
+                $order = Order::create([
+                    'user_id' => $user->id ,
+                    'number' =>  $number ,
+                    'status' => $order_status ,
+                    'sub_total' => $total_order_price ,
+                    'tax_ratio' => $tax ,
+                    'tax_value' => $tax_value ,
+                    'shipping' => 0 ,
+                    'total' => $grand_order_total ,
+                    'first_name' => $request->first_name , 
+                    'last_name' => $request->last_name ,
+                    'phone' => $request->phone ,
+                    'email' => $request->email ,
+                    'address' => $address ,
+                    'customer_note' => $request->customer_note ,
+                    'estimated_time' => $estimated_time ,
+                ]);
+                // inserting order_items
+                foreach($order_items_arr as $order_item){
+                    OrderItem::create([
+                        'order_id' => $order->id ,
+                        'product_id' => $order_item['product_id'] ,
+                        'price' => $order_item['price'] ,
+                        'discount' => $order_item['discount'] ,
+                        'quantity' => $order_item['quantity'] ,
+                    ]);
+                }
+                // create discount 
+                if(Session::get('points_applied')){
+                    DiscountDetail::create([
+                        'user_id' => $user->id ,
+                        'order_id'=> $order->id ,
+                        'type' => 'points',
+                        'percent' => Session::get('discount_percent'),
+                        'value' => Session::get('discount'),
+                        'code' => Session::get('points_applied'),
+                    ]);
+                }
+                // create payment_details
+                if($request->payment_method == 'cash'){
+                    PaymentDetail::create([
+                        'user_id' => $user->id ,
+                        'order_id' => $order->id ,
+                        'amount' => $order->total ,
+                        'provider' => 'cash' ,
+                        'status' => 'pending' ,
+                    ]);
+                }
+                // delete items from cart
+                foreach($cart_items as $cart_item){
+                        $cart_item->delete();
+                }
+                DB::commit();
         }
-        // create discount 
-        if(Session::get('points_applied')){
-            DiscountDetail::create([
-                'user_id' => $user->id ,
-                'order_id'=> $order->id ,
-                'type' => 'points',
-                'percent' => Session::get('discount_percent'),
-                'value' => Session::get('discount'),
-                'code' => Session::get('points_applied'),
-            ]);
-        }
-        // create payment_details
-        if($request->payment_method == 'cash'){
-            PaymentDetail::create([
-                'user_id' => $user->id ,
-                'order_id' => $order->id ,
-                'amount' => $order->total ,
-                'provider' => 'cash' ,
-                'status' => 'pending' ,
-            ]);
-        }
-        // delete items from cart
-        foreach($cart_items as $cart_item){
-                $cart_item->delete();
+        catch(\Exception $e) {
+            DB::rollback();
+            return 'opss something gone wrong !';
         }
 
         return redirect(route('order.details',$order->id));

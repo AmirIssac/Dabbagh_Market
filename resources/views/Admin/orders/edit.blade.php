@@ -33,7 +33,9 @@
       <div class="card card-upgrade">
         <div class="card-header text-center">
           <h4 class="card-title"> <span class="badge badge-primary"> #{{$order->number}} </span> </h3>
+            @if($order->store)
             <a style="float: right" href="{{route('print.order',$order->id)}}" class="btn btn-info">print</a>
+            @endif
             <p class="card-category"></p>
         </div>
         <div class="card-body">
